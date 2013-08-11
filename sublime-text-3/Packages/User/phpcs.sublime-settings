@@ -1,0 +1,12 @@
+{
+    "phpcs_additional_args": {
+        "--standard": "/home/manu/Dev/conf/phpcs/sonar.xml",
+        "-n": "" 
+    },
+    "phpmd_run": true,
+    "phpmd_additional_args": {
+        "codesize,unusedcode": "" 
+    },
+    "phpcs_show_quick_panel": false,
+    "phpcs_outline_for_errors": false
+}

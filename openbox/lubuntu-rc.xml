@@ -1,4 +1,3 @@
-<?xml version="1.0"?>
 <openbox_config xmlns="http://openbox.org/3.4/rc" xmlns:xi="http://www.w3.org/2001/XInclude">
   <resistance>
     <strength>10</strength>
@@ -356,7 +355,7 @@
     </keybind>
     <keybind key="W-t">
       <action name="Execute">
-        <command>/home/manu/opt/sublime-text-2/sublime_text</command>
+        <command>subl</command>
       </action>
     </keybind>
     <keybind key="W-w">

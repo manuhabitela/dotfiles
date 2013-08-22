@@ -42,8 +42,8 @@ Terminal=false
 ShowOnViewport=0
 
 #f[0;100] Order you want for this launcher among the others:
-Order=7.71875
+Order=7.75390625
 
 Icon Type=0
 Type=Application
-Origin=/usr/local/share/applications/Sublime_Text_2.desktop
+Origin=/usr/share/applications/sublime_text.desktop

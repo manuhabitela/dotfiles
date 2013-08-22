@@ -24,6 +24,7 @@
 { "keys": ["ctrl+shift+alt+c"], "command": "svn_commit" },
 { "keys": ["ctrl+shift+n"], "command": "new_window" },
 { "keys": ["ctrl+alt+u","ctrl+alt+i"], "command": "sftp_switch_config" },
+{ "keys": ["f12"], "command": "goto_definition" },
 {
 	//un seul panel
 	"keys": ["alt+shift+a"],

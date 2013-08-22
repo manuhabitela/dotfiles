@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/sh
 extract() {
 	if [ -f $1 ] ; then
 		case $1 in
@@ -20,6 +20,8 @@ extract() {
 	fi
 }
 
-server="python -m SimpleHTTPServer"
+alias server="python -m SimpleHTTPServer"
 
-svnd="svn diff | colordiff"
+alias svnd="svn diff | colordiff"
+
+alias jsl="jslint"

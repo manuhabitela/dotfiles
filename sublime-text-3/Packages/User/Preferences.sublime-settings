@@ -1,4 +1,5 @@
 {
+	"animation_enabled": false,
 	"binary_file_patterns":
 	[
 		"*.jpg",
@@ -18,7 +19,8 @@
 	],
 	"color_scheme": "Packages/RailsCasts Colour Scheme/RailsCastsColorScheme.tmTheme",
 	"detect_slow_plugins": false,
-	"draw_minimap_border": true,
+	"draw_indent_guides": false,
+	"draw_minimap_border": false,
 	"fallback_encoding": "Western (ISO 8859-1)",
 	"font_face": "Monaco for Powerline",
 	"font_options":

@@ -18,3 +18,7 @@ for folder in $CONFIG_FOLDERS
 do
 	ln -s $CONFIG_ROOT/$folder $HOME/.config/$folder
 done
+
+
+
+ln -s $CONFIG_ROOT/bin $HOME/bin

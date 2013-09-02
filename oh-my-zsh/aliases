@@ -20,8 +20,6 @@ extract() {
 	fi
 }
 
-alias server="python -m SimpleHTTPServer"
-
 alias svnd="svn diff | colordiff"
 
 alias jsl="jslint"

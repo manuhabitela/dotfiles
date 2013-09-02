@@ -1,0 +1,13 @@
+#!/bin/sh
+# création d'un serveur web http tout simple dans le répertoire courant
+# $1 = port sur lequel on lance le serveur
+# port 8000 par défaut si aucun argument
+
+PORT=8000
+if [ ! $# -eq 0 ]; then
+	PORT=$1
+fi
+
+echo "localhost:$PORT" | xclip
+echo "listening on http://localhost:$PORT (copied to xclip, press middle mouse button to paste)"
+python -m SimpleHTTPServer $PORT

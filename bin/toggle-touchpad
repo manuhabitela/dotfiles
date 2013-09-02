@@ -1,0 +1,8 @@
+#!/bin/sh
+STATE=`synclient -l | grep -ce TouchpadOff.*0`
+synclient TouchpadOff=$STATE
+if [ $STATE -eq 1 ]; then
+	notify-send "Touchpad désactivé"
+else
+	notify-send "Touchpad activé"
+fi

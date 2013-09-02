@@ -1,0 +1,18 @@
+#!/bin/sh
+# permet de rajouter rapidement dans notre PATH l'éxécutable que l'on souhaite avec l'alias que l'on souhaite
+# exemple: 
+# 	add2path ~/opt/sublime-text-2/sublime_text subl
+# rend l'éxécutable de sublime text disponible partout via la commande subl
+
+# $1 = éxécutable
+# $2 = alias de la commande qui veut dans le PATH
+if [ $# -ne 2 ]
+then
+	echo "Usage : add2path chemin_du_programme alias_a_mettre_dans_path"
+	exit 1
+fi
+
+# suffit de faire un lien symbolique vers ~/bin qui est dans notre PATH :)
+ln -s "$1" "$HOME/bin/$2"
+
+exit 0

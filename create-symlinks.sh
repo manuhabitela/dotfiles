@@ -22,3 +22,4 @@ done
 
 
 ln -s $CONFIG_ROOT/bin $HOME/bin
+ln -s $CONFIG_ROOT/xmodmap/xmodmaprc $HOME/.xmodmaprc

@@ -20,4 +20,6 @@ source_sh () {
 }
 source_sh $HOME/.aliases
 
+source_sh $HOME/.xmodmaprc
+
 CHROME_DEVEL_SANDBOX="$HOME/opt/chrome-linux/chrome_sandbox"

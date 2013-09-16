@@ -178,16 +178,6 @@
     <keybind key="C-A-Left">
       <action name="GoToDesktop"/>
     </keybind>
-    <keybind key="S-A-w">
-      <action name="Execute">
-        <command>xvkbd -xsendevent -text &quot;&lt;&quot;</command>
-      </action>
-    </keybind>
-    <keybind key="S-A-x">
-      <action name="Execute">
-        <command>xvkbd -xsendevent -text &quot;&gt;&quot;</command>
-      </action>
-    </keybind>
     <keybind key="W-C-Tab">
       <action name="SendToDesktopNext"/>
     </keybind>

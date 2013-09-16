@@ -1,11 +1,16 @@
 {
+	"auto_upgrade_ignore":
+	[
+	],
 	"installed_packages":
 	[
 		"AdvancedNewFile",
+		"Better CoffeeScript",
 		"ColorPicker",
 		"DocBlockr",
 		"Emmet",
 		"FindKeyConflicts",
+		"Git",
 		"Handlebars",
 		"Missing Palette Commands",
 		"Modific",

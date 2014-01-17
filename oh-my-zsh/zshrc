@@ -15,4 +15,4 @@ plugins=(git debian nyan svn)
 source $ZSH/oh-my-zsh.sh
 
 setopt auto_cd
-cdpath=($HOME/Dev $HOME/Dropbox/Web/localhost)
+cdpath=($HOME/Dev $HOME/Dev/httpd $HOME/Dev/vagrant $HOME/Dropbox/Web/localhost)

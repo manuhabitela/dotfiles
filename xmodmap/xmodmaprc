@@ -1,3 +1,12 @@
+!remove caps lock and put < and > (with shift) on it
 remove lock = Caps_Lock
 keycode 0x42 = less greater
+
+!remove œ and put ² and ³ (with shift) on it
 keycode 49 = twosuperior threesuperior
+
+!reverse scrolling with mouse wheel
+!pointer = 1 2 3 5 4 7 6 8 9 10 11 12
+
+!normal scrolling with mouse wheel
+pointer = 1 2 3 4 5 6 7 8 9 10 11 12

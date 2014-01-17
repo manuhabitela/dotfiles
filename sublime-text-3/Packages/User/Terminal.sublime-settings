@@ -1,0 +1,8 @@
+{
+	"terminal": "guake",
+
+	//on ouvre le terminal 0 de guake, on se met dans le répertoire actuel de sublime, et on toggle l'affichage de guake (on assume qu'il est caché) 
+	"parameters": ["-s", "0", "-e", "cd '%CWD%' && clear", "-t"]
+	// on peut aussi ouvrir un nouveau terminal et passer directement le répertoire actuel de sublime
+	// "parameters": ["-n", "%CWD%", "-t"]
+}

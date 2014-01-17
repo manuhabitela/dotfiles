@@ -17,8 +17,9 @@
 		"*.zip",
 		"*.scssc"
 	],
-	"color_scheme": "Packages/RailsCasts Colour Scheme/RailsCastsColorScheme.tmTheme",
+	"color_scheme": "Packages/User/RailsCastsColorScheme (SL).tmTheme",
 	"detect_slow_plugins": false,
+	"dictionary": "",
 	"draw_indent_guides": false,
 	"draw_minimap_border": false,
 	"fallback_encoding": "Western (ISO 8859-1)",

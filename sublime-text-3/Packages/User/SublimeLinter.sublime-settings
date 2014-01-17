@@ -1,25 +1,93 @@
 {
-	"sublimelinter": "load-save",
-	"sublimelinter_syntax_map":
+	"user":
 	{
-		"Cake": "php"
-	},
-	"sublimelinter_disable": ["css"],
-	"sublimelinter_mark_style": "outline",
-	// jshint: options for linting JavaScript. See http://www.jshint.com/docs/#options for more info.
-	// By deault, eval is allowed.
-	"jshint_options":
-	{
-	    // To fix column positions for JSHint errors you may want to add `"indent": 1` to your
-	    // **User** "jshint_options". This issue affects users with tabs for indentation.
-	    // This fix was reverted due to a conflict with using the `"white": true` option.
-	    // "indent": 1,
-	    "evil": true,
-	    "regexdash": true,
-	    "browser": true,
-	    "wsh": true,
-	    "trailing": true,
-	    "sub": true,
-	    "newcap": false
+		"debug": false,
+		"delay": 0.25,
+		"error_color": "D02000",
+		"gutter_theme": "Packages/SublimeLinter/gutter-themes/Default.gutter-theme",
+		"gutter_theme_excludes":
+		[
+		],
+		"lint_mode": "background",
+		"linters":
+		{
+			"csslint":
+			{
+				"@disable": true,
+				"args":
+				[
+				],
+				"errors": "",
+				"excludes":
+				[
+				],
+				"ignore": "",
+				"warnings": ""
+			},
+			"jshint":
+			{
+				"@disable": false,
+				"args":
+				[
+				],
+				"excludes":
+				[
+				]
+			},
+			"json":
+			{
+				"@disable": false,
+				"args":
+				[
+				],
+				"excludes":
+				[
+				]
+			},
+			"php":
+			{
+				"@disable": false,
+				"args":
+				[
+				],
+				"excludes":
+				[
+				]
+			}
+		},
+		"mark_style": "none",
+		"paths":
+		{
+			"linux":
+			[
+			],
+			"osx":
+			[
+			],
+			"windows":
+			[
+			]
+		},
+		"python_paths":
+		{
+			"linux":
+			[
+			],
+			"osx":
+			[
+			],
+			"windows":
+			[
+			]
+		},
+		"rc_search_limit": 3,
+		"show_errors_on_save": false,
+		"show_marks_in_minimap": true,
+		"syntax_map":
+		{
+			"php": "html"
+		},
+		"warning_color": "DDB700",
+		"wrap_find": true
 	}
 }

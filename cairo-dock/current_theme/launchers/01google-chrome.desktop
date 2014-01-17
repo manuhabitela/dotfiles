@@ -1,6 +1,7 @@
-#3.2.99.alpha2
+#3.3.99.alpha1
 
 #[gtk-about]
+
 [Desktop Entry]
 
 #F[Icon]
@@ -16,7 +17,7 @@ sep_display=
 Name=
 
 #S+[Default] Image's name or path:
-Icon=/home/manu/Dropbox/Mes documents/Mes images/Divers/chrome-canary-faenza.png
+Icon=
 
 #s[Default] Command to launch on click:
 #{Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc}
@@ -26,7 +27,7 @@ Exec=
 #X[Extra parameters]
 frame_extra=
 
-#b Prevent this launcher from stealing this application from taskbar?
+#b Don't link the launcher with its window
 #{If you chose to mix launcher and applications, this option will deactivate this behaviour for this launcher only. It can be useful for instance for a launcher that launches a script in a terminal, but you don't want it to steal the terminal's icon from the taskbar.} 
 prevent inhibate=false
 
@@ -42,8 +43,8 @@ Terminal=false
 ShowOnViewport=0
 
 #f[0;100] Order you want for this launcher among the others:
-Order=7.8125
+Order=7.712890625
 
 Icon Type=0
 Type=Application
-Origin=/usr/local/share/applications/Chromium_Daily.desktop
+Origin=/usr/share/applications/google-chrome.desktop

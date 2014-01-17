@@ -18,13 +18,17 @@
 { "keys": ["ctrl+alt+s"], "command": "prompt_save_as" },
 { "keys": ["ctrl+shift+s"], "command": "sftp_upload_file" },
 { "keys": ["ctrl+alt+f"], "command": "sftp_diff_remote_file" },
-{ "keys": ["ctrl+alt+d"], "command": "svn_wc_diff" },
-{ "keys": ["ctrl+shift+alt+d"], "command": "svn_diff" },
-{ "keys": ["ctrl+alt+c"], "command": "svn_wc_commit" },
-{ "keys": ["ctrl+shift+alt+c"], "command": "svn_commit" },
+{ "keys": ["ctrl+alt+super+d"], "command": "svn_wc_diff" },
+{ "keys": ["ctrl+shift+alt+super+d"], "command": "svn_diff" },
+{ "keys": ["ctrl+alt+super+c"], "command": "svn_wc_commit" },
+{ "keys": ["ctrl+shift+alt+super+c"], "command": "svn_commit" },
+{ "keys": ["ctrl+alt+d"], "command": "git_diff" },
+{ "keys": ["ctrl+shift+alt+d"], "command": "git_diff_current_file" },
+{ "keys": ["ctrl+alt+c"], "command": "git_status" },
 { "keys": ["ctrl+shift+n"], "command": "new_window" },
 { "keys": ["ctrl+alt+u","ctrl+alt+i"], "command": "sftp_switch_config" },
 { "keys": ["f12"], "command": "goto_definition" },
+{ "keys": ["ctrl+shift+r"], "command": "goto_symbol_in_project" },
 {
 	//un seul panel
 	"keys": ["alt+shift+a"],
@@ -94,20 +98,5 @@
 			[0, 1, 1, 2], [1, 1, 2, 2]
 		]
 	}
-}//,
-// {
-// 	//gros wtf
-// 	"keys": ["alt+shift+x"],
-// 	"command": "set_layout",
-// 	"args":
-// 	{
-// 		"cols": [0.0, 0.33, 0.66, 1.0],
-// 		"rows": [0.0, 0.33, 0.66, 1.0],
-// 		"cells":
-// 		[
-// 			[0, 0, 1, 1], [1, 0, 2, 1], [2, 0, 3, 1],
-// 			[0, 1, 1, 1], [1, 1, 1, 2], [2, 1, 1, 3]
-// 		]
-// 	}
-// }
+}
 ]

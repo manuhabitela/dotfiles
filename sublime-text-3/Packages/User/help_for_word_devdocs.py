@@ -1,14 +1,13 @@
-# search for the keyword under the scope on various documentation website or google
+# search for the keyword under the scope on devdocs.io or google if language is not supposedly supported
 #
 # how to use: bind the "help_for_word" command to a keyboard shortcut
-# put your cursor on the langage keyword, function, ... you want info on
-# trigger the command via the shortcut > the documentation website or google is opened on your browser
+# put your cursor on the language keyword, function, ... you want info on
+# trigger the command via the shortcut > devdocs or google is opened on your browser
 #
 # code is mostly http://dom111.co.uk/files/sublime/plugins/help_for_word.py
-# just modified to take devdocs.io into account
+# modified to use devdocs.io as the main doc website
 import sublime
 import sublime_plugin
-import re
 
 
 def open_url(url):
@@ -18,15 +17,10 @@ def open_url(url):
 class HelpForWordCommand(sublime_plugin.TextCommand):
 
     def run(self, edit):
-        # define lookups here
-        urls = {
-            # r'scope\.name\.regex': 'http://url.for/%(function_name)s'
-            r'support\.function\..+\.php': 'http://php.net/%s',
-            r'(storage\..+|keyword\..+|support\..+|constant\.language)\.python': 'http://effbot.org/pyref/%s.htm'
-        }
+        devdocs_languages = ["js", "css", "html", "php", "python", "ruby"]
+        devdocs_multiple_docs_languages = ["js", "ruby"]
 
         for region in self.view.sel():
-            scopes = self.view.scope_name(region.begin()).strip().split(' ')
 
             if region.empty():
                 p = region.begin()
@@ -51,17 +45,11 @@ class HelpForWordCommand(sublime_plugin.TextCommand):
             else:
                 s = self.view.substr(region)
 
-            for scope in scopes:
-                for search in urls.keys():
-                    if re.search(search, scope):
-                        open_url(urls[search] % s)
-                        return
+            # purloined from: http://www.sublimetext.com/forum/viewtopic.php?f=5&t=2242
+            language = self.view.scope_name(self.view.sel()[0].begin()).strip().split('.')[-1]
 
-            else:
-                # purloined from: http://www.sublimetext.com/forum/viewtopic.php?f=5&t=2242
-                language = self.view.scope_name(self.view.sel()[0].begin()).strip().split('.')[-1]
-
-                # devdocs: if langage is "js" we don't prepend the request with the langage because of underscore, jquery and all
-                request = language + ' ' + s if language != "js" else s
-                url = 'http://devdocs.io/#q=%s' if language in ["js", "css", "html"] else 'http://www.google.com/search?q=%s'
-                open_url(url % request)
+            # devdocs: if language has multiple docs on devdocs, we don't prepend the request with the language
+            # this is useful for JS (will jquery, underscore and all other libraries) or ruby (with ror) for example
+            request = s if language in devdocs_multiple_docs_languages else language + ' ' + s
+            url = 'http://devdocs.io/#q=%s' if language in devdocs_languages else 'http://www.google.com/search?q=%s'
+            open_url(url % request)

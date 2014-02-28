@@ -23,6 +23,42 @@
 	"draw_indent_guides": false,
 	"draw_minimap_border": false,
 	"fallback_encoding": "Western (ISO 8859-1)",
+	"file_exclude_patterns":
+	[
+		"*.log",
+		"*.min.js",
+		"*.min.css",
+		"*.pyc",
+		"*.pyo",
+		"*.exe",
+		"*.dll",
+		"*.obj",
+		"*.o",
+		"*.a",
+		"*.lib",
+		"*.so",
+		"*.dylib",
+		"*.ncb",
+		"*.sdf",
+		"*.suo",
+		"*.pdb",
+		"*.idb",
+		".DS_Store",
+		"*.class",
+		"*.psd",
+		"*.db",
+		"*.sublime-workspace"
+	],
+	"folder_exclude_patterns":
+	[
+		"node_modules",
+		"bower_components",
+		".svn",
+		".git",
+		".hg",
+		"CVS",
+		".sass-cache"
+	],
 	"font_face": "Monaco for Powerline",
 	"font_options":
 	[

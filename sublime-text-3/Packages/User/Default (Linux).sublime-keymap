@@ -1,7 +1,7 @@
 [
 { "keys": ["ctrl+v"], "command": "paste_and_indent" },
-{ "keys": ["ctrl+shift+o"], "command": "fetch" },
 { "keys": ["ctrl+shift+;"], "command": "help_for_word" },
+{ "keys": ["ctrl+shift+alt+;"], "command": "zeal_search" },
 { "keys": ["ctrl+b"], "command": "toggle_side_bar" },
 { "keys": ["ctrl+shift+x"], "command": "delete_trailing_spaces" },
 { "keys": ["ctrl+space"], "command": "auto_complete" },
@@ -29,6 +29,16 @@
 { "keys": ["ctrl+alt+u","ctrl+alt+i"], "command": "sftp_switch_config" },
 { "keys": ["f12"], "command": "goto_definition" },
 { "keys": ["ctrl+shift+r"], "command": "goto_symbol_in_project" },
+{
+    "keys": ["ctrl+e", "<character>"],
+    "command": "easy_motion",
+    "args": {"select_text": false}
+},
+{
+    "keys": ["ctrl+e", "enter"],
+    "command": "easy_motion",
+    "args": {"select_text": false, "character": "enter"}
+},
 {
 	//un seul panel
 	"keys": ["alt+shift+a"],

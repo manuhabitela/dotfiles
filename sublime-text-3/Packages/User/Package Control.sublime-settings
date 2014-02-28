@@ -8,6 +8,7 @@
 		"Better CoffeeScript",
 		"ColorPicker",
 		"DocBlockr",
+		"EasyMotion",
 		"Emmet",
 		"FindKeyConflicts",
 		"Handlebars",
@@ -15,8 +16,8 @@
 		"Missing Palette Commands",
 		"Modific",
 		"MultiFill",
-		"Nettuts+ Fetch",
 		"Package Control",
+		"PHP-Twig",
 		"Phpcs",
 		"Pretty JSON",
 		"RailsCasts Colour Scheme",
@@ -38,6 +39,8 @@
 		"Theme - Nil",
 		"TrailingSpaces",
 		"Underscore.js Snippets",
-		"YUI Compressor"
+		"Xdebug Client",
+		"YUI Compressor",
+		"Zeal"
 	]
 }

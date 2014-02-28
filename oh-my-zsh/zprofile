@@ -18,6 +18,5 @@ source_sh () {
   emulate -LR sh
   . "$@"
 }
-source_sh $HOME/.aliases
 
 CHROME_DEVEL_SANDBOX="$HOME/opt/chrome-linux/chrome_sandbox"

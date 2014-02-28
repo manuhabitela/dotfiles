@@ -16,3 +16,5 @@ source $ZSH/oh-my-zsh.sh
 
 setopt auto_cd
 cdpath=($HOME/Dev $HOME/Dev/httpd $HOME/Dev/vagrant $HOME/Dropbox/Web/localhost)
+
+source_sh $HOME/.aliases

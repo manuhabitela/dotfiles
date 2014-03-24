@@ -1,18 +1,18 @@
-/autostart/
-/sublime-text-2/
+/.config/autostart/
+/.config/sublime-text-2/
 
-!sublime-text-3/
+!.config/sublime-text-3/
 
-sublime-text-3/*
-!sublime-text-3/Packages/
+.config/sublime-text-3/*
+!.config/sublime-text-3/Packages/
 
-sublime-text-3/Packages/*
-!sublime-text-3/Packages/User/
+.config/sublime-text-3/Packages/*
+!.config/sublime-text-3/Packages/User/
 
-sublime-text-3/Packages/User/sftp_servers/
-sublime-text-3/Packages/User/ColorPicker/
-sublime-text-3/Packages/User/SVN.sublime-settings
-sublime-text-3/Packages/User/SFTP.sublime-settings
+.config/sublime-text-3/Packages/User/sftp_servers/
+.config/sublime-text-3/Packages/User/ColorPicker/
+.config/sublime-text-3/Packages/User/SVN.sublime-settings
+.config/sublime-text-3/Packages/User/SFTP.sublime-settings
 
-sublime-text-3/Packages/User/Package Control*
-!sublime-text-3/Packages/User/Package Control.sublime-settings
+.config/sublime-text-3/Packages/User/Package Control*
+!.config/sublime-text-3/Packages/User/Package Control.sublime-settings

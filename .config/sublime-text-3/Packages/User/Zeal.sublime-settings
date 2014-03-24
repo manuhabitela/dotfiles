@@ -11,7 +11,7 @@
    */
   "language_mapping": {
     "HTML": {"lang": "html", "zeal_lang": "html"},
-    "JavaScript": {"lang": "javascript", "zeal_lang": "javascript"},
+    "JavaScript": {"lang": "javascript", "zeal_lang": " "},
     "CSS": {"lang": "css", "zeal_lang": "css"},
     "SCSS": {"lang": "scss", "zeal_lang": "sass"},
     "PHP": {"lang": "php", "zeal_lang": "php"},

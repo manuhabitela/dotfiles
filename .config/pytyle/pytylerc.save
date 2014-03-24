@@ -175,8 +175,8 @@ Config.KEYMAP = {
                  # The following two will increase and decrease the number
                  # of master windows. This will allow you to easily configure
                  # a grid layout dynamically, among other things.
-                 'Alt-period': 'add_master',
-                 'Alt-comma': 'remove_master',
+                 'Super-Y': 'add_master',
+                 'Super-B': 'remove_master',
 
                  # This will make the currently active window the master.
                  'Super-E': 'make_active_master',
@@ -195,13 +195,13 @@ Config.KEYMAP = {
                  # The following two will cycle focus to the previous or
                  # next windows. (The algorithm for this is determined
                  # by the current tiling layout.)
-                 #'Alt-J': 'win_previous',
-                 #'Alt-K': 'win_next',
+                 'Super-K': 'win_previous',
+                 'Super-L': 'win_next',
 
                  # The following two will switch the current window with
-                 # the previous or next window.
-                 #'Alt-Shift-J': 'switch_previous',
-                 #'Alt-Shift-K': 'switch_next',
+                 # the previous or next window
+                 'Super-Shift-K': 'switch_previous',
+                 'Super-Shift-L': 'switch_next',
 
                  # This is a debugging binding that shows some information
                  # about the current desktop. It's only useful if you're
@@ -284,7 +284,7 @@ Config.WORKAREA = {
 #
 # Note 2: You shouldn't need to put dmenu here.
 Config.FILTER = [
-               'gmrun', 'gimp', 'download', 'spotify.exe', 'VirtualBox', operamobile
+               'gmrun', 'gimp', 'download', 'spotify.exe', 'VirtualBox', 'operamobile'
                ]
 
 

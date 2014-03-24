@@ -1,0 +1,6 @@
+{
+	"path_mapping": {
+		"/home/httpd/" : "/home/manu/Dev/httpd/"
+	},
+	"debug": true
+}

@@ -1,0 +1,28 @@
+#!/bin/sh
+# lancement d'une commande dans un screen sans rentrer dedans
+# $1 = nom à attribuer au screen créé (facultatif : peut être directement la commande ) éxectuer
+# $2 = commande à éxéctuer si y'a un nom
+# exemple: `scrn php_serv php -S localhost:8000 -t public`
+
+if [ $# -eq 0 ] || [ $# -gt 2 ]; then
+	echo "Usage : scrn [nom_du_screen] command"
+	exit 1
+fi
+
+NAME=''
+COMMAND=''
+
+if [ $# -eq 1 ]; then
+	COMMAND=$1
+fi
+
+if [ $# -eq 2 ]; then
+	NAME=$1
+	COMMAND=$2
+fi
+
+if [ ! "$NAME" ]; then
+	screen -d -m $COMMAND
+else
+	screen -S "$NAME" -d -m $COMMAND
+fi

@@ -1,25 +1,27 @@
 #!/bin/zsh
 
-ZSH_FOLDER="$HOME/Dropbox/synced-configs/oh-my-zsh"
-ZSH_FILES=( aliases zprofile zshrc )
+DOTFILES="/home/manu/Dropbox/dotfiles"
 
-for file in $ZSH_FILES
+FILES=( bin .aliases .xmodmaprc .zprofile .zshrc )
+
+for FILE in $FILES
 do
-	ln -s $ZSH_FOLDER/$file $HOME/.$file
+	echo "ln -s $DOTFILES/$FILE $HOME/$FILE"
+	ln -s $DOTFILES/$FILE $HOME/$FILE
 done
 
-ln -s $ZSH_FOLDER/theme $HOME/.oh-my-zsh/themes/leimi.zsh-theme
-
-
-
-CONFIG_ROOT="$HOME/Dropbox/synced-configs"
-CONFIG_FOLDERS=( sublime-text-2 sublime-text-3 openbox lxsession pytyle cairo-dock )
-for folder in $CONFIG_FOLDERS
+CONFIGS=( cairo-dock lxsession openbox pytyle sublime-text-2 sublime-text-3 xfce4 )
+for CONFIG in $CONFIGS
 do
-	ln -s $CONFIG_ROOT/$folder $HOME/.config/$folder
+	echo "ln -s $DOTFILES/.config/$CONFIG $HOME/.config/$CONFIG"
+	ln -s $DOTFILES/.config/$CONFIG $HOME/.config/$CONFIG
 done
 
+echo "ln -s $DOTFILES/.themes/ACIDBoxCustom $HOME/.themes/ACIDBoxCustom"
+ln -s $DOTFILES/.themes/ACIDBoxCustom $HOME/.themes/ACIDBoxCustom
 
+echo "ln -s $DOTFILES/.themes/Numix $HOME/.themes/Numix"
+ln -s $DOTFILES/.themes/Numix $HOME/.themes/Numix
 
-ln -s $CONFIG_ROOT/bin $HOME/bin
-ln -s $CONFIG_ROOT/xmodmap/xmodmaprc $HOME/.xmodmaprc
+echo "ln -s $DOTFILES/.oh-my-zsh/themes/leimi.zsh $HOME/.oh-my-zsh/themes/leimi.zsh"
+ln -s $DOTFILES/.oh-my-zsh/themes/leimi.zsh $HOME/.oh-my-zsh/themes/leimi.zsh

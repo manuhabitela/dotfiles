@@ -18,7 +18,7 @@ function leimi.titlewidget(c)
         ret:set_text("  "..c.name or "<unknown>")
     end
     local function update_font()
-        ret:set_font(c == client.focus and beautiful.font_focus or beautiful.font)
+        ret:set_font(c == client.focus and beautiful.font_title_focus or beautiful.font_title)
     end
     c:connect_signal("property::name", update_title)
     c:connect_signal("focus", update_font)
@@ -27,6 +27,12 @@ function leimi.titlewidget(c)
     update_font()
 
     return ret
+end
+
+function leimi.minimizebutton(c)
+    local widget = awful.titlebar.widget.button(c, "minimize", function() return c.minimized end, function(c) c.minimized = not c.minimized end)
+    c:connect_signal("property::minimized", widget.update)
+    return widget
 end
 
 -- Load Debian menu entries
@@ -433,7 +439,7 @@ client.connect_signal("manage", function (c, startup)
     local titlebars_enabled = true
     if titlebars_enabled and c.instance ~= "exe" and c.instance ~= "plugin-container" and (c.type == "normal" or c.type == "dialog") then
         -- buttons for the titlebar
-        local buttons = awful.util.table.join(
+        local mouse_buttons = awful.util.table.join(
                 awful.button({ }, 1, function()
                     if awful.client.focus.filter(c) then
                       client.focus = c
@@ -457,18 +463,24 @@ client.connect_signal("manage", function (c, startup)
 
         -- Widgets that are aligned to the right
         local right_layout = wibox.layout.fixed.horizontal()
-        right_layout:add(awful.titlebar.widget.maximizedbutton(c))
-        right_layout:add(awful.titlebar.widget.closebutton(c))
-
-        local middle_layout = wibox.layout.fixed.horizontal()
+        local maximizedbutton = awful.titlebar.widget.maximizedbutton(c)
+        local closebutton = awful.titlebar.widget.closebutton(c)
+        local minimizebutton = leimi.minimizebutton(c)
+        local title_buttons = {
+          leimi.minimizebutton(c),
+          awful.titlebar.widget.maximizedbutton(c),
+          awful.titlebar.widget.closebutton(c)
+        }
+        for i, title_button in ipairs(title_buttons) do
+          title_button:set_resize(false)
+          right_layout:add(title_button)
+        end
 
         -- Now bring it alla together
         local layout = wibox.layout.align.horizontal()
         layout:set_left(left_layout)
         layout:set_right(right_layout)
-        layout:set_middle(middle_layout)
-        left_layout:buttons(buttons)
-        middle_layout:buttons(buttons)
+        left_layout:buttons(mouse_buttons)
         awful.titlebar(c):set_widget(layout)
     end
 end)

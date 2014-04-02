@@ -5,10 +5,11 @@
 theme = {}
 
 theme.font          = "Droid Sans 10"
-theme.font_focus    = "Droid Sans Bold 10"
+theme.font_title          = "Droid Sans 8"
+theme.font_title_focus    = "Droid Sans Bold 8"
 
-theme.bg_normal     = "#222222"
-theme.bg_focus      = "#535d6c"
+theme.bg_normal     = "#444444"
+theme.bg_focus      = "#222222"
 theme.bg_urgent     = "#ff0000"
 theme.bg_minimize   = "#444444"
 theme.bg_systray    = theme.bg_normal
@@ -18,9 +19,9 @@ theme.fg_focus      = "#ffffff"
 theme.fg_urgent     = "#ffffff"
 theme.fg_minimize   = "#ffffff"
 
-theme.border_width  = 1
+theme.border_width  = 2
 theme.border_normal = "#000000"
-theme.border_focus  = "#535d6c"
+theme.border_focus  = "#B18904"
 theme.border_marked = "#91231c"
 
 -- There are other variable sets
@@ -50,30 +51,23 @@ theme.menu_width  = 100
 --theme.bg_widget = "#cc0000"
 
 -- Define the image to load
--- theme.titlebar_close_button_normal = "/usr/share/icons/Faenza-Darkest/actions/16/gtk-close.png"
--- theme.titlebar_close_button_focus  = "/usr/share/icons/Faenza-Darkest/actions/16/gtk-close.png"
 theme.titlebar_close_button_normal = "/usr/share/themes/Numix/unity/close.png"
 theme.titlebar_close_button_focus  = "/usr/share/themes/Numix/unity/close.png"
 
-theme.titlebar_ontop_button_normal_inactive = "/usr/share/awesome/themes/default/titlebar/ontop_normal_inactive.png"
-theme.titlebar_ontop_button_focus_inactive  = "/usr/share/awesome/themes/default/titlebar/ontop_focus_inactive.png"
-theme.titlebar_ontop_button_normal_active = "/usr/share/awesome/themes/default/titlebar/ontop_normal_active.png"
-theme.titlebar_ontop_button_focus_active  = "/usr/share/awesome/themes/default/titlebar/ontop_focus_active.png"
+theme.titlebar_minimize_button_normal_inactive = "/usr/share/themes/Numix/unity/minimize.png"
+theme.titlebar_minimize_button_normal_active = "/usr/share/themes/Numix/unity/minimize.png"
+theme.titlebar_minimize_button_focus_inactive  = "/usr/share/themes/Numix/unity/minimize.png"
+theme.titlebar_minimize_button_focus_active  = "/usr/share/themes/Numix/unity/minimize.png"
 
-theme.titlebar_sticky_button_normal_inactive = "/usr/share/awesome/themes/default/titlebar/sticky_normal_inactive.png"
-theme.titlebar_sticky_button_focus_inactive  = "/usr/share/awesome/themes/default/titlebar/sticky_focus_inactive.png"
-theme.titlebar_sticky_button_normal_active = "/usr/share/awesome/themes/default/titlebar/sticky_normal_active.png"
-theme.titlebar_sticky_button_focus_active  = "/usr/share/awesome/themes/default/titlebar/sticky_focus_active.png"
+theme.titlebar_maximized_button_normal_inactive = "/usr/share/themes/Numix/unity/maximize.png"
+theme.titlebar_maximized_button_focus_inactive  = "/usr/share/themes/Numix/unity/maximize.png"
+theme.titlebar_maximized_button_normal_active = "/usr/share/themes/Numix/unity/maximize.png"
+theme.titlebar_maximized_button_focus_active  = "/usr/share/themes/Numix/unity/maximize.png"
 
 theme.titlebar_floating_button_normal_inactive = "/usr/share/icons/Faenza-Darkest/actions/16/edit-copy.png"
 theme.titlebar_floating_button_focus_inactive  = "/usr/share/icons/Faenza-Darkest/actions/16/edit-copy.png"
 theme.titlebar_floating_button_normal_active = "/usr/share/icons/Faenza-Darkest/actions/16/edit-copy.png"
 theme.titlebar_floating_button_focus_active  = "/usr/share/icons/Faenza-Darkest/actions/16/edit-copy.png"
-
-theme.titlebar_maximized_button_normal_inactive = "/usr/share/icons/Faenza-Darkest/actions/16/gtk-add.png"
-theme.titlebar_maximized_button_focus_inactive  = "/usr/share/icons/Faenza-Darkest/actions/16/gtk-add.png"
-theme.titlebar_maximized_button_normal_active = "/usr/share/icons/Faenza-Darkest/actions/16/gtk-add.png"
-theme.titlebar_maximized_button_focus_active  = "/usr/share/icons/Faenza-Darkest/actions/16/gtk-add.png"
 
 theme.wallpaper = "/usr/share/awesome/themes/default/background.png"
 
@@ -93,7 +87,7 @@ theme.layout_dwindle = "/usr/share/awesome/themes/default/layouts/dwindlew.png"
 
 theme.awesome_icon = "/usr/share/awesome/icons/awesome16.png"
 
--- Define the icon theme for application icons. If not set then the icons 
+-- Define the icon theme for application icons. If not set then the icons
 -- from /usr/share/icons and /usr/share/icons/hicolor will be used.
 theme.icon_theme = "Faenza-Dark"
 

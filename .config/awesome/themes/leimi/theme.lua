@@ -69,7 +69,7 @@ theme.titlebar_floating_button_focus_inactive  = "/usr/share/icons/Faenza-Darkes
 theme.titlebar_floating_button_normal_active = "/usr/share/icons/Faenza-Darkest/actions/16/edit-copy.png"
 theme.titlebar_floating_button_focus_active  = "/usr/share/icons/Faenza-Darkest/actions/16/edit-copy.png"
 
-theme.wallpaper = "/usr/share/awesome/themes/default/background.png"
+theme.wallpaper = "/home/manu/Dropbox/Mes documents/Mes images/Walls/burning_valley_by_viperv6-d6ubjgl.jpg"
 
 -- You can use your own layout icons like this:
 theme.layout_fairh = "/usr/share/awesome/themes/default/layouts/fairhw.png"

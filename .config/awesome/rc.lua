@@ -11,8 +11,6 @@ local myhelpers = require("helpers")
 local leimi = require('leimi')
 require("debian.menu")
 
-
-
 -- error handling
 -- check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -52,10 +50,10 @@ local ctrl = "Control"
 local sft = "Shift"
 local panel = "xfce4-panel"
 local titlebars_enabled = true
-local titlebars_blacklist = { "guake", "exe", "plugin-container", "xfce4-notifyd" }
+local titlebars_blacklist = { "guake", "exe", "plugin-container" }
 local floating_classes = { "MPlayer", "pinentry", "Gimp"}
-local floating_instances = {"exe", "plugin-container", "xfce4-notifyd"}
-local noborders_instances = { "xfce4-notifyd", "xfce4-panel" }
+local floating_instances = {"exe", "plugin-container"}
+local noborders_instances = { "xfce4-panel" }
 local focused_clients = {}
 -- layouts: simple tiles and fullscreen layout are enough
 local layouts =
@@ -93,14 +91,47 @@ mymainmenu = awful.menu({
 })
 
 -- screen padding - give 1px free at bottom to let xfce4-panel show up on mouse-enter
+-- for s = 1, screen.count() do
+--   awful.screen.padding( screen[s], { bottom = 1 } )
+-- end
+mytextclock = awful.widget.textclock()
+
+-- Create a wibox for each screen and add it
+mywibox = {}
+mytaglist = {}
+mytaglist.buttons = awful.util.table.join(
+  awful.button({ }, 1, function(t) leimi.gototag(awful.tag.viewonly) end),
+  awful.button({ modkey }, 1, awful.client.movetotag),
+  awful.button({ }, 3, awful.tag.viewtoggle),
+  awful.button({ modkey }, 3, awful.client.toggletag),
+  awful.button({ }, 4, function(t) awful.tag.viewnext(awful.tag.getscreen(t)) end),
+  awful.button({ }, 5, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end)
+)
+
 for s = 1, screen.count() do
-  awful.screen.padding( screen[s], { bottom = 1 } )
+    mywibox[s] = awful.wibox({ position = "bottom", width = 90, screen = s, height = 1 })
+    mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons)
+    mywibox[s]:set_widget(mytaglist[s])
+    mywibox[s]:struts({ left = 0, right = 0, bottom = 1, top = 0 })
+    mywibox[s]:connect_signal("mouse::enter", function(w)
+      leimi.showtaglist(w)
+    end)
+    mywibox[s]:connect_signal("mouse::leave", function(w)
+      leimi.hidetaglist(w)
+    end)
 end
 
 -- global keyboard shortcuts - work all the time everywhere
 globalkeys = awful.util.table.join(
-  awful.key({ modkey, sft       }, "Tab",     function() leimi.gototag(awful.tag.viewprev) end),
-  awful.key({ modkey,           }, "Tab",     function() leimi.gototag(awful.tag.viewnext) end),
+  awful.key({ modkey,           }, "t",     function()
+    leimi.toggletaglist(mywibox[mouse.screen])
+  end),
+  awful.key({ modkey, sft       }, "Tab",     function()
+    leimi.gototag(awful.tag.viewprev)
+  end),
+  awful.key({ modkey,           }, "Tab",     function()
+    leimi.gototag(awful.tag.viewnext)
+  end),
   awful.key({ modkey,           }, "Escape",  awful.tag.history.restore),
   awful.key({ modkey,           }, "k",       function()
     leimi.client_focus_global_byidx(-1)
@@ -138,7 +169,6 @@ for i = 1, 9 do
   globalkeys = awful.util.table.join(globalkeys,
     -- go to tag x on the current screen, focusing back the client that was last focused on the given tag
     awful.key({ modkey      }, "#" .. i + 9, function()
-      -- myhelpers.notify({title = mouse.screen})
       leimi.gototag(function()
         awful.tag.viewonly(awful.tag.gettags(mouse.screen)[i])
       end)
@@ -165,7 +195,6 @@ clientkeys = awful.util.table.join(
   awful.key({ altkey            }, "F4",     function(c) c:kill() end),
   awful.key({ modkey, ctrl      }, "space",  awful.client.floating.toggle),
   awful.key({ modkey, ctrl      }, "Return", function(c) c:swap(awful.client.getmaster()) end),
-  awful.key({ modkey,           }, "t",      function(c) c.ontop = not c.ontop end),
   awful.key({ modkey,           }, "n",      function(c)
     -- The client currently has the input focus, so it cannot be
     -- minimized, since minimized clients can't have the focus.

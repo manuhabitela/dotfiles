@@ -47,7 +47,6 @@ function leimi.gototag(callback)
   else
     awful.client.focus.byidx( 1)
   end
-  myhelpers.notify({ title = "Bureau "..new_tag.name, urgency = "low", time = 1000 })
 end
 
 function leimi.client_focus_global_byidx(i, c)
@@ -71,6 +70,26 @@ function leimi.client_focus_global_byidx(i, c)
     awful.screen.focus_bydirection("right")
   elseif next_client then
     client.focus = next_client
+  end
+end
+
+function leimi.showtaglist(w)
+  w.height = 20
+  w.ontop = true
+  w:struts({ left = 0, right = 0, bottom = 1, top = 0 })
+end
+
+function leimi.hidetaglist(w)
+  w.height = 1
+  w.ontop = false
+  w:struts({ left = 0, right = 0, bottom = 1, top = 0 })
+end
+
+function leimi.toggletaglist(w)
+  if w.height == 1 then
+    leimi.showtaglist(w)
+  else
+    leimi.hidetaglist(w)
   end
 end
 

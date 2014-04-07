@@ -4,19 +4,21 @@ awful.rules = require("awful.rules")
 require("awful.autofocus")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
-local naughty = require("naughty")
-local scratchdrop = require("scratchdrop")
+-- local naughty = require("naughty")
+-- local scratchdrop = require("scratchdrop")
 local myhelpers = require("helpers")
 -- homemade stuff - usually slightly modified existing functions in awesome
 local leimi = require('leimi')
 require("debian.menu")
 
+
+
 -- error handling
 -- check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
 if awesome.startup_errors then
-  naughty.notify({
-    preset = naughty.config.presets.critical,
+  myhelpers.notify({
+    urgency = "critical",
     title = "Oops, there were errors during startup!",
     text = awesome.startup_errors
   })
@@ -24,12 +26,12 @@ end
 -- handle runtime errors after startup
 do
   local in_error = false
-  awesome.connect_signal("debug::error", function (err)
+  awesome.connect_signal("debug::error", function(err)
     -- make sure we don't go into an endless error loop
     if in_error then return end
     in_error = true
-    naughty.notify({
-      preset = naughty.config.presets.critical,
+    myhelpers.notify({
+      urgency = "critical",
       title = "Oops, an error happened!",
       text = err
     })
@@ -45,11 +47,16 @@ editor = os.getenv("EDITOR") or "editor"
 editor_cmd = terminal .. " -e " .. editor
 winkey = "Mod4"
 modkey = winkey
-local altkey = "Alt"
+local altkey = "Mod1"
+local ctrl = "Control"
+local sft = "Shift"
 local panel = "xfce4-panel"
 local titlebars_enabled = true
-local titlebars_blacklist = { classes = { }, instances = { "guake", "exe", "plugin-container" } }
-
+local titlebars_blacklist = { "guake", "exe", "plugin-container", "xfce4-notifyd" }
+local floating_classes = { "MPlayer", "pinentry", "Gimp"}
+local floating_instances = {"exe", "plugin-container", "xfce4-notifyd"}
+local noborders_instances = { "xfce4-notifyd", "xfce4-panel" }
+local focused_clients = {}
 -- layouts: simple tiles and fullscreen layout are enough
 local layouts =
 {
@@ -90,85 +97,60 @@ for s = 1, screen.count() do
   awful.screen.padding( screen[s], { bottom = 1 } )
 end
 
--- keyboard shortcuts that work all the time everywhere
+-- global keyboard shortcuts - work all the time everywhere
 globalkeys = awful.util.table.join(
-  awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
-  awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
-  awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
-
-  awful.key({ modkey,           }, "j", function ()
-    awful.client.focus.byidx( 1)
+  awful.key({ modkey, sft       }, "Tab",     function() leimi.gototag(awful.tag.viewprev) end),
+  awful.key({ modkey,           }, "Tab",     function() leimi.gototag(awful.tag.viewnext) end),
+  awful.key({ modkey,           }, "Escape",  awful.tag.history.restore),
+  awful.key({ modkey,           }, "k",       function()
+    leimi.client_focus_global_byidx(-1)
     if client.focus then client.focus:raise() end
   end),
-  awful.key({ modkey,           }, "k", function ()
-    awful.client.focus.byidx(-1)
+  awful.key({ modkey,           }, "l",       function()
+    leimi.client_focus_global_byidx(1)
     if client.focus then client.focus:raise() end
   end),
-  awful.key({ modkey,           }, "w", function () mymainmenu:show() end),
-
-  -- Layout manipulation
-  awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end),
-  awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)    end),
-  awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end),
-  awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end),
-  awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
+  awful.key({ modkey, sft       }, "k",       function() awful.client.swap.byidx(  1)    end),
+  awful.key({ modkey, sft       }, "l",       function() awful.client.swap.byidx( -1)    end),
+  awful.key({ modkey, ctrl      }, "k",       function() awful.screen.focus_relative( 1) end),
+  awful.key({ modkey, ctrl      }, "l",       function() awful.screen.focus_relative(-1) end),
+  awful.key({ modkey,           }, "u",       awful.client.urgent.jumpto),
 
   -- Standard program
-  awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
-  awful.key({ modkey, "Control" }, "r", awesome.restart),
-  awful.key({ modkey, "Shift"   }, "q", awesome.quit),
+  awful.key({ modkey,           }, "Return",  function() awful.util.spawn(terminal) end),
+  awful.key({ modkey, ctrl      }, "r",       awesome.restart),
+  awful.key({ modkey, ctrl, sft }, "q",       awesome.quit),
 
-  awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)    end),
-  awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)    end),
-  awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1)      end),
-  awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1)      end),
-  awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1)         end),
-  awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1)         end),
-  awful.key({ modkey,           }, "space", function () awful.layout.inc(layouts,  1) end),
-  awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
+  awful.key({ modkey,           }, "m",       function() awful.tag.incmwfact( 0.05)    end),
+  awful.key({ modkey,           }, "j",       function() awful.tag.incmwfact(-0.05)    end),
+  awful.key({ modkey, sft       }, "j",       function() awful.tag.incnmaster( 1)      end),
+  awful.key({ modkey, sft       }, "m",       function() awful.tag.incnmaster(-1)      end),
+  awful.key({ modkey,           }, "space",   function() awful.layout.inc(layouts,  1) end),
+  awful.key({ modkey, sft       }, "space",   function() awful.layout.inc(layouts, -1) end),
 
-  awful.key({ modkey, "Control" }, "n", awful.client.restore),
-
-  -- Prompt
-  awful.key({ modkey },            "r",     function () awful.util.spawn_with_shell("dmenu_run -fn 'Droid Sans-10' -b") end),
-  awful.key({ },            "F1",     function() scratchdrop("guake", "bottom") end)
+  awful.key({ modkey, ctrl      }, "n",       awful.client.restore),
+  awful.key({ modkey            }, "r",       function() awful.util.spawn_with_shell("dmenu_run -fn 'Droid Sans-10' -b") end)
+  -- awful.key({ },            "F1",     function() scratchdrop("guake", "bottom") end)
 )
 
 -- bind all key numbers to tags
-focused_clients = {}
 for i = 1, 9 do
   globalkeys = awful.util.table.join(globalkeys,
     -- go to tag x on the current screen, focusing back the client that was last focused on the given tag
-    awful.key({ modkey }, "#" .. i + 9, function ()
-      local screen = mouse.screen
-      local from_tag = awful.tag.selected(screen)
-      local to_tag = awful.tag.gettags(screen)[i]
-      if client.focus then
-        focused_clients[from_tag] = client.focus
-      end
-      if to_tag then
-        awful.tag.viewonly(to_tag)
-        if focused_clients[to_tag] and awful.client.focus.filter(focused_clients[to_tag]) then
-          client.focus = focused_clients[to_tag]
-        -- important ~hack because of xfce4-panel:
-        -- if it's the first time we go on the tag, by default it always focuses xfce4-panel (don't know why)
-        -- I don't want this behavior so I focus the next client after xfce
-        else
-          awful.client.focus.byidx( 1)
-        end
-      end
+    awful.key({ modkey      }, "#" .. i + 9, function()
+      -- myhelpers.notify({title = mouse.screen})
+      leimi.gototag(function()
+        awful.tag.viewonly(awful.tag.gettags(mouse.screen)[i])
+      end)
     end),
     -- go to tag x on the current screen and move currently focused client on the given tag
-    awful.key({ modkey, "Shift" }, "#" .. i + 9, function ()
-      if client.focus then
-        local current_client = client.focus
+    awful.key({ modkey, sft }, "#" .. i + 9, function()
+      leimi.gototag(function()
         local tag = awful.tag.gettags(client.focus.screen)[i]
-        if tag then
-          awful.client.movetotag(tag)
-          awful.tag.viewonly(tag)
-          client.focus = current_client
-        end
-      end
+        leimi.focused_clients[client.focus.screen][tag] = client.focus
+        awful.client.movetotag(tag)
+        awful.tag.viewonly(tag)
+      end)
     end)
   )
 end
@@ -176,20 +158,20 @@ end
 -- set all global keyboard shortcuts
 root.keys(globalkeys)
 
--- keyboard shortcuts that work on a client
+-- client keyboard shortcuts
 clientkeys = awful.util.table.join(
-  awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
-  awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill() end),
-  awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ),
-  awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
-  awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
-  awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
-  awful.key({ modkey,           }, "n", function (c)
+  awful.key({ modkey,           }, "f",      function(c) c.fullscreen = not c.fullscreen end),
+  awful.key({ modkey            }, "q",      function(c) c:kill() end),
+  awful.key({ altkey            }, "F4",     function(c) c:kill() end),
+  awful.key({ modkey, ctrl      }, "space",  awful.client.floating.toggle),
+  awful.key({ modkey, ctrl      }, "Return", function(c) c:swap(awful.client.getmaster()) end),
+  awful.key({ modkey,           }, "t",      function(c) c.ontop = not c.ontop end),
+  awful.key({ modkey,           }, "n",      function(c)
     -- The client currently has the input focus, so it cannot be
     -- minimized, since minimized clients can't have the focus.
     c.minimized = true
   end),
-  awful.key({ modkey,           }, "m", function (c)
+  awful.key({ modkey,           }, "m", function(c)
     c.maximized_horizontal = not c.maximized_horizontal
     c.maximized_vertical   = not c.maximized_vertical
   end)
@@ -197,14 +179,14 @@ clientkeys = awful.util.table.join(
 
 -- default mouse bindings that work everywhere
 root.buttons(awful.util.table.join(
-  awful.button({ }, 3, function () mymainmenu:toggle() end),
+  awful.button({ }, 3, function() mymainmenu:toggle() end),
   awful.button({ }, 4, awful.tag.viewnext),
   awful.button({ }, 5, awful.tag.viewprev)
 ))
 
 -- mouse buttons that works on a client - redefine the global mouse bindings for client behavior
 clientbuttons = awful.util.table.join(
-  awful.button({ }, 1, function (c)
+  awful.button({ }, 1, function(c)
     if awful.client.focus.filter(c) then client.focus = c end
     c:raise()
   end),
@@ -225,19 +207,23 @@ awful.rules.rules = {
       buttons = clientbuttons
     }
   },
-  -- these clients are floating by default
+  -- some clients are floating by default, others don't have borders - see variables declaration at top
   {
-    rule_any = { class = { "MPlayer", "pinentry", "Gimp"} },
+    rule_any = { class = floating_classes },
     properties = { floating = true }
   },
   {
-    rule_any = { instance = {"exe", "plugin-container"} },
+    rule_any = { instance = floating_instances },
     properties = { floating = true }
+  },
+  {
+    rule_any = { instance = noborders_instances },
+    properties = { border_width = 0 }
   }
 }
 
 -- signal function to execute when a new client appears.
-client.connect_signal("manage", function (c, startup)
+client.connect_signal("manage", function(c, startup)
   -- enable sloppy focus (focus windows when mouse comes over them)
   -- c:connect_signal("mouse::enter", function(c)
   --     if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
@@ -260,8 +246,7 @@ client.connect_signal("manage", function (c, startup)
 
   -- titlebar - for some clients we do not want it (their class or instance name is in a blacklist)
   if titlebars_enabled
-    and not myhelpers.contains(c.instance, titlebars_blacklist.instances)
-    and not myhelpers.contains(c.class, titlebars_blacklist.classes)
+    and not myhelpers.contains(c.instance, titlebars_blacklist)
     and (c.type == "normal" or c.type == "dialog") then
     -- buttons working when clicking the titlebar text on the left (left click = move, right click = resize)
     local mouse_buttons = awful.util.table.join(

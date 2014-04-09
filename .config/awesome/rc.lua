@@ -90,17 +90,10 @@ mymainmenu = awful.menu({
   }
 })
 
--- screen padding - give 1px free at bottom to let xfce4-panel show up on mouse-enter
--- for s = 1, screen.count() do
---   awful.screen.padding( screen[s], { bottom = 1 } )
--- end
-mytextclock = awful.widget.textclock()
-
--- Create a wibox for each screen and add it
-mywibox = {}
-mytaglist = {}
-mytaglist.buttons = awful.util.table.join(
-  awful.button({ }, 1, function(t) leimi.gototag(awful.tag.viewonly) end),
+statusbars = {}
+taglists = {}
+taglists.buttons = awful.util.table.join(
+  awful.button({ }, 1, awful.tag.viewonly),
   awful.button({ modkey }, 1, awful.client.movetotag),
   awful.button({ }, 3, awful.tag.viewtoggle),
   awful.button({ modkey }, 3, awful.client.toggletag),
@@ -109,22 +102,22 @@ mytaglist.buttons = awful.util.table.join(
 )
 
 for s = 1, screen.count() do
-    mywibox[s] = awful.wibox({ position = "bottom", width = 90, screen = s, height = 1 })
-    mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons)
-    mywibox[s]:set_widget(mytaglist[s])
-    mywibox[s]:struts({ left = 0, right = 0, bottom = 1, top = 0 })
-    mywibox[s]:connect_signal("mouse::enter", function(w)
-      leimi.showtaglist(w)
-    end)
-    mywibox[s]:connect_signal("mouse::leave", function(w)
-      leimi.hidetaglist(w)
-    end)
+  statusbars[s] = awful.wibox({ position = "bottom", width = 90, screen = s, height = 1 })
+  taglists[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, taglists.buttons)
+  statusbars[s]:set_widget(taglists[s])
+  statusbars[s]:struts({ left = 0, right = 0, bottom = 1, top = 0 })
+  statusbars[s]:connect_signal("mouse::enter", function(w)
+    leimi.showtaglist(w)
+  end)
+  statusbars[s]:connect_signal("mouse::leave", function(w)
+    leimi.hidetaglist(w)
+  end)
 end
 
 -- global keyboard shortcuts - work all the time everywhere
 globalkeys = awful.util.table.join(
   awful.key({ modkey,           }, "t",     function()
-    leimi.toggletaglist(mywibox[mouse.screen])
+    leimi.toggletaglist(statusbars[mouse.screen])
   end),
   awful.key({ modkey, sft       }, "Tab",     function()
     leimi.gototag(awful.tag.viewprev)
@@ -198,7 +191,7 @@ clientkeys = awful.util.table.join(
   awful.key({ modkey,           }, "n",      function(c)
     -- The client currently has the input focus, so it cannot be
     -- minimized, since minimized clients can't have the focus.
-    c.minimized = true
+    if (c.name ~= panel) then c.minimized = true end
   end),
   awful.key({ modkey,           }, "m", function(c)
     c.maximized_horizontal = not c.maximized_horizontal

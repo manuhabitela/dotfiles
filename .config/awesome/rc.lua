@@ -1,6 +1,7 @@
 local gears = require("gears")
 local awful = require("awful")
 awful.rules = require("awful.rules")
+local common = require("awful.widget.common")
 require("awful.autofocus")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
@@ -89,9 +90,14 @@ mymainmenu = awful.menu({
     { "open terminal", terminal }
   }
 })
+mylauncher = awful.widget.launcher({
+  image = beautiful.awesome_icon,
+  menu = mymainmenu
+})
 
 statusbars = {}
 taglists = {}
+tasklists = {}
 taglists.buttons = awful.util.table.join(
   awful.button({ }, 1, awful.tag.viewonly),
   awful.button({ modkey }, 1, awful.client.movetotag),
@@ -100,18 +106,116 @@ taglists.buttons = awful.util.table.join(
   awful.button({ }, 4, function(t) awful.tag.viewnext(awful.tag.getscreen(t)) end),
   awful.button({ }, 5, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end)
 )
+tasklists.buttons = awful.util.table.join(
+  awful.button({ }, 1, function(c)
+    if c == client.focus then
+      c.minimized = true
+    else
+      -- Without this, the following
+      -- :isvisible() makes no sense
+      c.minimized = false
+      if not c:isvisible() then
+        awful.tag.viewonly(c:tags()[1])
+      end
+      -- This will also un-minimize
+      -- the client, if needed
+      client.focus = c
+      c:raise()
+    end
+  end),
+  awful.button({ }, 3, function()
+    if instance then
+      instance:hide()
+      instance = nil
+    else
+      instance = awful.menu.clients({
+      theme = { width = 250 }
+      })
+    end
+  end),
+  awful.button({ }, 4, function()
+    awful.client.focus.byidx(1)
+    if client.focus then client.focus:raise() end
+  end),
+  awful.button({ }, 5, function()
+    awful.client.focus.byidx(-1)
+    if client.focus then client.focus:raise() end
+  end)
+)
+
+
+local mysystray = wibox.widget.systray()
+-- mysystray_wibox = awful.wibox({ position = "bottom", align = "right", screen = 1, height = 20, width = "10%" })
+-- mysystray_wibox:set_widget(mysystray)
+-- mysystray_wibox:struts({ left = 0, right = 0, bottom = 1, top = 0 })
+-- mysystray_wibox:connect_signal('mouse::enter', function()
+      -- leimi.showtaglist(mysystray_wibox)
+-- end)
+
 
 for s = 1, screen.count() do
-  statusbars[s] = awful.wibox({ position = "bottom", width = 90, screen = s, height = 1 })
+  statusbars[s] = awful.wibox({ position = "bottom", screen = s, height = 1, width = "30%" })
   taglists[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, taglists.buttons)
-  statusbars[s]:set_widget(taglists[s])
+  tasklists[s] = awful.widget.tasklist(
+    s,
+    awful.widget.tasklist.filter.alltags,
+    tasklists.buttons,
+    { bg_normal = "#00FF00" },
+    function (w, buttons, label, data, objects)
+      w:reset()
+      local icons_width = 0
+      local l = wibox.layout.fixed.horizontal()
+      for i, o in ipairs(objects) do
+        local cache = data[o]
+        if cache then
+          ib = cache.ib
+        else
+          ib = wibox.widget.imagebox()
+          ib:buttons(common.create_buttons(buttons, o))
+
+          data[o] = {
+            ib = ib
+          }
+        end
+
+        local text, bg, bg_image, icon = label(o)
+        ib:fit(24, 24)
+        ib:set_image(icon)
+        l:add(ib)
+        icons_width = icons_width + ib._image:get_width()
+      end
+      w:add(l)
+      -- statusbars[s].width = icons_width + 90
+      -- if statusbars[s].height == 1 then
+        -- leimi.hidetaglist(statusbars[s])
+      -- else
+        -- leimi.showtaglist(statusbars[s])
+      -- end
+    end,
+    wibox.layout.fixed.horizontal()
+  )
+
+  local statusbar_layout = wibox.layout.fixed.horizontal()
+  -- statusbar_layout:fill_space(false)
+  statusbar_layout:add(mylauncher)
+  statusbar_layout:add(taglists[s])
+  statusbar_layout:add(tasklists[s])
+  statusbar_layout:add(mysystray)
+
+  statusbars[s]:set_widget(statusbar_layout)
   statusbars[s]:struts({ left = 0, right = 0, bottom = 1, top = 0 })
-  statusbars[s]:connect_signal("mouse::enter", function(w)
-    leimi.showtaglist(w)
+  statusbars[s]:connect_signal('mouse::enter', function()
+        leimi.showtaglist(statusbars[s])
   end)
-  statusbars[s]:connect_signal("mouse::leave", function(w)
-    leimi.hidetaglist(w)
-  end)
+--  mysystray:connect_signal('mouse::enter', function()
+--        leimi.showtaglist(statusbars[s])
+--  end)
+--  mysystray:connect_signal('mouse::leave', function()
+--    if mouse.object_under_pointer() ~= statusbar[s] then 
+--      leimi.hidetaglist(statusbars[s])
+--    end
+--  end)
+
 end
 
 -- global keyboard shortcuts - work all the time everywhere
@@ -191,7 +295,7 @@ clientkeys = awful.util.table.join(
   awful.key({ modkey,           }, "n",      function(c)
     -- The client currently has the input focus, so it cannot be
     -- minimized, since minimized clients can't have the focus.
-    if (c.name ~= panel) then c.minimized = true end
+    c.minimized = true
   end),
   awful.key({ modkey,           }, "m", function(c)
     c.maximized_horizontal = not c.maximized_horizontal
@@ -316,19 +420,20 @@ end)
 
 -- change client's border on focus change
 client.connect_signal("focus", function(c)
-  if c.name ~= panel then c.border_color = beautiful.border_focus end
+  c.border_color = beautiful.border_focus
 end)
 client.connect_signal("unfocus", function(c)
-  if c.name ~= panel then c.border_color = beautiful.border_normal end
+  c.border_color = beautiful.border_normal
 end)
 
 -- show/hide xfce panel on mouse enter/leave without focusing it
 client.connect_signal("mouse::enter", function(c)
-  if c.name == panel then c:raise() end
+  leimi.hidetaglist(statusbars[mouse.screen])
 end)
 client.connect_signal("mouse::leave", function(c)
-  if c.name == panel then c:lower() end
 end)
 
+client.connect_signal('mouse::enter', function()
+end)
 -- autostarting apps - awesome_boot loads every .desktop file in standard autostart folder
 awful.util.spawn_with_shell("awesome_boot")

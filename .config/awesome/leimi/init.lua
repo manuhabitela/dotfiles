@@ -1,4 +1,5 @@
 local awful = require('awful')
+local common = require('awful.widget.common')
 local wibox = require('wibox')
 local beautiful = require('beautiful')
 local myhelpers = require('helpers')
@@ -74,7 +75,7 @@ function leimi.client_focus_global_byidx(i, c)
 end
 
 function leimi.showtaglist(w)
-  w.height = 20
+  w.height = 24
   w.ontop = true
   w:struts({ left = 0, right = 0, bottom = 1, top = 0 })
 end
@@ -91,6 +92,29 @@ function leimi.toggletaglist(w)
   else
     leimi.hidetaglist(w)
   end
+end
+
+function leimi.list_update(w, buttons, label, data, objects)
+   w:reset()
+   local l = wibox.layout.fixed.horizontal()
+   for i, o in ipairs(objects) do
+       local cache = data[o]
+       if cache then
+           ib = cache.ib
+       else
+           ib = wibox.widget.imagebox()
+           ib:buttons(common.create_buttons(buttons, o))
+
+           data[o] = {
+               ib = ib
+           }
+       end
+
+       local text, bg, bg_image, icon = label(o)
+       ib:set_image(icon)
+       l:add(ib)
+  end
+  w:add(l)
 end
 
 return leimi

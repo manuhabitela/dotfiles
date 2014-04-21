@@ -122,4 +122,11 @@ function leimi.icons_only_list(w, buttons, label, data, objects)
   w:add(l)
 end
 
+function leimi.ror(cmd, classes, merge)
+  local matcher = function(c)
+    return awful.rules.match_any(c, { class = classes })
+  end
+  return awful.client.run_or_raise(cmd, matcher, merge)
+end
+
 return leimi

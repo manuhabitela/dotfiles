@@ -54,8 +54,8 @@ local floating_instances = {"exe", "plugin-container"}
 local noborders_instances = {}
 -- menu config: using own fork of awesome-freedesktop for i18n https://github.com/Leimi/awesome-freedesktop/tree/feature-simple-localization
 require('awesome-freedesktop.freedesktop.utils')
-freedesktop.utils.terminal = "x-terminal-emulator"  -- default: "xterm"
-freedesktop.utils.icon_theme = "Faenza" -- look inside /usr/share/icons/, default: nil (don't use icon theme)
+freedesktop.utils.terminal = terminal  -- default: "xterm"
+freedesktop.utils.icon_theme = beautiful.icon_theme -- look inside /usr/share/icons/, default: nil (don't use icon theme)
 freedesktop.utils.lang = "fr"
 require('awesome-freedesktop.freedesktop.menu')
 freedesktop.menu.categories = {
@@ -185,7 +185,7 @@ end
 
 -- global keyboard shortcuts - work all the time everywhere
 globalkeys = awful.util.table.join(
-  awful.key({ modkey,           }, "t",     function()
+  awful.key({ modkey,           }, "v",     function()
     leimi.toggle_floating_wibox(statusbars[mouse.screen])
   end),
 
@@ -222,20 +222,20 @@ globalkeys = awful.util.table.join(
   end),
 
   -- shift + jklm to resize windows
-  awful.key({ modkey, sft       }, "k",       function() awful.client.incwfact(-0.1)    end),
-  awful.key({ modkey, sft       }, "l",       function() awful.client.incwfact( 0.1)    end),
+  awful.key({ modkey, sft       }, "k",       function() awful.client.incwfact(-0.1) end),
+  awful.key({ modkey, sft       }, "l",       function() awful.client.incwfact( 0.1) end),
 
   awful.key({ modkey, sft       }, "j",       function() awful.tag.incmwfact(-0.05) end),
   awful.key({ modkey, sft       }, "m",       function() awful.tag.incmwfact( 0.05) end),
 
   -- add or remove focused client to the master side
-  awful.key({ modkey,           }, "g",       function() awful.tag.incnmaster( 1)      end),
-  awful.key({ modkey,           }, "h",       function() awful.tag.incnmaster(-1)      end),
+  awful.key({ modkey,           }, "h",       function() awful.tag.incnmaster( 1) end),
+  awful.key({ modkey, sft       }, "h",       function() awful.tag.incnmaster(-1) end),
 
   -- cycle through existing layouts
-  awful.key({ modkey            }, "c",       function() awful.layout.inc(layouts, 1)  end),
+  awful.key({ modkey            }, "c",       function() awful.layout.inc(layouts, 1) end),
   -- cycle all clients (move them)
-  awful.key({ modkey            }, "x",       function() awful.client.cycle(true)          end),
+  awful.key({ modkey            }, "x",       function() awful.client.cycle(true) end),
   -- put current client as the master one
   awful.key({ modkey            }, "e",       function() awful.client.setmaster(client.focus) end),
 
@@ -248,7 +248,15 @@ globalkeys = awful.util.table.join(
   end),
   awful.key({ modkey,           }, "Return",  function() awful.util.spawn(terminal) end),
   awful.key({ modkey, ctrl      }, "r",       awesome.restart),
-  awful.key({ modkey, ctrl, sft }, "q",       awesome.quit)
+  awful.key({ modkey, ctrl, sft }, "q",       awesome.quit),
+
+  -- run or raise applications
+  awful.key({ modkey            }, "f",       function() leimi.ror("pcmanfm", { "Pcmanfm" }) end),
+  awful.key({ modkey            }, "s",       function() leimi.ror("subl", { "Sublime_text" }) end),
+  awful.key({ modkey            }, "w",       function() leimi.ror("chromium-browser", { "Chromium_browser" }) end),
+  awful.key({ modkey            }, "p",       function() leimi.ror("pidgin", { "Pidgin" }) end),
+  awful.key({ modkey            }, "g",       function() leimi.ror("git-cola", { "Git-cola" }) end),
+  awful.key({ modkey            }, "t",       function() leimi.ror(terminal, { "X-terminal-emulator" }) end)
 )
 
 -- bind all key numbers to tags
@@ -333,7 +341,10 @@ awful.rules.rules = {
   {
     rule_any = { instance = noborders_instances },
     properties = { border_width = 0 }
-  }
+  },
+  { rule = { class = "Sublime_text" }, properties = { tag = tags[1][1] } },
+  { rule = { class = "Chromium_browser" }, properties = { tag = tags[1][2] } },
+  { rule = { class = "X-terminal-emulator" }, properties = { tag = tags[1][6] } },
 }
 
 -- signal function to execute when a new client appears.

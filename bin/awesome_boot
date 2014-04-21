@@ -4,5 +4,4 @@
 # dirty trick: we check if volumeicon (one of the startup programs) is already running before starting everything
 if [ -z "`ps -Af | grep -o -w ".*volumeicon" | grep -v grep | grep -v run-once`" ]; then
   dex -a -e Awesome
-  sleep 20s && neap &
 fi

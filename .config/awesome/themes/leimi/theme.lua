@@ -4,7 +4,7 @@
 
 theme = {}
 
-theme.wallpaper = "/home/manu/Dropbox/Mes documents/Mes images/Walls/burning_valley_by_viperv6-d6ubjgl.jpg"
+theme.wallpaper = "/home/manu/Dropbox/Mes documents/Mes images/Walls/LionSky.png"
 
 theme.icon_theme = "Faenza-Dark"
 
@@ -27,10 +27,12 @@ theme.taglist_bg_focus = "#2F497F"
 theme.taglist_squares_sel   = "/usr/share/awesome/themes/default/taglist/squarew.png"
 theme.taglist_squares_unsel = "/usr/share/awesome/themes/default/taglist/squarew.png"
 
+
 theme.awesome_icon = "/usr/share/awesome/icons/awesome16.png"
+theme.awesome_icon = "/usr/share/icons/Faenza/places/24/distributor-logo.png"
 theme.menu_submenu_icon = "/usr/share/awesome/themes/default/submenu.png"
-theme.menu_height = 15
-theme.menu_width  = 100
+theme.menu_height = 22
+theme.menu_width  = 200
 
 theme.titlebar_close_button_normal = "/usr/share/themes/Numix/unity/close.png"
 theme.titlebar_close_button_focus  = "/usr/share/themes/Numix/unity/close.png"

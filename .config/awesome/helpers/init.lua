@@ -11,6 +11,9 @@ function helpers.contains(element, table)
 end
 
 function helpers.notify(args)
+	if args and type(args) ~= 'table' then
+		args = { title = args }
+	end
 	if not args.title then return false end
 	local title = args.title
 	local text = args.text or nil

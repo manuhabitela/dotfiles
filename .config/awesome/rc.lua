@@ -5,12 +5,10 @@ local common = require("awful.widget.common")
 require("awful.autofocus")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
--- local naughty = require("naughty")
--- local scratchdrop = require("scratchdrop")
 local myhelpers = require("helpers")
--- homemade stuff - usually slightly modified existing functions in awesome
+-- homemade stuff
 local leimi = require('leimi')
-require("debian.menu")
+
 
 -- error handling
 -- check if awesome encountered an error during startup and fell back to
@@ -38,7 +36,7 @@ do
   end)
 end
 
--- global variable definitions
+-- config stuff
 os.setlocale(os.getenv("LANG"))
 beautiful.init("/home/manu/.config/awesome/themes/leimi/theme.lua")
 terminal = "x-terminal-emulator"
@@ -49,13 +47,31 @@ modkey = winkey
 local altkey = "Mod1"
 local ctrl = "Control"
 local sft = "Shift"
-local panel = "xfce4-panel"
 local titlebars_enabled = true
 local titlebars_blacklist = { "guake", "exe", "plugin-container" }
 local floating_classes = { "MPlayer", "pinentry", "Gimp"}
 local floating_instances = {"exe", "plugin-container"}
-local noborders_instances = { "xfce4-panel" }
-local focused_clients = {}
+local noborders_instances = {}
+-- menu config: using own fork of awesome-freedesktop for i18n https://github.com/Leimi/awesome-freedesktop/tree/feature-simple-localization
+require('awesome-freedesktop.freedesktop.utils')
+freedesktop.utils.terminal = "x-terminal-emulator"  -- default: "xterm"
+freedesktop.utils.icon_theme = "Faenza" -- look inside /usr/share/icons/, default: nil (don't use icon theme)
+freedesktop.utils.lang = "fr"
+require('awesome-freedesktop.freedesktop.menu')
+freedesktop.menu.categories = {
+  accessories = "Accessoires",
+  dev = "Développement",
+  education = "Éducation",
+  games = "Jeux",
+  graphics = "Graphisme",
+  web = "Internet",
+  media = "Multimédia",
+  office = "Bureautique",
+  other = "Autre",
+  settings = "Paramètres",
+  system = "Système"
+}
+
 -- layouts: simple tiles and fullscreen layout are enough
 local layouts =
 {
@@ -77,27 +93,13 @@ for s = 1, screen.count() do
   tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6 }, s, layouts[1])
 end
 
--- menu accessible through keybinding or right click on desktop
-myawesomemenu = {
-  { "edit config", editor_cmd .. " " .. awesome.conffile },
-  { "restart", awesome.restart },
-  { "quit", awesome.quit }
-}
-mymainmenu = awful.menu({
-  items = {
-    { "awesome", myawesomemenu, beautiful.awesome_icon },
-    { "Debian", debian.menu.Debian_menu.Debian },
-    { "open terminal", terminal }
-  }
-})
-mylauncher = awful.widget.launcher({
-  image = beautiful.awesome_icon,
-  menu = mymainmenu
-})
+main_menu = awful.menu({ items = freedesktop.menu.new() })
 
+-- statusbar config: we have a systray, a launcher, a taglist and a tasklist
 statusbars = {}
 taglists = {}
 tasklists = {}
+-- normal taglist mouse buttons
 taglists.buttons = awful.util.table.join(
   awful.button({ }, 1, awful.tag.viewonly),
   awful.button({ modkey }, 1, awful.client.movetotag),
@@ -106,6 +108,7 @@ taglists.buttons = awful.util.table.join(
   awful.button({ }, 4, function(t) awful.tag.viewnext(awful.tag.getscreen(t)) end),
   awful.button({ }, 5, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end)
 )
+-- normal tasklist mouse buttons
 tasklists.buttons = awful.util.table.join(
   awful.button({ }, 1, function(c)
     if c == client.focus then
@@ -142,92 +145,56 @@ tasklists.buttons = awful.util.table.join(
     if client.focus then client.focus:raise() end
   end)
 )
-
-
-local mysystray = wibox.widget.systray()
--- mysystray_wibox = awful.wibox({ position = "bottom", align = "right", screen = 1, height = 20, width = "10%" })
--- mysystray_wibox:set_widget(mysystray)
--- mysystray_wibox:struts({ left = 0, right = 0, bottom = 1, top = 0 })
--- mysystray_wibox:connect_signal('mouse::enter', function()
-      -- leimi.showtaglist(mysystray_wibox)
--- end)
-
+launcher = awful.widget.launcher({
+  image = beautiful.awesome_icon,
+  menu = main_menu
+})
 
 for s = 1, screen.count() do
-  statusbars[s] = awful.wibox({ position = "bottom", screen = s, height = 1, width = "30%" })
+  statusbars[s] = awful.wibox({ position = "bottom", align = "right", screen = s, height = 1, width = 500 })
   taglists[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, taglists.buttons)
+  -- we show all apps in the tasklist with icons only
   tasklists[s] = awful.widget.tasklist(
     s,
     awful.widget.tasklist.filter.alltags,
     tasklists.buttons,
-    { bg_normal = "#00FF00" },
-    function (w, buttons, label, data, objects)
-      w:reset()
-      local icons_width = 0
-      local l = wibox.layout.fixed.horizontal()
-      for i, o in ipairs(objects) do
-        local cache = data[o]
-        if cache then
-          ib = cache.ib
-        else
-          ib = wibox.widget.imagebox()
-          ib:buttons(common.create_buttons(buttons, o))
-
-          data[o] = {
-            ib = ib
-          }
-        end
-
-        local text, bg, bg_image, icon = label(o)
-        ib:fit(24, 24)
-        ib:set_image(icon)
-        l:add(ib)
-        icons_width = icons_width + ib._image:get_width()
-      end
-      w:add(l)
-      -- statusbars[s].width = icons_width + 90
-      -- if statusbars[s].height == 1 then
-        -- leimi.hidetaglist(statusbars[s])
-      -- else
-        -- leimi.showtaglist(statusbars[s])
-      -- end
-    end,
+    nil,
+    leimi.icons_only_list,
     wibox.layout.fixed.horizontal()
   )
 
-  local statusbar_layout = wibox.layout.fixed.horizontal()
-  -- statusbar_layout:fill_space(false)
-  statusbar_layout:add(mylauncher)
-  statusbar_layout:add(taglists[s])
-  statusbar_layout:add(tasklists[s])
-  statusbar_layout:add(mysystray)
-
+  local statusbar_layout_left = wibox.layout.fixed.horizontal()
+  local statusbar_layout_right = wibox.layout.fixed.horizontal()
+  statusbar_layout_left:add(tasklists[s])
+  if s == 1 then
+    statusbar_layout_right:add(wibox.widget.systray())
+  end
+  statusbar_layout_right:add(taglists[s])
+  statusbar_layout_right:add(launcher)
+  local statusbar_layout = wibox.layout.align.horizontal()
+  statusbar_layout:set_left(statusbar_layout_left)
+  statusbar_layout:set_right(statusbar_layout_right)
   statusbars[s]:set_widget(statusbar_layout)
-  statusbars[s]:struts({ left = 0, right = 0, bottom = 1, top = 0 })
+  -- the statusbar is "floating": its height is 1px high when "hidden"
+  -- we can then put cursor at bottom of screen to trigger mouse::enter signal and show it above clients
+  leimi.show_floating_wibox(statusbars[s])
   statusbars[s]:connect_signal('mouse::enter', function()
-        leimi.showtaglist(statusbars[s])
+        leimi.show_floating_wibox(statusbars[s])
   end)
---  mysystray:connect_signal('mouse::enter', function()
---        leimi.showtaglist(statusbars[s])
---  end)
---  mysystray:connect_signal('mouse::leave', function()
---    if mouse.object_under_pointer() ~= statusbar[s] then 
---      leimi.hidetaglist(statusbars[s])
---    end
---  end)
-
 end
 
 -- global keyboard shortcuts - work all the time everywhere
 globalkeys = awful.util.table.join(
   awful.key({ modkey,           }, "t",     function()
-    leimi.toggletaglist(statusbars[mouse.screen])
+    leimi.toggle_floating_wibox(statusbars[mouse.screen])
   end),
   awful.key({ modkey, sft       }, "Tab",     function()
     leimi.gototag(awful.tag.viewprev)
+    leimi.show_floating_wibox(statusbars[mouse.screen])
   end),
   awful.key({ modkey,           }, "Tab",     function()
     leimi.gototag(awful.tag.viewnext)
+    leimi.show_floating_wibox(statusbars[mouse.screen])
   end),
   awful.key({ modkey,           }, "Escape",  awful.tag.history.restore),
   awful.key({ modkey,           }, "k",       function()
@@ -291,7 +258,6 @@ clientkeys = awful.util.table.join(
   awful.key({ modkey            }, "q",      function(c) c:kill() end),
   awful.key({ altkey            }, "F4",     function(c) c:kill() end),
   awful.key({ modkey, ctrl      }, "space",  awful.client.floating.toggle),
-  awful.key({ modkey, ctrl      }, "Return", function(c) c:swap(awful.client.getmaster()) end),
   awful.key({ modkey,           }, "n",      function(c)
     -- The client currently has the input focus, so it cannot be
     -- minimized, since minimized clients can't have the focus.
@@ -305,7 +271,7 @@ clientkeys = awful.util.table.join(
 
 -- default mouse bindings that work everywhere
 root.buttons(awful.util.table.join(
-  awful.button({ }, 3, function() mymainmenu:toggle() end),
+  awful.button({ }, 3, function() main_menu:toggle() end),
   awful.button({ }, 4, awful.tag.viewnext),
   awful.button({ }, 5, awful.tag.viewprev)
 ))
@@ -400,7 +366,7 @@ client.connect_signal("manage", function(c, startup)
     -- clickable buttons to minimize, maximize and close client on the right
     local right_layout = wibox.layout.fixed.horizontal()
     local title_buttons = {
-      leimi.minimizebutton(c),
+      awful.titlebar.widget.minimizebutton(c),
       awful.titlebar.widget.maximizedbutton(c),
       awful.titlebar.widget.closebutton(c)
     }
@@ -419,21 +385,22 @@ client.connect_signal("manage", function(c, startup)
 end)
 
 -- change client's border on focus change
+-- be sure the menu and statusbar are hidden when we are a on client (focusing it or clicking on it)
 client.connect_signal("focus", function(c)
   c.border_color = beautiful.border_focus
+  main_menu:hide()
+end)
+client.connect_signal("button::press", function(c)
+  main_menu:hide()
+  leimi.hide_floating_wibox(statusbars[mouse.screen])
 end)
 client.connect_signal("unfocus", function(c)
   c.border_color = beautiful.border_normal
 end)
 
--- show/hide xfce panel on mouse enter/leave without focusing it
 client.connect_signal("mouse::enter", function(c)
-  leimi.hidetaglist(statusbars[mouse.screen])
-end)
-client.connect_signal("mouse::leave", function(c)
+  leimi.hide_floating_wibox(statusbars[mouse.screen])
 end)
 
-client.connect_signal('mouse::enter', function()
-end)
 -- autostarting apps - awesome_boot loads every .desktop file in standard autostart folder
 awful.util.spawn_with_shell("awesome_boot")

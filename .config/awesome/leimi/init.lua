@@ -6,6 +6,8 @@ local myhelpers = require('helpers')
 local mouse = require('mouse')
 local leimi = {}
 leimi.focused_clients = { {}, {}, {}, {} }
+
+
 -- custom titlewidget:
 -- * text aligned to left with small left-margin
 -- * text becomes bold on focus
@@ -23,13 +25,6 @@ function leimi.titlewidget(c)
   update_title()
   update_font()
   return ret
-end
-
--- minimize button for the titlebar
-function leimi.minimizebutton(c)
-  local widget = awful.titlebar.widget.button(c, "minimize", function() return c.minimized end, function(c) c.minimized = not c.minimized end)
-  c:connect_signal("property::minimized", widget.update)
-  return widget
 end
 
 -- move to a tag through the given callback (awful.tag.viewnext, viewonly, etc)
@@ -50,6 +45,9 @@ function leimi.gototag(callback)
   end
 end
 
+-- make focus_byidx work on all screens
+-- kinda like focus_global_bydirection but here you can only press your usual two keys to go forward and backward the
+-- clients list instead of having to really go with one of four directions
 function leimi.client_focus_global_byidx(i, c)
   local current_client = c or client.focus
   local current_screen = current_client and current_client.screen or mouse.screen
@@ -74,45 +72,52 @@ function leimi.client_focus_global_byidx(i, c)
   end
 end
 
-function leimi.showtaglist(w)
-  w.height = 24
+-- show a wibox, give it the given height and update its struts to only 1px bottom
+-- this put the wibox on top of clients, kinda floating
+function leimi.show_floating_wibox(w, height)
+  w.height = height or 26
   w.ontop = true
   w:struts({ left = 0, right = 0, bottom = 1, top = 0 })
 end
 
-function leimi.hidetaglist(w)
+-- "hides" a wibox by setting its height to 1
+-- this allows the mouse::enter signal to still work with the one pixel height
+function leimi.hide_floating_wibox(w)
   w.height = 1
   w.ontop = false
   w:struts({ left = 0, right = 0, bottom = 1, top = 0 })
 end
 
-function leimi.toggletaglist(w)
+function leimi.toggle_floating_wibox(w, height)
   if w.height == 1 then
-    leimi.showtaglist(w)
+    leimi.show_floating_wibox(w, height)
   else
-    leimi.hidetaglist(w)
+    leimi.hide_floating_wibox(w)
   end
 end
 
-function leimi.list_update(w, buttons, label, data, objects)
-   w:reset()
-   local l = wibox.layout.fixed.horizontal()
-   for i, o in ipairs(objects) do
-       local cache = data[o]
-       if cache then
-           ib = cache.ib
-       else
-           ib = wibox.widget.imagebox()
-           ib:buttons(common.create_buttons(buttons, o))
+-- custom option to pass to the tasklist - show only app icons
+function leimi.icons_only_list(w, buttons, label, data, objects)
+  w:reset()
+  local icons_width = 0
+  local l = wibox.layout.fixed.horizontal()
+  for i, o in ipairs(objects) do
+    local cache = data[o]
+    if cache then
+      ib = cache.ib
+    else
+      ib = wibox.widget.imagebox()
+      ib:buttons(common.create_buttons(buttons, o))
 
-           data[o] = {
-               ib = ib
-           }
-       end
+      data[o] = {
+        ib = ib
+      }
+    end
 
-       local text, bg, bg_image, icon = label(o)
-       ib:set_image(icon)
-       l:add(ib)
+    local text, bg, bg_image, icon = label(o)
+    ib:fit(24, 24)
+    ib:set_image(icon)
+    l:add(ib)
   end
   w:add(l)
 end

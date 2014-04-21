@@ -151,7 +151,7 @@ launcher = awful.widget.launcher({
 })
 
 for s = 1, screen.count() do
-  statusbars[s] = awful.wibox({ position = "bottom", align = "right", screen = s, height = 1, width = 500 })
+  statusbars[s] = awful.wibox({ position = "bottom", align = "right", screen = s, height = 1, width = 600 })
   taglists[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, taglists.buttons)
   -- we show all apps in the tasklist with icons only
   tasklists[s] = awful.widget.tasklist(
@@ -196,6 +196,12 @@ globalkeys = awful.util.table.join(
     leimi.gototag(awful.tag.viewnext)
     leimi.show_floating_wibox(statusbars[mouse.screen])
   end),
+  awful.key({ altkey,           }, "Tab",     function()
+    awful.util.spawn_with_shell(string.format(
+      'rofi -now -font "%s" -fg "%s" -bg "%s" -hlfg "%s" -hlbg "%s" -o 85 -width 600',
+      beautiful.font_xft, beautiful.fg_normal, beautiful.bg_normal, beautiful.fg_focus, beautiful.bg_focus
+    ))
+  end),
   awful.key({ modkey,           }, "Escape",  awful.tag.history.restore),
   awful.key({ modkey,           }, "k",       function()
     leimi.client_focus_global_byidx(-1)
@@ -220,11 +226,14 @@ globalkeys = awful.util.table.join(
   awful.key({ modkey,           }, "j",       function() awful.tag.incmwfact(-0.05)    end),
   awful.key({ modkey, sft       }, "j",       function() awful.tag.incnmaster( 1)      end),
   awful.key({ modkey, sft       }, "m",       function() awful.tag.incnmaster(-1)      end),
-  awful.key({ modkey,           }, "space",   function() awful.layout.inc(layouts,  1) end),
-  awful.key({ modkey, sft       }, "space",   function() awful.layout.inc(layouts, -1) end),
-
-  awful.key({ modkey, ctrl      }, "n",       awful.client.restore),
-  awful.key({ modkey            }, "r",       function() awful.util.spawn_with_shell("dmenu_run -fn 'Droid Sans-10' -b") end)
+  -- awful.key({ modkey, altkey    }, "space",   function() awful.layout.inc(layouts,  1) end),
+  -- dmenu with fuzzy matching through -z option https://aur.archlinux.org/packages/dmenu-xft-fuzzy/
+  awful.key({ modkey            }, "r",   function()
+    awful.util.spawn_with_shell(string.format(
+      "dmenu_run -fn '%s' -nf '%s' -nb '%s' -sf '%s' -sb '%s' -b -z",
+      beautiful.font_xft, beautiful.fg_normal, beautiful.bg_normal, beautiful.fg_focus, beautiful.bg_focus
+    ))
+  end)
   -- awful.key({ },            "F1",     function() scratchdrop("guake", "bottom") end)
 )
 

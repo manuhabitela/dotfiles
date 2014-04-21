@@ -8,10 +8,11 @@ theme.wallpaper = "/home/manu/Dropbox/Mes documents/Mes images/Walls/LionSky.png
 
 theme.icon_theme = "Faenza-Dark"
 
-theme.bg_normal     = "#111111"
+theme.bg_normal     = "#222222"
 theme.fg_normal     = "#dddddd"
 theme.border_normal = "#000000"
 theme.font          = "Droid Sans 10"
+theme.font_xft      = "Droid Sans-10"
 theme.font_title    = "Droid Sans 8"
 
 theme.bg_focus      = "#395899"

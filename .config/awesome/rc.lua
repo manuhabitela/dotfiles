@@ -188,21 +188,30 @@ globalkeys = awful.util.table.join(
   awful.key({ modkey,           }, "t",     function()
     leimi.toggle_floating_wibox(statusbars[mouse.screen])
   end),
-  awful.key({ modkey, sft       }, "Tab",     function()
-    leimi.gototag(awful.tag.viewprev)
-    leimi.show_floating_wibox(statusbars[mouse.screen])
-  end),
+
+  -- go to next or prev tag with (shift+)tab
   awful.key({ modkey,           }, "Tab",     function()
     leimi.gototag(awful.tag.viewnext)
     leimi.show_floating_wibox(statusbars[mouse.screen])
   end),
+  awful.key({ modkey, sft       }, "Tab",     function()
+    leimi.gototag(awful.tag.viewprev)
+    leimi.show_floating_wibox(statusbars[mouse.screen])
+  end),
+  -- move current client to next (or prev cause it's cycling) screen with win+ctrl+tab
+  awful.key({ modkey, ctrl      }, "Tab",     function()
+    awful.client.movetoscreen(client.focus)
+  end),
+
+  -- almost normal alt-tab behavior with rofi https://github.com/DaveDavenport/rofi
   awful.key({ altkey,           }, "Tab",     function()
     awful.util.spawn_with_shell(string.format(
-      'rofi -now -font "%s" -fg "%s" -bg "%s" -hlfg "%s" -hlbg "%s" -o 85 -width 600',
+      'rofi -now -font "%s" -fg "%s" -bg "%s" -hlfg "%s" -hlbg "%s" -o 95 -width 600',
       beautiful.font_xft, beautiful.fg_normal, beautiful.bg_normal, beautiful.fg_focus, beautiful.bg_focus
     ))
   end),
-  awful.key({ modkey,           }, "Escape",  awful.tag.history.restore),
+
+  -- focus next or prev client - works accross all screens
   awful.key({ modkey,           }, "k",       function()
     leimi.client_focus_global_byidx(-1)
     if client.focus then client.focus:raise() end
@@ -211,30 +220,35 @@ globalkeys = awful.util.table.join(
     leimi.client_focus_global_byidx(1)
     if client.focus then client.focus:raise() end
   end),
-  awful.key({ modkey, sft       }, "k",       function() awful.client.swap.byidx(  1)    end),
-  awful.key({ modkey, sft       }, "l",       function() awful.client.swap.byidx( -1)    end),
-  awful.key({ modkey, ctrl      }, "k",       function() awful.screen.focus_relative( 1) end),
-  awful.key({ modkey, ctrl      }, "l",       function() awful.screen.focus_relative(-1) end),
-  awful.key({ modkey,           }, "u",       awful.client.urgent.jumpto),
 
-  -- Standard program
-  awful.key({ modkey,           }, "Return",  function() awful.util.spawn(terminal) end),
-  awful.key({ modkey, ctrl      }, "r",       awesome.restart),
-  awful.key({ modkey, ctrl, sft }, "q",       awesome.quit),
+  -- shift + jklm to resize windows
+  awful.key({ modkey, sft       }, "k",       function() awful.client.incwfact(-0.1)    end),
+  awful.key({ modkey, sft       }, "l",       function() awful.client.incwfact( 0.1)    end),
 
-  awful.key({ modkey,           }, "m",       function() awful.tag.incmwfact( 0.05)    end),
-  awful.key({ modkey,           }, "j",       function() awful.tag.incmwfact(-0.05)    end),
-  awful.key({ modkey, sft       }, "j",       function() awful.tag.incnmaster( 1)      end),
-  awful.key({ modkey, sft       }, "m",       function() awful.tag.incnmaster(-1)      end),
-  -- awful.key({ modkey, altkey    }, "space",   function() awful.layout.inc(layouts,  1) end),
+  awful.key({ modkey, sft       }, "j",       function() awful.tag.incmwfact(-0.05) end),
+  awful.key({ modkey, sft       }, "m",       function() awful.tag.incmwfact( 0.05) end),
+
+  -- add or remove focused client to the master side
+  awful.key({ modkey,           }, "g",       function() awful.tag.incnmaster( 1)      end),
+  awful.key({ modkey,           }, "h",       function() awful.tag.incnmaster(-1)      end),
+
+  -- cycle through existing layouts
+  awful.key({ modkey            }, "c",       function() awful.layout.inc(layouts, 1)  end),
+  -- cycle all clients (move them)
+  awful.key({ modkey            }, "x",       function() awful.client.cycle(true)          end),
+  -- put current client as the master one
+  awful.key({ modkey            }, "e",       function() awful.client.setmaster(client.focus) end),
+
   -- dmenu with fuzzy matching through -z option https://aur.archlinux.org/packages/dmenu-xft-fuzzy/
   awful.key({ modkey            }, "r",   function()
     awful.util.spawn_with_shell(string.format(
       "dmenu_run -fn '%s' -nf '%s' -nb '%s' -sf '%s' -sb '%s' -b -z",
       beautiful.font_xft, beautiful.fg_normal, beautiful.bg_normal, beautiful.fg_focus, beautiful.bg_focus
     ))
-  end)
-  -- awful.key({ },            "F1",     function() scratchdrop("guake", "bottom") end)
+  end),
+  awful.key({ modkey,           }, "Return",  function() awful.util.spawn(terminal) end),
+  awful.key({ modkey, ctrl      }, "r",       awesome.restart),
+  awful.key({ modkey, ctrl, sft }, "q",       awesome.quit)
 )
 
 -- bind all key numbers to tags
@@ -247,7 +261,7 @@ for i = 1, 9 do
       end)
     end),
     -- go to tag x on the current screen and move currently focused client on the given tag
-    awful.key({ modkey, sft }, "#" .. i + 9, function()
+    awful.key({ modkey, ctrl }, "#" .. i + 9, function()
       leimi.gototag(function()
         local tag = awful.tag.gettags(client.focus.screen)[i]
         leimi.focused_clients[client.focus.screen][tag] = client.focus
@@ -263,10 +277,9 @@ root.keys(globalkeys)
 
 -- client keyboard shortcuts
 clientkeys = awful.util.table.join(
-  awful.key({ modkey,           }, "f",      function(c) c.fullscreen = not c.fullscreen end),
   awful.key({ modkey            }, "q",      function(c) c:kill() end),
   awful.key({ altkey            }, "F4",     function(c) c:kill() end),
-  awful.key({ modkey, ctrl      }, "space",  awful.client.floating.toggle),
+  awful.key({ modkey            }, "u",      awful.client.floating.toggle),
   awful.key({ modkey,           }, "n",      function(c)
     -- The client currently has the input focus, so it cannot be
     -- minimized, since minimized clients can't have the focus.

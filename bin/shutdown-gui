@@ -1,0 +1,30 @@
+#! /bin/bash
+action=$(yad --width 300 --title "Quitter" --window-icon=system-shutdown \
+    --buttons-layout=center \
+    --center \
+    --button=" Arreter!system-shutdown:1" \
+    --button=" Redemarrer!reload:2" \
+    --button=" Suspendre!down:3" \
+    --button=" Se déconnecter!system-log-out:4" \
+    --button=" Verrouiller!lock:5" \
+    --button=" Annuler!gtk-close:6")
+ret=$?
+
+case $ret in
+    1*) cmd="gksudo halt" ;;
+    2*) cmd="gksudo reboot" ;;
+    3*) cmd="gksudo suspend" ;;
+    4*)
+    case $(wmctrl -m | grep Name) in
+        *awesome) cmd="awesome-client quit" ;;
+        *Openbox) cmd="openbox --exit" ;;
+        *FVWM) cmd="FvwmCommand Quit" ;;
+            *Metacity) cmd="gnome-save-session --kill" ;;
+        *) exit 1 ;;
+    esac
+    ;;
+    5*) cmd="xscreensaver-command -lock" ;;
+    *) exit 1 ;;
+esac
+
+eval exec $cmd

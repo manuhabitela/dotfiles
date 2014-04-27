@@ -3,6 +3,7 @@ local awful = require("awful")
 awful.rules = require("awful.rules")
 local common = require("awful.widget.common")
 require("awful.autofocus")
+require("awful.remote")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 local myhelpers = require("helpers")
@@ -51,7 +52,7 @@ local ctrl = "Control"
 local sft = "Shift"
 local titlebars_enabled = true
 local titlebars_blacklist = { "guake", "exe", "plugin-container", terminal }
-local floating_classes = { "MPlayer", "pinentry", "Gimp", "Guake"}
+local floating_classes = { "MPlayer", "pinentry", "Gimp", "Guake", "Yad"}
 local floating_instances = {"exe", "plugin-container"}
 local noborders_instances = {}
 local main_screen = screen.count() > 1 and 2 or 1
@@ -100,8 +101,7 @@ for s = 1, screen.count() do
 end
 
 
--- main_menu = awful.menu({ items = freedesktop.menu.new() })
-main_menu = awful.menu({ items = {} })
+main_menu = awful.menu({ items = awful.util.table.join(freedesktop.menu.new(), { { "Quitter", 'shutdown-gui' } }) })
 
 
 -- statusbar config: we have a systray, a launcher, a taglist and a tasklist

@@ -6,7 +6,7 @@ theme = {}
 
 theme.wallpaper = "/home/manu/Dropbox/Mes documents/Mes images/Walls/LionSky.png"
 
-theme.icon_theme = "Faenza-Dark"
+theme.icon_theme = "Faenza"
 
 theme.bg_normal     = "#222222"
 theme.fg_normal     = "#dddddd"

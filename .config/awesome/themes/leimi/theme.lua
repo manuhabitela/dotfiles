@@ -30,6 +30,11 @@ theme.taglist_squares_unsel = "/usr/share/awesome/themes/default/taglist/squarew
 
 theme.clock_font = "Droid Sans Bold 8"
 
+theme.statusbar_height = 28
+theme.statusbar_margin = 2
+theme.statusbar_items_margin = 8
+theme.statusbar_border_width = 1
+theme.statusbar_border_color = "#333333"
 
 theme.awesome_icon = "/usr/share/awesome/icons/awesome16.png"
 theme.awesome_icon = "/usr/share/icons/Faenza/places/24/distributor-logo.png"

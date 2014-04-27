@@ -103,21 +103,33 @@ function leimi.icons_only_list(w, buttons, label, data, objects)
   local l = wibox.layout.fixed.horizontal()
   for i, o in ipairs(objects) do
     local cache = data[o]
+    local ib, m
     if cache then
       ib = cache.ib
+      m = cache.m
+      bgb = cache.bgb
     else
       ib = wibox.widget.imagebox()
-      ib:buttons(common.create_buttons(buttons, o))
+      bgb = wibox.widget.background()
+      m = wibox.layout.margin(ib, 2, 2, 1, 1)
+
+      bgb:set_widget(m)
+      bgb:buttons(common.create_buttons(buttons, o))
 
       data[o] = {
-        ib = ib
+        ib = ib,
+        bgb = bgb,
+        m = m
       }
     end
 
     local text, bg, bg_image, icon = label(o)
-    ib:fit(24, 24)
+    bgb:set_bg(bg)
+    bgb:set_bgimage(bg_image)
+    local icon_size = beautiful.statusbar_height - beautiful.statusbar_margin
+    ib:fit(icon_size, icon_size)
     ib:set_image(icon)
-    l:add(ib)
+    l:add(bgb)
   end
   w:add(l)
 end

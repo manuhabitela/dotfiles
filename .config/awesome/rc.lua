@@ -160,7 +160,7 @@ launcher = awful.widget.launcher({
 })
 
 for s = 1, screen.count() do
-  statusbars[s] = awful.wibox({ position = "bottom", align = "right", screen = s, height = 1, width = 600 })
+  statusbars[s] = awful.wibox({ position = "bottom", border_width = beautiful.statusbar_border_width, border_color = beautiful.statusbar_border_color, align = "right", screen = s, height = 1, width = 600 })
   taglists[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, taglists.buttons)
   -- we show all apps in the tasklist with icons only
   tasklists[s] = awful.widget.tasklist(
@@ -177,24 +177,25 @@ for s = 1, screen.count() do
   statusbar_layout_left:add(tasklists[s])
   if s == main_screen then
     local mysystray = wibox.widget.systray()
-    mysystray:set_base_size(24)
+    mysystray:set_base_size(beautiful.statusbar_height - beautiful.statusbar_margin)
     mysystray:fit()
-    statusbar_layout_right:add( mysystray ) -- systray not working with a margin layout? putting margins on siblings widgets instead
+    -- systray seems to be not working with a margin layout
+    statusbar_layout_right:add( mysystray )
   end
-  statusbar_layout_right:add( wibox.layout.margin(taglists[s], 10) )
+  statusbar_layout_right:add( wibox.layout.margin(taglists[s], beautiful.statusbar_items_margin) )
   local clock = awful.widget.textclock("%H:%M")
   clock:set_font(beautiful.taglist_font)
-  statusbar_layout_right:add( wibox.layout.margin(clock, 8) )
-  statusbar_layout_right:add( wibox.layout.margin(launcher, 8) )
+  statusbar_layout_right:add( wibox.layout.margin(clock, beautiful.statusbar_items_margin) )
+  statusbar_layout_right:add( wibox.layout.margin(launcher, beautiful.statusbar_items_margin) )
   local statusbar_layout = wibox.layout.align.horizontal()
   statusbar_layout:set_left(statusbar_layout_left)
   statusbar_layout:set_right(statusbar_layout_right)
-  statusbars[s]:set_widget(statusbar_layout)
+  statusbars[s]:set_widget(wibox.layout.margin(statusbar_layout, beautiful.statusbar_margin, beautiful.statusbar_margin, beautiful.statusbar_margin, beautiful.statusbar_margin))
   -- the statusbar is "floating": its height is 1px high when "hidden"
   -- we can then put cursor at bottom of screen to trigger mouse::enter signal and show it above clients
-  leimi.show_floating_wibox(statusbars[s])
+  leimi.show_floating_wibox(statusbars[s], beautiful.statusbar_height)
   statusbars[s]:connect_signal('mouse::enter', function()
-        leimi.show_floating_wibox(statusbars[s])
+        leimi.show_floating_wibox(statusbars[s], beautiful.statusbar_height)
   end)
 end
 
@@ -204,11 +205,11 @@ globalkeys = awful.util.table.join(
   -- go to next or prev tag with (shift+)tab
   awful.key({ modkey,           }, "Tab",     function()
     leimi.gototag(awful.tag.viewnext)
-    leimi.show_floating_wibox(statusbars[mouse.screen])
+    leimi.show_floating_wibox(statusbars[mouse.screen], beautiful.statusbar_height)
   end),
   awful.key({ modkey, sft       }, "Tab",     function()
     leimi.gototag(awful.tag.viewprev)
-    leimi.show_floating_wibox(statusbars[mouse.screen])
+    leimi.show_floating_wibox(statusbars[mouse.screen], beautiful.statusbar_height)
   end),
 
   -- almost normal alt-tab behavior with rofi https://github.com/DaveDavenport/rofi
@@ -255,7 +256,7 @@ globalkeys = awful.util.table.join(
 
   -- toggle the visibility of the statusbar
   awful.key({ modkey,           }, "v",     function()
-    leimi.toggle_floating_wibox(statusbars[mouse.screen])
+    leimi.toggle_floating_wibox(statusbars[mouse.screen], beautiful.statusbar_height)
   end),
 
   -- run or raise applications

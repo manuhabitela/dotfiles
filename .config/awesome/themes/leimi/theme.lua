@@ -23,10 +23,12 @@ theme.font_title_focus    = "Droid Sans Bold 8"
 
 theme.border_width  = 1
 
-theme.taglist_font = "Droid Sans Bold 10"
+theme.taglist_font = "Droid Sans Bold 9"
 theme.taglist_bg_focus = "#2F497F"
 theme.taglist_squares_sel   = "/usr/share/awesome/themes/default/taglist/squarew.png"
 theme.taglist_squares_unsel = "/usr/share/awesome/themes/default/taglist/squarew.png"
+
+theme.clock_font = "Droid Sans Bold 8"
 
 
 theme.awesome_icon = "/usr/share/awesome/icons/awesome16.png"

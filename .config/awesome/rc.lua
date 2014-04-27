@@ -6,6 +6,7 @@ require("awful.autofocus")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 local myhelpers = require("helpers")
+local scratchdrop = require("scratchdrop")
 -- homemade stuff
 local leimi = require('leimi')
 
@@ -36,10 +37,11 @@ do
   end)
 end
 
+
 -- config stuff
 os.setlocale(os.getenv("LANG"))
 beautiful.init("/home/manu/.config/awesome/themes/leimi/theme.lua")
-terminal = "x-terminal-emulator"
+terminal = "roxterm"
 editor = os.getenv("EDITOR") or "editor"
 editor_cmd = terminal .. " -e " .. editor
 winkey = "Mod4"
@@ -48,10 +50,11 @@ local altkey = "Mod1"
 local ctrl = "Control"
 local sft = "Shift"
 local titlebars_enabled = true
-local titlebars_blacklist = { "guake", "exe", "plugin-container" }
-local floating_classes = { "MPlayer", "pinentry", "Gimp"}
+local titlebars_blacklist = { "guake", "exe", "plugin-container", terminal }
+local floating_classes = { "MPlayer", "pinentry", "Gimp", "Guake"}
 local floating_instances = {"exe", "plugin-container"}
 local noborders_instances = {}
+local main_screen = screen.count() > 1 and 2 or 1
 -- menu config: using own fork of awesome-freedesktop for i18n https://github.com/Leimi/awesome-freedesktop/tree/feature-simple-localization
 require('awesome-freedesktop.freedesktop.utils')
 freedesktop.utils.terminal = terminal  -- default: "xterm"
@@ -72,6 +75,7 @@ freedesktop.menu.categories = {
   system = "Système"
 }
 
+
 -- layouts: simple tiles and fullscreen layout are enough
 local layouts =
 {
@@ -80,6 +84,7 @@ local layouts =
   awful.layout.suit.max
 }
 
+
 -- wallpaper
 if beautiful.wallpaper then
   for s = 1, screen.count() do
@@ -87,13 +92,17 @@ if beautiful.wallpaper then
   end
 end
 
+
 -- each screen has its own set of 6 tags
 tags = {}
 for s = 1, screen.count() do
   tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6 }, s, layouts[1])
 end
 
-main_menu = awful.menu({ items = freedesktop.menu.new() })
+
+-- main_menu = awful.menu({ items = freedesktop.menu.new() })
+main_menu = awful.menu({ items = {} })
+
 
 -- statusbar config: we have a systray, a launcher, a taglist and a tasklist
 statusbars = {}
@@ -166,11 +175,17 @@ for s = 1, screen.count() do
   local statusbar_layout_left = wibox.layout.fixed.horizontal()
   local statusbar_layout_right = wibox.layout.fixed.horizontal()
   statusbar_layout_left:add(tasklists[s])
-  if s == 1 then
-    statusbar_layout_right:add(wibox.widget.systray())
+  if s == main_screen then
+    local mysystray = wibox.widget.systray()
+    mysystray:set_base_size(24)
+    mysystray:fit()
+    statusbar_layout_right:add( mysystray ) -- systray not working with a margin layout? putting margins on siblings widgets instead
   end
-  statusbar_layout_right:add(taglists[s])
-  statusbar_layout_right:add(launcher)
+  statusbar_layout_right:add( wibox.layout.margin(taglists[s], 10) )
+  local clock = awful.widget.textclock("%H:%M")
+  clock:set_font(beautiful.taglist_font)
+  statusbar_layout_right:add( wibox.layout.margin(clock, 8) )
+  statusbar_layout_right:add( wibox.layout.margin(launcher, 8) )
   local statusbar_layout = wibox.layout.align.horizontal()
   statusbar_layout:set_left(statusbar_layout_left)
   statusbar_layout:set_right(statusbar_layout_right)
@@ -183,12 +198,9 @@ for s = 1, screen.count() do
   end)
 end
 
+
 -- global keyboard shortcuts - work all the time everywhere
 globalkeys = awful.util.table.join(
-  awful.key({ modkey,           }, "v",     function()
-    leimi.toggle_floating_wibox(statusbars[mouse.screen])
-  end),
-
   -- go to next or prev tag with (shift+)tab
   awful.key({ modkey,           }, "Tab",     function()
     leimi.gototag(awful.tag.viewnext)
@@ -198,10 +210,6 @@ globalkeys = awful.util.table.join(
     leimi.gototag(awful.tag.viewprev)
     leimi.show_floating_wibox(statusbars[mouse.screen])
   end),
-  -- move current client to next (or prev cause it's cycling) screen with win+ctrl+tab
-  awful.key({ modkey, ctrl      }, "Tab",     function()
-    awful.client.movetoscreen(client.focus)
-  end),
 
   -- almost normal alt-tab behavior with rofi https://github.com/DaveDavenport/rofi
   awful.key({ altkey,           }, "Tab",     function()
@@ -209,6 +217,11 @@ globalkeys = awful.util.table.join(
       'rofi -now -font "%s" -fg "%s" -bg "%s" -hlfg "%s" -hlbg "%s" -o 95 -width 600',
       beautiful.font_xft, beautiful.fg_normal, beautiful.bg_normal, beautiful.fg_focus, beautiful.bg_focus
     ))
+  end),
+
+  -- move current client to next (or prev cause it's cycling) screen - ² key is right next to the 1
+  awful.key({ modkey            }, "²",     function()
+    awful.client.movetoscreen(client.focus)
   end),
 
   -- focus next or prev client - works accross all screens
@@ -222,10 +235,9 @@ globalkeys = awful.util.table.join(
   end),
 
   -- shift + jklm to resize windows
+  awful.key({ modkey, sft       }, "j",       function() awful.tag.incmwfact(-0.05) end),
   awful.key({ modkey, sft       }, "k",       function() awful.client.incwfact(-0.1) end),
   awful.key({ modkey, sft       }, "l",       function() awful.client.incwfact( 0.1) end),
-
-  awful.key({ modkey, sft       }, "j",       function() awful.tag.incmwfact(-0.05) end),
   awful.key({ modkey, sft       }, "m",       function() awful.tag.incmwfact( 0.05) end),
 
   -- add or remove focused client to the master side
@@ -233,30 +245,46 @@ globalkeys = awful.util.table.join(
   awful.key({ modkey, sft       }, "h",       function() awful.tag.incnmaster(-1) end),
 
   -- cycle through existing layouts
-  awful.key({ modkey            }, "c",       function() awful.layout.inc(layouts, 1) end),
+  awful.key({ modkey            }, "Return",       function() awful.layout.inc(layouts, 1) end),
+
   -- cycle all clients (move them)
-  awful.key({ modkey            }, "x",       function() awful.client.cycle(true) end),
+  awful.key({ modkey            }, "c",       function() awful.client.cycle(true) end),
+
   -- put current client as the master one
   awful.key({ modkey            }, "e",       function() awful.client.setmaster(client.focus) end),
 
+  -- toggle the visibility of the statusbar
+  awful.key({ modkey,           }, "v",     function()
+    leimi.toggle_floating_wibox(statusbars[mouse.screen])
+  end),
+
+  -- run or raise applications
+  awful.key({ modkey            }, "f",       function() leimi.ror("pcmanfm", "Pcmanfm") end),
+  awful.key({ modkey            }, "s",       function() leimi.ror("subl", "Sublime_text") end),
+  awful.key({ modkey            }, "w",       function() leimi.ror("chromium-browser", "Chromium-browser") end),
+  awful.key({ modkey            }, "p",       function() leimi.ror("pidgin", "Pidgin") end),
+  awful.key({ modkey            }, "g",       function() leimi.ror("git-cola", "Git-cola") end),
+
   -- dmenu with fuzzy matching through -z option https://aur.archlinux.org/packages/dmenu-xft-fuzzy/
+  awful.key({ modkey            }, "space",   function()
+    awful.util.spawn_with_shell(string.format(
+      "dmenu_run -fn '%s' -nf '%s' -nb '%s' -sf '%s' -sb '%s' -b -z",
+      beautiful.font_xft, beautiful.fg_normal, beautiful.bg_normal, beautiful.fg_focus, beautiful.bg_focus
+    ))
+  end),
   awful.key({ modkey            }, "r",   function()
     awful.util.spawn_with_shell(string.format(
       "dmenu_run -fn '%s' -nf '%s' -nb '%s' -sf '%s' -sb '%s' -b -z",
       beautiful.font_xft, beautiful.fg_normal, beautiful.bg_normal, beautiful.fg_focus, beautiful.bg_focus
     ))
   end),
-  awful.key({ modkey,           }, "Return",  function() awful.util.spawn(terminal) end),
-  awful.key({ modkey, ctrl      }, "r",       awesome.restart),
-  awful.key({ modkey, ctrl, sft }, "q",       awesome.quit),
 
-  -- run or raise applications
-  awful.key({ modkey            }, "f",       function() leimi.ror("pcmanfm", { "Pcmanfm" }) end),
-  awful.key({ modkey            }, "s",       function() leimi.ror("subl", { "Sublime_text" }) end),
-  awful.key({ modkey            }, "w",       function() leimi.ror("chromium-browser", { "Chromium_browser" }) end),
-  awful.key({ modkey            }, "p",       function() leimi.ror("pidgin", { "Pidgin" }) end),
-  awful.key({ modkey            }, "g",       function() leimi.ror("git-cola", { "Git-cola" }) end),
-  awful.key({ modkey            }, "t",       function() leimi.ror(terminal, { "X-terminal-emulator" }) end)
+  -- quake like terminal through https://github.com/copycat-killer/awesome-copycats/ scratchdrop
+  awful.key({ altkey,           }, "space",   function () scratchdrop(terminal) end),
+  awful.key({ modkey,           }, "t",   function () scratchdrop(terminal) end),
+
+  awful.key({ modkey, ctrl      }, "r",       awesome.restart),
+  awful.key({ modkey, ctrl, sft }, "q",       awesome.quit)
 )
 
 -- bind all key numbers to tags
@@ -269,7 +297,7 @@ for i = 1, 9 do
       end)
     end),
     -- go to tag x on the current screen and move currently focused client on the given tag
-    awful.key({ modkey, ctrl }, "#" .. i + 9, function()
+    awful.key({ modkey, sft }, "#" .. i + 9, function()
       leimi.gototag(function()
         local tag = awful.tag.gettags(client.focus.screen)[i]
         leimi.focused_clients[client.focus.screen][tag] = client.focus
@@ -283,9 +311,17 @@ end
 -- set all global keyboard shortcuts
 root.keys(globalkeys)
 
+-- default mouse bindings that work everywhere
+root.buttons(awful.util.table.join(
+  awful.button({ }, 3, function() main_menu:toggle() end),
+  awful.button({ }, 4, awful.tag.viewnext),
+  awful.button({ }, 5, awful.tag.viewprev)
+))
+
+
 -- client keyboard shortcuts
 clientkeys = awful.util.table.join(
-  awful.key({ modkey            }, "q",      function(c) c:kill() end),
+  awful.key({ modkey, sft       }, "q",      function(c) c:kill() end),
   awful.key({ altkey            }, "F4",     function(c) c:kill() end),
   awful.key({ modkey            }, "u",      awful.client.floating.toggle),
   awful.key({ modkey,           }, "n",      function(c)
@@ -299,13 +335,6 @@ clientkeys = awful.util.table.join(
   end)
 )
 
--- default mouse bindings that work everywhere
-root.buttons(awful.util.table.join(
-  awful.button({ }, 3, function() main_menu:toggle() end),
-  awful.button({ }, 4, awful.tag.viewnext),
-  awful.button({ }, 5, awful.tag.viewprev)
-))
-
 -- mouse buttons that works on a client - redefine the global mouse bindings for client behavior
 clientbuttons = awful.util.table.join(
   awful.button({ }, 1, function(c)
@@ -315,6 +344,7 @@ clientbuttons = awful.util.table.join(
   awful.button({ modkey }, 1, awful.mouse.client.move),
   awful.button({ modkey }, 3, awful.mouse.client.resize)
 )
+
 
 -- client rules
 awful.rules.rules = {
@@ -342,21 +372,13 @@ awful.rules.rules = {
     rule_any = { instance = noborders_instances },
     properties = { border_width = 0 }
   },
-  { rule = { class = "Sublime_text" }, properties = { tag = tags[1][1] } },
-  { rule = { class = "Chromium_browser" }, properties = { tag = tags[1][2] } },
-  { rule = { class = "X-terminal-emulator" }, properties = { tag = tags[1][6] } },
+  { rule = { class = "Sublime_text" }, properties = { tag = tags[main_screen][1] } },
+  { rule = { class = "Chromium-browser" }, properties = { tag = tags[main_screen][2] } }
 }
+
 
 -- signal function to execute when a new client appears.
 client.connect_signal("manage", function(c, startup)
-  -- enable sloppy focus (focus windows when mouse comes over them)
-  -- c:connect_signal("mouse::enter", function(c)
-  --     if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
-  --         and awful.client.focus.filter(c) then
-  --         client.focus = c
-  --     end
-  -- end)
-
   if not startup then
     -- set the windows at the slave,
     -- i.e. put it at the end of others instead of setting it master.
@@ -423,10 +445,12 @@ client.connect_signal("focus", function(c)
   c.border_color = beautiful.border_focus
   main_menu:hide()
 end)
+
 client.connect_signal("button::press", function(c)
   main_menu:hide()
   leimi.hide_floating_wibox(statusbars[mouse.screen])
 end)
+
 client.connect_signal("unfocus", function(c)
   c.border_color = beautiful.border_normal
 end)
@@ -434,6 +458,7 @@ end)
 client.connect_signal("mouse::enter", function(c)
   leimi.hide_floating_wibox(statusbars[mouse.screen])
 end)
+
 
 -- autostarting apps - awesome_boot loads every .desktop file in standard autostart folder
 awful.util.spawn_with_shell("awesome_boot")

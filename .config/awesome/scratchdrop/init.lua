@@ -44,7 +44,7 @@ function toggle(prog, vert, horiz, width, height, sticky, screen)
     vert   = vert   or "top"
     horiz  = horiz  or "center"
     width  = width  or 1
-    height = height or 0.25
+    height = height or 0.40
     sticky = sticky or false
     screen = screen or capi.mouse.screen
 

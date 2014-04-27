@@ -165,7 +165,7 @@ for s = 1, screen.count() do
   -- we show all apps in the tasklist with icons only
   tasklists[s] = awful.widget.tasklist(
     s,
-    awful.widget.tasklist.filter.alltags,
+    awful.widget.tasklist.filter.allscreen,
     tasklists.buttons,
     nil,
     leimi.icons_only_list,

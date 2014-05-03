@@ -38,13 +38,13 @@ Config.MISC = {
                # This is a list of all available tilers. If a tiler
                # is not listed here, it cannot be used. They are
                # loaded when PyTyle starts.
-               'tilers': ['Vertical', 'Horizontal', 'HorizontalRows', 'Maximal', 'Cascade'],
+               'tilers': ['Vertical', 'Horizontal', 'Maximal'],
 
                # Enables tiling for all desktops/viewports/screens upon
                # PyTyle startup. Desktops et al can still be disabled from
                # tiling by issuing the "untile" command. Default layouts
                # specified below will still be used.
-               'global_tiling': True,
+               'global_tiling': False,
 
                # This timeout is used several times in the main event
                # loop. It is the amount of time (seconds) we wait, for
@@ -136,7 +136,7 @@ Config.KEYMAP = {
                  # Reloads the configuration file. Make changes to your
                  # config file, and have them applied immediately by
                  # calling this without having to restart PyTyle.
-                 #'Alt-Q': 'reload',
+                 'Super-Ctrl-R': 'reload',
 
                  # This is a hard reset of the current screen. It will
                  # force a re-tile and refresh PyTyle's image of the
@@ -153,14 +153,14 @@ Config.KEYMAP = {
                  # the last active window of the specified screen.
                  # Remember, these currently only work properly if
                  # tiling is enabled on the screen.
-                 # 'Alt-W': 'screen0_focus',
-                 # 'Alt-E': 'screen1_focus',
+                 'Super-Ctrl-K': 'screen0_focus',
+                 'Super-Ctrl-L': 'screen1_focus',
                  # 'Alt-R': 'screen2_focus',
 
                  # The following three will move the currently focused
                  # window to the specified screen.
-                 # 'Alt-Shift-W': 'screen0_put',
-                 # 'Alt-Shift-E': 'screen1_put',
+                'Super-Ctrl-J': 'screen0_put',
+                'Super-Ctrl-M': 'screen1_put',
                  # 'Alt-Shift-R': 'screen2_put',
 
                  # The following two will increase and decrease the master
@@ -169,21 +169,21 @@ Config.KEYMAP = {
                  # in the Vertical layout, it will change the master area
                  # width, and in the Horizontal layout, it will change the
                  # master area height.)
-                 'Super-G': 'master_decrease',
-                 'Super-H': 'master_increase',
+                 'Super-J': 'master_decrease',
+                 'Super-M': 'master_increase',
 
                  # The following two will increase and decrease the number
                  # of master windows. This will allow you to easily configure
                  # a grid layout dynamically, among other things.
-                 'Super-Y': 'add_master',
-                 'Super-B': 'remove_master',
+                 'Super-G': 'add_master',
+                 'Super-H': 'remove_master',
 
                  # This will make the currently active window the master.
                  'Super-E': 'make_active_master',
 
                  # This will move focus to the master window (or the first
                  # master window if there are more than one).
-                 'Alt-M': 'win_master',
+                 # 'Alt-M': 'win_master',
 
                  # This will close the currently focused window. You do
                  # *NOT* need to use this to close windows. It is only
@@ -200,8 +200,8 @@ Config.KEYMAP = {
 
                  # The following two will switch the current window with
                  # the previous or next window
-                 'Super-Shift-K': 'switch_previous',
-                 'Super-Shift-L': 'switch_next',
+                 # 'Super-Shift-K': 'switch_previous',
+                 # 'Super-Shift-L': 'switch_next',
 
                  # This is a debugging binding that shows some information
                  # about the current desktop. It's only useful if you're

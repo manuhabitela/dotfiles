@@ -1,9 +1,6 @@
-@xscreensaver -no-splash
-@xfce4-power-manager
-@pcmanfm --desktop-off --profile lubuntu
-@/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
 @xcompmgr -n
-@xfce4-panel
-@volumeicon --enable-notify
 @pytyle
 @nitrogen --restore
+@kupfer
+@guake
+@xfce4-panel

@@ -10,6 +10,7 @@ local myhelpers = require("helpers")
 local scratchdrop = require("scratchdrop")
 -- homemade stuff
 local leimi = require('leimi')
+local leimiwibox = require('leimi.wibox')
 
 
 -- error handling
@@ -160,7 +161,7 @@ launcher = awful.widget.launcher({
 })
 
 for s = 1, screen.count() do
-  statusbars[s] = awful.wibox({ position = "bottom", border_width = beautiful.statusbar_border_width, border_color = beautiful.statusbar_border_color, align = "right", screen = s, height = 1, width = 600 })
+  statusbars[s] = leimiwibox({ position = "bottom", border_width = beautiful.statusbar_border_width, border_color = beautiful.statusbar_border_color, align = "right", screen = s, height = 1, width = 600 })
   taglists[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, taglists.buttons)
   -- we show all apps in the tasklist with icons only
   tasklists[s] = awful.widget.tasklist(

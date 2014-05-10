@@ -4,7 +4,7 @@
 
 theme = {}
 
-theme.wallpaper = "/home/manu/Dropbox/Mes documents/Mes images/Walls/LionSky.png"
+theme.wallpaper = "/home/manu/Dropbox/Mes documents/Mes images/Walls/mhcy2u.jpg"
 
 theme.icon_theme = "Faenza"
 
@@ -18,8 +18,7 @@ theme.font_title    = "Droid Sans 8"
 theme.bg_focus      = "#395899"
 theme.fg_focus      = "#ffffff"
 theme.border_focus  = "#2F497F"
-theme.font_title_focus    = "Droid Sans Bold 8"
-
+theme.font_title_focus    = "Droid Sans 8"
 
 theme.border_width  = 1
 

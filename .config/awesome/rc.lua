@@ -102,6 +102,7 @@ for s = 1, screen.count() do
 end
 
 
+-- main_menu = awful.menu({ items = { } })
 main_menu = awful.menu({ items = awful.util.table.join(freedesktop.menu.new(), { { "Quitter", 'shutdown-gui' } }) })
 
 
@@ -200,17 +201,26 @@ for s = 1, screen.count() do
   end)
 end
 
+local delayed_statusbar_hide = timer { timeout = 1 }
+delayed_statusbar_hide:connect_signal("timeout", function()
+  leimi.hide_floating_wibox(statusbars[mouse.screen])
+  delayed_statusbar_hide:stop()
+end)
 
 -- global keyboard shortcuts - work all the time everywhere
 globalkeys = awful.util.table.join(
-  -- go to next or prev tag with (shift+)tab
+  -- go to next or prev tag with (shift+)tab + show statusbar for 1 sec to see what tag we're on
   awful.key({ modkey,           }, "Tab",     function()
     leimi.gototag(awful.tag.viewnext)
     leimi.show_floating_wibox(statusbars[mouse.screen], beautiful.statusbar_height)
+    delayed_statusbar_hide:stop()
+    delayed_statusbar_hide:start()
   end),
   awful.key({ modkey, sft       }, "Tab",     function()
     leimi.gototag(awful.tag.viewprev)
     leimi.show_floating_wibox(statusbars[mouse.screen], beautiful.statusbar_height)
+    delayed_statusbar_hide:stop()
+    delayed_statusbar_hide:start()
   end),
 
   -- almost normal alt-tab behavior with rofi https://github.com/DaveDavenport/rofi

@@ -10,7 +10,7 @@ do
 	ln -s $DOTFILES/$FILE $HOME/$FILE
 done
 
-CONFIGS=( cairo-dock lxsession openbox pytyle sublime-text-2 sublime-text-3 xfce4 )
+CONFIGS=( awesome cairo-dock lxsession openbox pytyle sublime-text-2 sublime-text-3 xfce4 )
 for CONFIG in $CONFIGS
 do
 	echo "ln -s $DOTFILES/.config/$CONFIG $HOME/.config/$CONFIG"

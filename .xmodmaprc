@@ -1,12 +1,26 @@
-!remove caps lock and put < and > (with shift) on it
-remove lock = Caps_Lock
-keycode 0x42 = less greater
+!keycode key shift+key modeswitch+key modeswitch+shift+key altgr+key altgr+shift+key
+
+!remove caps lock and put ctrl on it
+!remove ctrl and put windows on it
+!clear Lock
+!remove Control = Control_L
+!clear Mod4
+!keycode 66 = Control_L
+!keycode 37 = Super_L
+!add Control = Control_L
+!add Mod4 = Super_L
+
+!remove caps lock and put ctrl on it
+!remove ctrl and put delete on it
+clear Lock
+remove Control = Control_L
+keycode 66 = Control_L
+keycode 37 = Delete
+add Control = Control_L
 
 !remove œ and put ² and ³ (with shift) on it
 keycode 49 = twosuperior threesuperior
 
-!reverse scrolling with mouse wheel
-!pointer = 1 2 3 5 4 7 6 8 9 10 11 12
-
-!normal scrolling with mouse wheel
-pointer = 1 2 3 4 5 6 7 8 9 10 11 12
+!put < and > on altgr+^ and altgr+$:
+keycode 34 = dead_circumflex dead_diaeresis dead_circumflex dead_diaeresis less apostrophe dead_tilde apostrophe dead_circumflex dead_diaeresis dead_tilde apostrophe dead_circumflex dead_diaeresis dead_tilde apostrophe
+keycode 35 = dollar sterling dollar sterling greater ecircumflex ecircumflex ediaeresis dollar sterling ecircumflex ediaeresis dollar sterling ecircumflex ediaeresis

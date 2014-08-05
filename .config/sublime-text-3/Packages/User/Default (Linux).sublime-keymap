@@ -1,7 +1,6 @@
 [
 { "keys": ["ctrl+v"], "command": "paste_and_indent" },
-{ "keys": ["ctrl+shift+;"], "command": "zeal_search_selection" },
-{ "keys": ["ctrl+shift+alt+;"], "command": "help_for_word" },
+{ "keys": ["ctrl+shift+;"], "command": "help_for_word" },
 { "keys": ["ctrl+b"], "command": "toggle_side_bar" },
 { "keys": ["ctrl+shift+x"], "command": "delete_trailing_spaces" },
 { "keys": ["ctrl+space"], "command": "auto_complete" },

@@ -1,6 +1,13 @@
 {
-	"path_mapping": {
-		"/home/httpd/" : "/home/manu/Dev/httpd/"
-	},
-	"debug": true
+	"debug": true,
+	"break_on_exception": [
+	    // E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR, E_USER_ERROR
+	    "Fatal error",
+	    // E_RECOVERABLE_ERROR (since PHP 5.2.0)
+	    "Catchable fatal error",
+	    // 0
+	    "Xdebug",
+	    // default
+	    "Unknown error"
+	]
 }

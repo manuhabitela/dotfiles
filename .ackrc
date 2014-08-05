@@ -1,0 +1,7 @@
+--type-set=twig=.twig
+--type-set=sass=.sass
+--type-set=allcss=.sass .less .css .scss
+
+--color-match=bright_red
+--color-filename=bright_blue
+--color-lineno=bright_magenta

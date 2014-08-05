@@ -1,4 +1,3 @@
-<?xml version="1.0"?>
 <openbox_config xmlns="http://openbox.org/3.4/rc" xmlns:xi="http://www.w3.org/2001/XInclude">
   <resistance>
     <strength>10</strength>
@@ -28,11 +27,11 @@
     <center>yes</center>
     <!-- whether to place windows in the center of the free area found or
        the top left corner -->
-    <monitor>Mouse</monitor>
+    <monitor>Active</monitor>
     <!-- with Smart placement on a multi-monitor system, try to place new windows
        on: 'Any' - any monitor, 'Mouse' - where the mouse is, 'Active' - where
        the active window is, 'Primary' - only on the primary monitor -->
-    <primaryMonitor>Mouse</primaryMonitor>
+    <primaryMonitor>1</primaryMonitor>
     <!-- The monitor where Openbox should place popup dialogs such as the
        focus cycling popup, or the desktop switch popup.  It can be an index
        from 1, specifying a particular monitor.  Or it can be one of the
@@ -185,16 +184,6 @@
     <keybind key="W-C-S-Tab">
       <action name="SendToDesktopPrevious"/>
     </keybind>
-    <keybind key="W-p">
-      <action name="Execute">
-        <command>pidgin</command>
-      </action>
-    </keybind>
-    <keybind key="W-m">
-      <action name="Execute">
-        <command>thunderbird</command>
-      </action>
-    </keybind>
     <keybind key="C-A-T">
       <action name="Execute">
         <command>lxterminal</command>
@@ -212,10 +201,14 @@
       <action name="Iconify"/>
     </keybind>
     <keybind key="W-Tab">
-      <action name="DesktopNext"/>
+      <action name="GoToDesktop">
+        <to>next</to>
+      </action>
     </keybind>
     <keybind key="W-S-Tab">
-      <action name="DesktopPrevious"/>
+      <action name="GoToDesktop">
+        <to>previous</to>
+      </action>
     </keybind>
     <keybind key="C-A-Right">
       <action name="GoToDesktop"/>
@@ -238,22 +231,24 @@
     <keybind key="S-A-Down">
       <action name="SendToDesktop"/>
     </keybind>
-    <keybind key="W-F1">
-      <action name="Desktop"/>
-    </keybind>
-    <keybind key="W-F2">
-      <action name="Desktop">
-        <desktop>2</desktop>
+    <keybind key="W-ampersand">
+      <action name="GoToDesktop">
+        <to>1</to>
       </action>
     </keybind>
-    <keybind key="W-F3">
-      <action name="Desktop">
-        <desktop>3</desktop>
+    <keybind key="W-eacute">
+      <action name="GoToDesktop">
+        <to>2</to>
       </action>
     </keybind>
-    <keybind key="W-F4">
-      <action name="Desktop">
-        <desktop>4</desktop>
+    <keybind key="W-quotedbl">
+      <action name="GoToDesktop">
+        <to>3</to>
+      </action>
+    </keybind>
+    <keybind key="W-apostrophe">
+      <action name="GoToDesktop">
+        <to>4</to>
       </action>
     </keybind>
     <keybind key="A-F4">
@@ -263,11 +258,6 @@
       <action name="Lower"/>
       <action name="FocusToBottom"/>
       <action name="Unfocus"/>
-    </keybind>
-    <keybind key="A-space">
-      <action name="ShowMenu">
-        <menu>client-menu</menu>
-      </action>
     </keybind>
     <keybind key="A-Print">
       <action name="Execute">

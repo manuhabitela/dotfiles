@@ -1,3 +1,18 @@
+PATH="/bin"
+PATH="$PATH:/sbin"
+PATH="$PATH:/usr/bin"
+PATH="$PATH:/usr/game"
+PATH="$PATH:/usr/sbin"
+PATH="$PATH:/usr/local/bin"
+PATH="$PATH:/usr/local/sbin"
+PATH="$PATH:/usr/lib/lightdm/lightdm"
+export PATH="$PATH:$HOME/bin"
+
+source_sh () {
+  emulate -LR sh
+  . "$@"
+}
+
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
 

@@ -2,7 +2,7 @@
 
 DOTFILES="/home/manu/Dropbox/dotfiles"
 
-FILES=( bin .aliases .xmodmaprc .zprofile .zshrc )
+FILES=( bin .aliases .xmodmaprc .zshrc )
 
 for FILE in $FILES
 do
@@ -24,4 +24,4 @@ echo "ln -s $DOTFILES/.themes/Numix $HOME/.themes/Numix"
 ln -s $DOTFILES/.themes/Numix $HOME/.themes/Numix
 
 echo "ln -s $DOTFILES/.oh-my-zsh/themes/leimi.zsh $HOME/.oh-my-zsh/themes/leimi.zsh"
-ln -s $DOTFILES/.oh-my-zsh/themes/leimi.zsh $HOME/.oh-my-zsh/themes/leimi.zsh
+ln -s $DOTFILES/.oh-my-zsh/themes/leimi.zsh $HOME/.oh-my-zsh/themes/leimi.zsh-theme

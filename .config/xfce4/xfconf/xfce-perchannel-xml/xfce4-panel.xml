@@ -10,10 +10,10 @@
         <value type="int" value="6"/>
         <value type="int" value="4"/>
         <value type="int" value="7"/>
-        <value type="int" value="15"/>
-        <value type="int" value="11"/>
-        <value type="int" value="2"/>
         <value type="int" value="1"/>
+        <value type="int" value="11"/>
+        <value type="int" value="15"/>
+        <value type="int" value="2"/>
       </property>
       <property name="background-style" type="uint" value="0"/>
       <property name="background-alpha" type="uint" value="85"/>
@@ -38,7 +38,7 @@
     <property name="plugin-1" type="string" value="applicationsmenu">
       <property name="show-tooltips" type="bool" value="true"/>
       <property name="button-icon" type="string" value="distributor-logo"/>
-      <property name="show-button-title" type="bool" value="false"/>
+      <property name="show-button-title" type="bool" value="true"/>
       <property name="show-generic-names" type="bool" value="false"/>
       <property name="button-title" type="string" value="Menu"/>
       <property name="show-menu-icons" type="bool" value="true"/>
@@ -70,8 +70,9 @@
         <value type="string" value="neap"/>
         <value type="string" value="pidgin"/>
         <value type="string" value="applet networkmanager"/>
-        <value type="string" value="chromium"/>
+        <value type="string" value="x-www-browser"/>
         <value type="string" value="gestionnaire de tâches"/>
+        <value type="string" value="chromium"/>
         <value type="string" value="dropbox"/>
         <value type="string" value="xfce4-power-manager"/>
         <value type="string" value="fluxgui.py"/>
@@ -105,7 +106,7 @@
       <property name="style" type="uint" value="1"/>
       <property name="expand" type="bool" value="false"/>
     </property>
-    <property name="plugin-2" type="string" value="clock"/>
+    <property name="plugin-2" type="string" value="datetime"/>
   </property>
   <property name="configver" type="int" value="2"/>
 </channel>

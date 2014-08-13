@@ -20,7 +20,7 @@ theme.fg_focus      = "#ffffff"
 theme.border_focus  = "#2F497F"
 theme.font_title_focus    = "Droid Sans Bold 8"
 
-theme.border_width  = 1
+theme.border_width  = 2
 
 theme.taglist_font = "Droid Sans Bold 9"
 theme.taglist_bg_focus = "#2F497F"

@@ -11,7 +11,7 @@ local scratchdrop = require("scratchdrop")
 -- homemade stuff
 local leimi = require('leimi')
 local leimiwibox = require('leimi.wibox')
-
+require("debian.menu")
 
 -- error handling
 -- check if awesome encountered an error during startup and fell back to
@@ -58,24 +58,24 @@ local floating_instances = {"exe", "plugin-container"}
 local noborders_instances = {}
 local main_screen = screen.count() > 1 and 2 or 1
 -- menu config: using own fork of awesome-freedesktop for i18n https://github.com/Leimi/awesome-freedesktop/tree/feature-simple-localization
-require('awesome-freedesktop.freedesktop.utils')
-freedesktop.utils.terminal = terminal  -- default: "xterm"
-freedesktop.utils.icon_theme = beautiful.icon_theme -- look inside /usr/share/icons/, default: nil (don't use icon theme)
-freedesktop.utils.lang = "fr"
-require('awesome-freedesktop.freedesktop.menu')
-freedesktop.menu.categories = {
-  accessories = "Accessoires",
-  dev = "Développement",
-  education = "Éducation",
-  games = "Jeux",
-  graphics = "Graphisme",
-  web = "Internet",
-  media = "Multimédia",
-  office = "Bureautique",
-  other = "Autre",
-  settings = "Paramètres",
-  system = "Système"
-}
+-- require('awesome-freedesktop.freedesktop.utils')
+-- freedesktop.utils.terminal = terminal  -- default: "xterm"
+-- freedesktop.utils.icon_theme = beautiful.icon_theme -- look inside /usr/share/icons/, default: nil (don't use icon theme)
+-- freedesktop.utils.lang = "fr"
+-- require('awesome-freedesktop.freedesktop.menu')
+-- freedesktop.menu.categories = {
+--   accessories = "Accessoires",
+--   dev = "Développement",
+--   education = "Éducation",
+--   games = "Jeux",
+--   graphics = "Graphisme",
+--   web = "Internet",
+--   media = "Multimédia",
+--   office = "Bureautique",
+--   other = "Autre",
+--   settings = "Paramètres",
+--   system = "Système"
+-- }
 
 
 -- layouts: simple tiles and fullscreen layout are enough
@@ -102,8 +102,22 @@ for s = 1, screen.count() do
 end
 
 
+main_menu_items = {
+   { "manual", terminal .. " -e man awesome" },
+   { "edit config", editor_cmd .. " " .. awesome.conffile },
+   { "restart", awesome.restart },
+   { "quit", awesome.quit }
+}
+
+main_menu = awful.menu({
+  items = {
+    { "awesome", main_menu_items, beautiful.awesome_icon },
+    { "Debian", debian.menu.Debian_menu.Debian },
+    { "open terminal", terminal }
+  }
+})
 -- main_menu = awful.menu({ items = { } })
-main_menu = awful.menu({ items = awful.util.table.join(freedesktop.menu.new(), { { "Quitter", 'shutdown-gui' } }) })
+-- main_menu = awful.menu({ items = awful.util.table.join(freedesktop.menu.new(), { { "Quitter", 'shutdown-gui' } }) })
 
 
 -- statusbar config: we have a systray, a launcher, a taglist and a tasklist
@@ -231,8 +245,8 @@ globalkeys = awful.util.table.join(
     ))
   end),
 
-  -- move current client to next (or prev cause it's cycling) screen - ² key is right next to the 1
-  awful.key({ modkey            }, "²",     function()
+  -- move current client to next (or prev cause it's cycling) screen
+  awful.key({ modkey, ctrl      }, "h",       function()
     awful.client.movetoscreen(client.focus)
   end),
 
@@ -252,12 +266,18 @@ globalkeys = awful.util.table.join(
   awful.key({ modkey, sft       }, "l",       function() awful.client.incwfact( 0.1) end),
   awful.key({ modkey, sft       }, "m",       function() awful.tag.incmwfact( 0.05) end),
 
+  -- ctrl + jklm to move windows
+  awful.key({ modkey, ctrl      }, "j",       function() awful.client.swap.global_bydirection("left") end),
+  awful.key({ modkey, ctrl      }, "k",       function() awful.client.swap.global_bydirection("down") end),
+  awful.key({ modkey, ctrl      }, "l",       function() awful.client.swap.global_bydirection("up") end),
+  awful.key({ modkey, ctrl      }, "m",       function() awful.client.swap.global_bydirection("right") end),
+
   -- add or remove focused client to the master side
   awful.key({ modkey,           }, "h",       function() awful.tag.incnmaster( 1) end),
   awful.key({ modkey, sft       }, "h",       function() awful.tag.incnmaster(-1) end),
 
   -- cycle through existing layouts
-  awful.key({ modkey            }, "Return",       function() awful.layout.inc(layouts, 1) end),
+  awful.key({ modkey            }, "Return",  function() awful.layout.inc(layouts, 1) end),
 
   -- cycle all clients (move them)
   awful.key({ modkey            }, "c",       function() awful.client.cycle(true) end),
@@ -266,7 +286,7 @@ globalkeys = awful.util.table.join(
   awful.key({ modkey            }, "e",       function() awful.client.setmaster(client.focus) end),
 
   -- toggle the visibility of the statusbar
-  awful.key({ modkey,           }, "v",     function()
+  awful.key({ modkey            }, "v",       function()
     leimi.toggle_floating_wibox(statusbars[mouse.screen], beautiful.statusbar_height)
   end),
 
@@ -284,7 +304,7 @@ globalkeys = awful.util.table.join(
       beautiful.font_xft, beautiful.fg_normal, beautiful.bg_normal, beautiful.fg_focus, beautiful.bg_focus
     ))
   end),
-  awful.key({ modkey            }, "r",   function()
+  awful.key({ modkey            }, "r",       function()
     awful.util.spawn_with_shell(string.format(
       "dmenu_run -fn '%s' -nf '%s' -nb '%s' -sf '%s' -sb '%s' -b -z",
       beautiful.font_xft, beautiful.fg_normal, beautiful.bg_normal, beautiful.fg_focus, beautiful.bg_focus
@@ -292,8 +312,16 @@ globalkeys = awful.util.table.join(
   end),
 
   -- quake like terminal through https://github.com/copycat-killer/awesome-copycats/ scratchdrop
-  awful.key({ altkey,           }, "space",   function () scratchdrop(terminal) end),
-  awful.key({ modkey,           }, "t",   function () scratchdrop(terminal) end),
+  awful.key({ altkey,           }, "space",   function()
+    scratchdrop(terminal, "top", "center", 1, 0.5, false, main_screen)
+  end),
+  awful.key({ modkey,           }, "t",       function()
+    scratchdrop(terminal, "top", "center", 1, 0.5, false, main_screen)
+  end),
+
+  awful.key({ ctrl, altkey      }, "l",       function()
+    awful.util.spawn_with_shell("xscreensaver-command -lock")
+  end),
 
   awful.key({ modkey, ctrl      }, "r",       awesome.restart),
   awful.key({ modkey, ctrl, sft }, "q",       awesome.quit)
@@ -303,13 +331,20 @@ globalkeys = awful.util.table.join(
 for i = 1, 9 do
   globalkeys = awful.util.table.join(globalkeys,
     -- go to tag x on the current screen, focusing back the client that was last focused on the given tag
-    awful.key({ modkey      }, "#" .. i + 9, function()
+    awful.key({ modkey       }, "#" .. i + 9, function()
       leimi.gototag(function()
         awful.tag.viewonly(awful.tag.gettags(mouse.screen)[i])
       end)
     end),
+    -- go to tag x on the other screen, focusing back the client that was last focused on the given tag
+    awful.key({ modkey, ctrl }, "#" .. i + 9, function()
+      local other_screen = mouse.screen == 1 and 2 or 1
+      leimi.gototag(function()
+        awful.tag.viewonly(awful.tag.gettags(other_screen)[i])
+      end)
+    end),
     -- go to tag x on the current screen and move currently focused client on the given tag
-    awful.key({ modkey, sft }, "#" .. i + 9, function()
+    awful.key({ modkey, sft  }, "#" .. i + 9, function()
       leimi.gototag(function()
         local tag = awful.tag.gettags(client.focus.screen)[i]
         leimi.focused_clients[client.focus.screen][tag] = client.focus
@@ -384,8 +419,8 @@ awful.rules.rules = {
     rule_any = { instance = noborders_instances },
     properties = { border_width = 0 }
   },
-  { rule = { class = "Sublime_text" }, properties = { tag = tags[main_screen][1] } },
-  { rule = { class = "Chromium-browser" }, properties = { tag = tags[main_screen][2] } }
+  { rule = { class = "Sublime_text" }, properties = { tag = tags[main_screen][2] } },
+  { rule = { class = "Chromium-browser" }, properties = { tag = tags[main_screen == 1 and 2 or 1][2] } }
 }
 
 

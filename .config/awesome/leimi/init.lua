@@ -27,6 +27,18 @@ function leimi.titlewidget(c)
   return ret
 end
 
+function leimi.update_border_color(c)
+  if c.maximized then
+    c.border_color = beautiful.border_maximized
+  elseif awful.client.floating.get(c) then
+    c.border_color = beautiful.border_floating
+  elseif client.focus == c then
+    c.border_color = beautiful.border_focus
+  else
+    c.border_color = beautiful.border_normal
+  end
+end
+
 -- move to a tag through the given callback (awful.tag.viewnext, viewonly, etc)
 -- keeps info about which client is focused on each tag before each move
 -- in order to be able to put the focus back on them when going back on the tag
@@ -45,12 +57,7 @@ function leimi.gototag(callback)
   end
 end
 
--- make focus_byidx work on all screens
--- kinda like focus_global_bydirection but here you can only press your usual two keys to go forward and backward the
--- clients list instead of having to really go with one of four directions
-function leimi.client_focus_global_byidx(i, c)
-  local current_client = c or client.focus
-  local current_screen = current_client and current_client.screen or mouse.screen
+function leimi.filter_visible_clients(current_screen, current_client)
   local visible_clients = awful.client.visible(current_screen)
   -- Remove all non-normal clients
   local fcls = {}
@@ -59,14 +66,28 @@ function leimi.client_focus_global_byidx(i, c)
           table.insert(fcls, c)
       end
   end
-  visible_clients = fcls
+  return fcls
+end
 
+-- make focus_byidx work on all screens
+-- kinda like focus_global_bydirection but here you can only press your usual two keys to go
+-- forward and backward the clients list instead of having to really go with one of four directions
+-- and it cycles (I use it as an alt-tab alternative)
+function leimi.client_focus_global_byidx(i, c)
+  local multiple_screens = screen.count() > 1
+  local current_client = c or client.focus
+  local current_screen = current_client and current_client.screen or mouse.screen
+  local visible_clients = leimi.filter_visible_clients(current_screen, current_client)
   local next_client = awful.client.next(i, current_client)
 
-  if screen.count() > 1 and current_client == visible_clients[1] and i == -1 then
-    awful.screen.focus_bydirection("left")
-  elseif screen.count() > 1 and current_client == visible_clients[#visible_clients] and i == 1 then
-    awful.screen.focus_bydirection("right")
+  if multiple_screens and current_client == visible_clients[1] and i == -1 then
+    awful.screen.focus_relative(-1)
+    local new_visible_clients = leimi.filter_visible_clients(client.focus.screen, client.focus)
+    client.focus = new_visible_clients[#new_visible_clients]
+  elseif multiple_screens and current_client == visible_clients[#visible_clients] and i == 1 then
+    awful.screen.focus_relative(1)
+    local new_visible_clients = leimi.filter_visible_clients(client.focus.screen, client.focus)
+    client.focus = new_visible_clients[1]
   elseif next_client then
     client.focus = next_client
   end
@@ -75,17 +96,22 @@ end
 -- show a wibox, give it the given height and update its struts to only 1px bottom
 -- this put the wibox on top of clients, kinda floating
 function leimi.show_floating_wibox(w, height)
-  w.height = height or 26
-  w.ontop = true
-  w:struts({ left = 0, right = 0, bottom = 1, top = 0 })
+  height = height or 26
+  if w.height ~= height then
+    w.height = height
+    w.ontop = true
+    w:struts({ left = 0, right = 0, bottom = 1, top = 0 })
+  end
 end
 
 -- "hides" a wibox by setting its height to 1
 -- this allows the mouse::enter signal to still work with the one pixel height
 function leimi.hide_floating_wibox(w)
-  w.height = 1
-  w.ontop = false
-  w:struts({ left = 0, right = 0, bottom = 1, top = 0 })
+  if w.height ~= 1 then
+    w.height = 1
+    w.ontop = false
+    w:struts({ left = 0, right = 0, bottom = 1, top = 0 })
+  end
 end
 
 function leimi.toggle_floating_wibox(w, height)

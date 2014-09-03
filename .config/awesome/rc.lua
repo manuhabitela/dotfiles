@@ -10,7 +10,7 @@ local myhelpers = require("helpers")
 local scratchdrop = require("scratchdrop")
 -- homemade stuff
 local leimi = require('leimi')
-local leimiwibox = require('leimi.wibox')
+-- local leimiwibox = require('leimi.wibox')
 require("debian.menu")
 
 -- error handling
@@ -57,6 +57,7 @@ local floating_classes = { "MPlayer", "pinentry", "Gimp", "Guake", "Yad"}
 local floating_instances = {"exe", "plugin-container"}
 local noborders_instances = {}
 local main_screen = screen.count() > 1 and 2 or 1
+local secondary_screen = 1
 -- menu config: using own fork of awesome-freedesktop for i18n https://github.com/Leimi/awesome-freedesktop/tree/feature-simple-localization
 -- require('awesome-freedesktop.freedesktop.utils')
 -- freedesktop.utils.terminal = terminal  -- default: "xterm"
@@ -176,72 +177,85 @@ launcher = awful.widget.launcher({
 })
 
 for s = 1, screen.count() do
-  statusbars[s] = leimiwibox({ position = "bottom", border_width = beautiful.statusbar_border_width, border_color = beautiful.statusbar_border_color, align = "right", screen = s, height = 1, width = 600 })
+  local statusbar_layout = wibox.layout.align.horizontal()
+  statusbars[s] = awful.wibox({ position = "bottom", border_width = beautiful.statusbar_border_width, border_color = beautiful.statusbar_border_color, align = "right", screen = s, height = 26 })
   taglists[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, taglists.buttons)
-  -- we show all apps in the tasklist with icons only
+  -- we show apps in the tasklist with icons only
   tasklists[s] = awful.widget.tasklist(
     s,
-    awful.widget.tasklist.filter.allscreen,
+    awful.widget.tasklist.filter.alltags,
     tasklists.buttons,
     nil,
     leimi.icons_only_list,
     wibox.layout.fixed.horizontal()
   )
 
-  local statusbar_layout_left = wibox.layout.fixed.horizontal()
-  local statusbar_layout_right = wibox.layout.fixed.horizontal()
-  statusbar_layout_left:add(tasklists[s])
+  -- show systray, clock and menu on main screen only - others screen have just their taglist and tasklist
   if s == main_screen then
+    local statusbar_layout_right = wibox.layout.fixed.horizontal()
+
+    statusbar_layout_right:add(wibox.layout.margin(tasklists[s], beautiful.statusbar_items_margin))
+
+    statusbar_layout_right:add( wibox.layout.margin(taglists[s], beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
     local mysystray = wibox.widget.systray()
     mysystray:set_base_size(beautiful.statusbar_height - beautiful.statusbar_margin)
     mysystray:fit()
     -- systray seems to be not working with a margin layout
     statusbar_layout_right:add( mysystray )
+
+
+    local clock = awful.widget.textclock("%H:%M")
+    clock:set_font(beautiful.clock_font)
+    statusbar_layout_right:add( wibox.layout.margin(clock, beautiful.statusbar_items_margin) )
+
+    statusbar_layout_right:add( wibox.layout.margin(launcher, beautiful.statusbar_items_margin) )
+
+    statusbar_layout:set_right(statusbar_layout_right)
+  else
+    local statusbar_layout_left = wibox.layout.fixed.horizontal()
+
+    statusbar_layout_left:add( wibox.layout.margin(taglists[s], 0, beautiful.statusbar_items_margin) )
+
+    statusbar_layout_left:add( wibox.layout.margin(tasklists[s], 0, beautiful.statusbar_items_margin) )
+
+    statusbar_layout:set_left(statusbar_layout_left)
   end
-  statusbar_layout_right:add( wibox.layout.margin(taglists[s], beautiful.statusbar_items_margin) )
-  local clock = awful.widget.textclock("%H:%M")
-  clock:set_font(beautiful.taglist_font)
-  statusbar_layout_right:add( wibox.layout.margin(clock, beautiful.statusbar_items_margin) )
-  statusbar_layout_right:add( wibox.layout.margin(launcher, beautiful.statusbar_items_margin) )
-  local statusbar_layout = wibox.layout.align.horizontal()
-  statusbar_layout:set_left(statusbar_layout_left)
-  statusbar_layout:set_right(statusbar_layout_right)
   statusbars[s]:set_widget(wibox.layout.margin(statusbar_layout, beautiful.statusbar_margin, beautiful.statusbar_margin, beautiful.statusbar_margin, beautiful.statusbar_margin))
   -- the statusbar is "floating": its height is 1px high when "hidden"
   -- we can then put cursor at bottom of screen to trigger mouse::enter signal and show it above clients
-  leimi.show_floating_wibox(statusbars[s], beautiful.statusbar_height)
-  statusbars[s]:connect_signal('mouse::enter', function()
-        leimi.show_floating_wibox(statusbars[s], beautiful.statusbar_height)
-  end)
+  -- leimi.show_floating_wibox(statusbars[s], beautiful.statusbar_height)
+  -- statusbars[s]:connect_signal('mouse::enter', function()
+  --       leimi.show_floating_wibox(statusbars[s], beautiful.statusbar_height)
+  -- end)
 end
 
-local delayed_statusbar_hide = timer { timeout = 1 }
-delayed_statusbar_hide:connect_signal("timeout", function()
-  leimi.hide_floating_wibox(statusbars[mouse.screen])
-  delayed_statusbar_hide:stop()
-end)
+-- local delayed_statusbar_hide = timer { timeout = 1 }
+-- delayed_statusbar_hide:connect_signal("timeout", function()
+--   leimi.hide_floating_wibox(statusbars[mouse.screen])
+--   delayed_statusbar_hide:stop()
+-- end)
 
 -- global keyboard shortcuts - work all the time everywhere
 globalkeys = awful.util.table.join(
   -- go to next or prev tag with (shift+)tab + show statusbar for 1 sec to see what tag we're on
   awful.key({ modkey,           }, "Tab",     function()
     leimi.gototag(awful.tag.viewnext)
-    leimi.show_floating_wibox(statusbars[mouse.screen], beautiful.statusbar_height)
-    delayed_statusbar_hide:stop()
-    delayed_statusbar_hide:start()
+    -- leimi.show_floating_wibox(statusbars[mouse.screen], beautiful.statusbar_height)
+    -- delayed_statusbar_hide:stop()
+    -- delayed_statusbar_hide:start()
   end),
   awful.key({ modkey, sft       }, "Tab",     function()
     leimi.gototag(awful.tag.viewprev)
-    leimi.show_floating_wibox(statusbars[mouse.screen], beautiful.statusbar_height)
-    delayed_statusbar_hide:stop()
-    delayed_statusbar_hide:start()
+    -- leimi.show_floating_wibox(statusbars[mouse.screen], beautiful.statusbar_height)
+    -- delayed_statusbar_hide:stop()
+    -- delayed_statusbar_hide:start()
   end),
 
   -- almost normal alt-tab behavior with rofi https://github.com/DaveDavenport/rofi
-  awful.key({ altkey,           }, "Tab",     function()
+  awful.key({ altkey,           }, "Escape",     function()
     awful.util.spawn_with_shell(string.format(
       'rofi -now -font "%s" -fg "%s" -bg "%s" -hlfg "%s" -hlbg "%s" -o 95 -width 600',
-      beautiful.font_xft, beautiful.fg_normal, beautiful.bg_normal, beautiful.fg_focus, beautiful.bg_focus
+      beautiful.font, beautiful.fg_normal, beautiful.bg_normal, beautiful.fg_focus, beautiful.bg_focus
     ))
   end),
 
@@ -256,6 +270,15 @@ globalkeys = awful.util.table.join(
     if client.focus then client.focus:raise() end
   end),
   awful.key({ modkey,           }, "l",       function()
+    leimi.client_focus_global_byidx(1)
+    if client.focus then client.focus:raise() end
+  end),
+  -- focus next or prev client - works accross all screens
+  awful.key({ altkey, sft       }, "Tab",       function()
+    leimi.client_focus_global_byidx(-1)
+    if client.focus then client.focus:raise() end
+  end),
+  awful.key({ altkey,           }, "Tab",       function()
     leimi.client_focus_global_byidx(1)
     if client.focus then client.focus:raise() end
   end),
@@ -285,12 +308,19 @@ globalkeys = awful.util.table.join(
   -- put current client as the master one
   awful.key({ modkey            }, "e",       function() awful.client.setmaster(client.focus) end),
 
-  -- toggle the visibility of the statusbar
+  -- "fullscreen mode": toggle the visibility of the statusbar and titlebars
   awful.key({ modkey            }, "v",       function()
-    leimi.toggle_floating_wibox(statusbars[mouse.screen], beautiful.statusbar_height)
+    -- leimi.toggle_floating_wibox(statusbars[mouse.screen], beautiful.statusbar_height)
+    for s = 1, screen.count() do
+      statusbars[s].visible = not statusbars[s].visible
+      for i, o in ipairs(client.get(s)) do
+        awful.titlebar.toggle(o)
+      end
+    end
   end),
 
   -- run or raise applications
+  awful.key({ modkey            }, "t",       function() leimi.ror("roxterm", "Roxterm") end),
   awful.key({ modkey            }, "f",       function() leimi.ror("pcmanfm", "Pcmanfm") end),
   awful.key({ modkey            }, "s",       function() leimi.ror("subl", "Sublime_text") end),
   awful.key({ modkey            }, "w",       function() leimi.ror("chromium-browser", "Chromium-browser") end),
@@ -301,21 +331,18 @@ globalkeys = awful.util.table.join(
   awful.key({ modkey            }, "space",   function()
     awful.util.spawn_with_shell(string.format(
       "dmenu_run -fn '%s' -nf '%s' -nb '%s' -sf '%s' -sb '%s' -b -z",
-      beautiful.font_xft, beautiful.fg_normal, beautiful.bg_normal, beautiful.fg_focus, beautiful.bg_focus
+      beautiful.font_dmenu, beautiful.fg_normal, beautiful.bg_normal, beautiful.fg_focus, beautiful.bg_focus
     ))
   end),
   awful.key({ modkey            }, "r",       function()
     awful.util.spawn_with_shell(string.format(
       "dmenu_run -fn '%s' -nf '%s' -nb '%s' -sf '%s' -sb '%s' -b -z",
-      beautiful.font_xft, beautiful.fg_normal, beautiful.bg_normal, beautiful.fg_focus, beautiful.bg_focus
+      beautiful.font_dmenu, beautiful.fg_normal, beautiful.bg_normal, beautiful.fg_focus, beautiful.bg_focus
     ))
   end),
 
   -- quake like terminal through https://github.com/copycat-killer/awesome-copycats/ scratchdrop
   awful.key({ altkey,           }, "space",   function()
-    scratchdrop(terminal, "top", "center", 1, 0.5, false, main_screen)
-  end),
-  awful.key({ modkey,           }, "t",       function()
     scratchdrop(terminal, "top", "center", 1, 0.5, false, main_screen)
   end),
 
@@ -370,7 +397,10 @@ root.buttons(awful.util.table.join(
 clientkeys = awful.util.table.join(
   awful.key({ modkey, sft       }, "q",      function(c) c:kill() end),
   awful.key({ altkey            }, "F4",     function(c) c:kill() end),
-  awful.key({ modkey            }, "u",      awful.client.floating.toggle),
+  awful.key({ modkey            }, "u",      function(c)
+    awful.client.floating.toggle(c)
+    leimi.update_border_color(c)
+  end),
   awful.key({ modkey,           }, "n",      function(c)
     -- The client currently has the input focus, so it cannot be
     -- minimized, since minimized clients can't have the focus.
@@ -379,6 +409,7 @@ clientkeys = awful.util.table.join(
   awful.key({ modkey,           }, "m", function(c)
     c.maximized_horizontal = not c.maximized_horizontal
     c.maximized_vertical   = not c.maximized_vertical
+    leimi.update_border_color(c)
   end)
 )
 
@@ -420,7 +451,7 @@ awful.rules.rules = {
     properties = { border_width = 0 }
   },
   { rule = { class = "Sublime_text" }, properties = { tag = tags[main_screen][2] } },
-  { rule = { class = "Chromium-browser" }, properties = { tag = tags[main_screen == 1 and 2 or 1][2] } }
+  { rule = { class = "Chromium-browser" }, properties = { tag = tags[secondary_screen][main_screen == secondary_screen and 3 or 2] } }
 }
 
 
@@ -489,22 +520,22 @@ end)
 -- change client's border on focus change
 -- be sure the menu and statusbar are hidden when we are a on client (focusing it or clicking on it)
 client.connect_signal("focus", function(c)
-  c.border_color = beautiful.border_focus
-  main_menu:hide()
+  leimi.update_border_color(c)
+  -- main_menu:hide()
 end)
 
-client.connect_signal("button::press", function(c)
-  main_menu:hide()
-  leimi.hide_floating_wibox(statusbars[mouse.screen])
-end)
+-- client.connect_signal("button::press", function(c)
+--   main_menu:hide()
+--   leimi.hide_floating_wibox(statusbars[mouse.screen])
+-- end)
 
 client.connect_signal("unfocus", function(c)
   c.border_color = beautiful.border_normal
 end)
 
-client.connect_signal("mouse::enter", function(c)
-  leimi.hide_floating_wibox(statusbars[mouse.screen])
-end)
+-- client.connect_signal("mouse::enter", function(c)
+--   leimi.hide_floating_wibox(statusbars[mouse.screen])
+-- end)
 
 
 -- autostarting apps - awesome_boot loads every .desktop file in standard autostart folder

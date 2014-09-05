@@ -184,10 +184,7 @@ for s = 1, screen.count() do
   tasklists[s] = awful.widget.tasklist(
     s,
     awful.widget.tasklist.filter.alltags,
-    tasklists.buttons,
-    nil,
-    leimi.icons_only_list,
-    wibox.layout.fixed.horizontal()
+    tasklists.buttons
   )
 
   -- show systray, clock and menu on main screen only - others screen have just their taglist and tasklist

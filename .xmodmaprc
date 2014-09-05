@@ -15,9 +15,10 @@
 clear Lock
 remove Control = Control_L
 keycode 66 = Control_L
-keycode 37 = Delete
+keycode 105 = Control_R
+keycode 37 = Super_L
 add Control = Control_L
-
+add Control = Control_R
 !remove œ and put ² and ³ (with shift) on it
 keycode 49 = twosuperior threesuperior
 

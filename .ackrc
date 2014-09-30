@@ -2,6 +2,6 @@
 --type-set=sass=.sass
 --type-set=allcss=.sass .less .css .scss
 
---color-match=bright_blue
+--color-match=green
 --color-filename=bold bright_red
---color-lineno=bright_magenta
+--color-lineno=yellow

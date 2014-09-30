@@ -1,5 +1,11 @@
-#!/bin/sh
+#!/bin/zsh
+
 extract() {
+	if [ -z "$1" ]; then
+		echo "\`extract\` lets you easily extract common archive types"
+		echo "Usage: extract archive_file";
+		return 1
+	fi
 	if [ -f $1 ] ; then
 		case $1 in
 			*.tar.bz2)   tar xjf $1     ;;
@@ -20,10 +26,41 @@ extract() {
 	fi
 }
 
-alias svnd="svn diff | colordiff"
+ju() {
+	if [ -z "$1" ]; then
+		echo "\`ju\` (for \"jump up\") lets you directly move into a parent directory, however high it is"
+		echo "Usage: ju sub_directory";
+		return 1
+	fi
+	local upto=$1
+	cd "${PWD/\/$upto\/*//$upto}"
+}
+
+jd() {
+	if [ -z "$1" ]; then
+		echo "\`jd\` (for \"jump down\") lets you directly move into a sub-directory, however deep it is"
+		echo "Usage: jd sub_directory";
+		return 1
+	fi
+	cd **"/$1"
+}
+
+transfer() {
+	if [ -z "$1" ]; then
+		echo "\`transfer\` helps you upload files on https://transfer.sh";
+		echo "Usage: transfer file_to_upload";
+		return 1
+	fi
+	curl --upload-file ./$1 https://transfer.sh/$1;
+}
 
 alias jsl="jslint"
 
 alias glo="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
 
+# gimme file!
 alias gmf="ack --ignore-case"
+
+# ecolutis
+alias cdp="cd ../../../../"
+alias egit="ecolugit"

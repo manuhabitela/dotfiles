@@ -66,14 +66,15 @@
 	"ignored_packages":
 	[
 		"Vintageous",
-		"Xdebug Client",
-		"Vintage"
+		"Vintage",
+		"Xdebug Client"
 	],
 	"jshint_options":
 	{
 		"smarttabs": true,
 		"trailing": false
 	},
+	"line_numbers": true,
 	"overlay_scroll_bars": "enabled",
 	"rulers":
 	[

@@ -1,0 +1,4 @@
+#!/bin/sh
+# lancement d'une commande git en stashant avant et réappliquant le stash après
+
+git stash && git $* && git stash pop

@@ -8,24 +8,29 @@ theme.wallpaper = "/home/manu/Dropbox/Mes documents/Mes images/Walls/mhcy2u.jpg"
 
 theme.icon_theme = "Faenza"
 
-theme.bg_normal     = "#222222"
-theme.fg_normal     = "#dddddd"
-theme.border_normal = "#000000"
 theme.font          = "Droid Sans 10"
 theme.font_xft      = "Droid Sans-10"
 theme.font_title    = "Droid Sans 8"
-theme.font_dmenu    = "Droid Sans-10"
+theme.font_dmenu    = theme.font_xft
+
+theme.bg_normal     = "#222222"
+theme.fg_normal     = "#dddddd"
+theme.border_normal = "#000000"
 
 theme.bg_focus      = "#395899"
 theme.fg_focus      = "#ffffff"
-theme.border_focus  = "#2F497F"
-theme.font_title_focus    = "Droid Sans Bold 8"
+theme.border_focus  = theme.bg_focus
+theme.font_title_focus = "Droid Sans Bold 8"
 
-theme.border_floating = "#00B2A9"
+theme.bg_floating = "#00B2A9"
+theme.fg_floating = theme.fg_focus
+theme.border_floating = theme.bg_floating
 
-theme.border_maximized = "#01006D"
+theme.bg_maximized = "#008466"
+theme.fg_maximized = theme.fg_focus
+theme.border_maximized = theme.bg_maximized
 
-theme.border_width  = 2
+theme.border_width = 0
 
 theme.taglist_font = "Droid Sans Bold 9"
 theme.taglist_bg_focus = "#2F497F"

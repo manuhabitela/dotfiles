@@ -27,16 +27,25 @@ function leimi.titlewidget(c)
   return ret
 end
 
-function leimi.update_border_color(c)
+function leimi.update_client_colors(c)
+  local bg_color, fg_color
   if c.maximized then
-    c.border_color = beautiful.border_maximized
-  elseif awful.client.floating.get(c) then
-    c.border_color = beautiful.border_floating
+    bg_color = beautiful.bg_maximized
+    fg_color = beautiful.fg_maximized
+  elseif awful.client.floating.get(c) or awful.layout.get(client.screen) == awful.layout.suit.floating then
+    bg_color = beautiful.bg_floating
+    fg_color = beautiful.fg_floating
   elseif client.focus == c then
-    c.border_color = beautiful.border_focus
+    bg_color = beautiful.bg_focus
+    fg_color = beautiful.fg_focus
   else
-    c.border_color = beautiful.border_normal
+    bg_color = beautiful.bg_normal
+    fg_color = beautiful.fg_normal
   end
+  local client_titlebar = awful.titlebar(c, { size = 18 })
+  client_titlebar:set_bg(bg_color)
+  client_titlebar:set_fg(fg_color)
+  -- c.border_color = bg_color
 end
 
 -- move to a tag through the given callback (awful.tag.viewnext, viewonly, etc)
@@ -70,7 +79,7 @@ function leimi.filter_visible_clients(current_screen, current_client)
 end
 
 -- make focus_byidx work on all screens
--- kinda like focus_global_bydirection but here you can only press your usual two keys to go
+-- kinda like focus_global_bydirection but here you can press only your usual two keys to go
 -- forward and backward the clients list instead of having to really go with one of four directions
 -- and it cycles (I use it as an alt-tab alternative)
 function leimi.client_focus_global_byidx(i, c)
@@ -125,11 +134,9 @@ end
 -- custom option to pass to the tasklist - show only app icons
 function leimi.icons_only_list(w, buttons, label, data, objects)
   w:reset()
-  local icons_width = 0
-  local l = wibox.layout.fixed.horizontal()
   for i, o in ipairs(objects) do
     local cache = data[o]
-    local ib, m
+    local l, ib, m, bgb
     if cache then
       ib = cache.ib
       m = cache.m
@@ -138,8 +145,12 @@ function leimi.icons_only_list(w, buttons, label, data, objects)
       ib = wibox.widget.imagebox()
       bgb = wibox.widget.background()
       m = wibox.layout.margin(ib, 2, 2, 1, 1)
+      l = wibox.layout.fixed.horizontal()
 
-      bgb:set_widget(m)
+      l:add(m)
+
+      bgb:set_widget(l)
+
       bgb:buttons(common.create_buttons(buttons, o))
 
       data[o] = {
@@ -152,12 +163,11 @@ function leimi.icons_only_list(w, buttons, label, data, objects)
     local text, bg, bg_image, icon = label(o)
     bgb:set_bg(bg)
     bgb:set_bgimage(bg_image)
-    local icon_size = beautiful.statusbar_height - beautiful.statusbar_margin
-    ib:fit(icon_size, icon_size)
+    -- local icon_size = beautiful.statusbar_height - beautiful.statusbar_margin
+    -- ib:fit(icon_size, icon_size)
     ib:set_image(icon)
-    l:add(bgb)
+    w:add(bgb)
   end
-  w:add(l)
 end
 
 function leimi.ror(cmd, classes, merge)

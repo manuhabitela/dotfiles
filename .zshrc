@@ -9,7 +9,7 @@ PATH="$PATH:/usr/lib/lightdm/lightdm"
 export PATH="$PATH:$HOME/bin"
 
 source_sh () {
-  emulate -LR sh
+  emulate -LR bash
   . "$@"
 }
 
@@ -32,4 +32,5 @@ source $ZSH/oh-my-zsh.sh
 setopt auto_cd
 cdpath=($HOME/Dev $HOME/Dev/httpd $HOME/Dev/vagrant $HOME/Dropbox/Web/localhost)
 
-source_sh $HOME/.aliases
+source $HOME/.aliases
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting

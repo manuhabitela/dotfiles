@@ -1,16 +1,6 @@
 !keycode key shift+key modeswitch+key modeswitch+shift+key altgr+key altgr+shift+key
 
 !remove caps lock and put ctrl on it
-!remove ctrl and put windows on it
-!clear Lock
-!remove Control = Control_L
-!clear Mod4
-!keycode 66 = Control_L
-!keycode 37 = Super_L
-!add Control = Control_L
-!add Mod4 = Super_L
-
-!remove caps lock and put ctrl on it
 !remove ctrl and put delete on it
 clear Lock
 remove Control = Control_L

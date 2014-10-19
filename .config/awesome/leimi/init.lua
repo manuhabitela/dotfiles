@@ -3,7 +3,6 @@ local common = require('awful.widget.common')
 local wibox = require('wibox')
 local beautiful = require('beautiful')
 local myhelpers = require('helpers')
-local mouse = require('mouse')
 local leimi = {}
 leimi.focused_clients = { {}, {}, {}, {} }
 

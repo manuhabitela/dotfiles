@@ -13,6 +13,6 @@ then
 fi
 
 # suffit de faire un lien symbolique vers ~/bin qui est dans notre PATH :)
-ln -s "$1" "$HOME/bin/$2"
+ln -s "$1" "/usr/bin/$2"
 
 exit 0

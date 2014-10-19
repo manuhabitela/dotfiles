@@ -66,8 +66,8 @@
 	"ignored_packages":
 	[
 		"Vintageous",
-		"Vintage",
-		"Xdebug Client"
+		"Xdebug Client",
+		"Vintage"
 	],
 	"jshint_options":
 	{

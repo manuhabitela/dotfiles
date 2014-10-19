@@ -12,6 +12,7 @@ add Control = Control_R
 !remove œ and put ² and ³ (with shift) on it
 keycode 49 = twosuperior threesuperior
 
-!put < and > on altgr+^ and altgr+$:
-keycode 34 = dead_circumflex dead_diaeresis dead_circumflex dead_diaeresis less apostrophe dead_tilde apostrophe dead_circumflex dead_diaeresis dead_tilde apostrophe dead_circumflex dead_diaeresis dead_tilde apostrophe
-keycode 35 = dollar sterling dollar sterling greater ecircumflex ecircumflex ediaeresis dollar sterling ecircumflex ediaeresis dollar sterling ecircumflex ediaeresis
+!put < and > on altgr+$ and altgr+*:
+keycode 35 = dollar sterling dollar sterling less ecircumflex ecircumflex ediaeresis dollar sterling ecircumflex ediaeresis dollar sterling ecircumflex ediaeresis
+keycode 51 = asterisk mu asterisk mu greater dead_macron dead_grave dead_macron asterisk mu dead_grave dead_macron asterisk mu dead_grave dead_macron
+keycode 134 = colon slash colon slash division U2215 division U2215 colon slash division U2215 colon slash division U2215

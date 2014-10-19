@@ -11,7 +11,7 @@ local scratchdrop = require("scratchdrop")
 -- homemade stuff
 local leimi = require('leimi')
 local leimiwibox = require('leimi.wibox')
-require("debian.menu")
+local xdg_menu = require("archmenu")
 
 -- error handling
 -- check if awesome encountered an error during startup and fell back to
@@ -52,31 +52,12 @@ local altkey = "Mod1"
 local ctrl = "Control"
 local sft = "Shift"
 local titlebars_enabled = true
-local titlebars_blacklist = { "guake", "exe", "plugin-container" }
+local titlebars_blacklist = { "guake", "exe", "plugin-container", "Plugin-container" }
 local floating_classes = { "MPlayer", "pinentry", "Gimp", "Guake", "Yad"}
 local floating_instances = {"exe", "plugin-container"}
 local noborders_instances = {}
 local main_screen = screen.count() > 1 and 2 or 1
 local secondary_screen = 1
--- menu config: using own fork of awesome-freedesktop for i18n https://github.com/Leimi/awesome-freedesktop/tree/feature-simple-localization
--- require('awesome-freedesktop.freedesktop.utils')
--- freedesktop.utils.terminal = terminal  -- default: "xterm"
--- freedesktop.utils.icon_theme = beautiful.icon_theme -- look inside /usr/share/icons/, default: nil (don't use icon theme)
--- freedesktop.utils.lang = "fr"
--- require('awesome-freedesktop.freedesktop.menu')
--- freedesktop.menu.categories = {
---   accessories = "Accessoires",
---   dev = "Développement",
---   education = "Éducation",
---   games = "Jeux",
---   graphics = "Graphisme",
---   web = "Internet",
---   media = "Multimédia",
---   office = "Bureautique",
---   other = "Autre",
---   settings = "Paramètres",
---   system = "Système"
--- }
 
 
 -- layouts: simple tiles and fullscreen layout are enough
@@ -112,15 +93,11 @@ main_menu_items = {
    { "quit", awesome.quit }
 }
 
-main_menu = awful.menu({
-  items = {
-    { "awesome", main_menu_items, beautiful.awesome_icon },
-    { "Debian", debian.menu.Debian_menu.Debian },
-    { "open terminal", terminal }
-  }
+main_menu = awful.menu({ items =
+	{
+    	{ "Apps", xdgmenu }
+  	}
 })
--- main_menu = awful.menu({ items = { } })
--- main_menu = awful.menu({ items = awful.util.table.join(freedesktop.menu.new(), { { "Quitter", 'shutdown-gui' } }) })
 
 
 -- statusbar config: we have a systray, a launcher, a taglist and a tasklist
@@ -330,8 +307,8 @@ globalkeys = awful.util.table.join(
   -- run or raise applications
   awful.key({ modkey            }, "t",       function() leimi.ror("roxterm", "Roxterm") end),
   awful.key({ modkey            }, "f",       function() leimi.ror("pcmanfm", "Pcmanfm") end),
-  awful.key({ modkey            }, "s",       function() leimi.ror("subl", "Sublime_text") end),
-  awful.key({ modkey            }, "w",       function() leimi.ror("chromium-browser", "Chromium-browser") end),
+  awful.key({ modkey            }, "s",       function() leimi.ror("subl", { "Sublime_text", "Subl" }) end),
+  awful.key({ modkey            }, "w",       function() leimi.ror("chromium-browser", { "Chromium-browser", "Chromium" }) end),
   awful.key({ modkey            }, "p",       function() leimi.ror("pidgin", "Pidgin") end),
   awful.key({ modkey            }, "g",       function() leimi.ror("git-cola", "Git-cola") end),
 

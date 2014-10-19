@@ -6,6 +6,7 @@ PATH="$PATH:/usr/sbin"
 PATH="$PATH:/usr/local/bin"
 PATH="$PATH:/usr/local/sbin"
 PATH="$PATH:/usr/lib/lightdm/lightdm"
+PATH="$PATH:$HOME/.rvm/bin"
 export PATH="$PATH:$HOME/bin"
 
 source_sh () {
@@ -25,7 +26,7 @@ COMPLETION_WAITING_DOTS="true"
 # Plugins: ~/.oh-my-zsh/plugins/
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git debian nyan svn)
+plugins=(git nyan)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -33,4 +34,5 @@ setopt auto_cd
 cdpath=($HOME/Dev $HOME/Dev/httpd $HOME/Dev/vagrant $HOME/Dropbox/Web/localhost)
 
 source $HOME/.aliases
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"

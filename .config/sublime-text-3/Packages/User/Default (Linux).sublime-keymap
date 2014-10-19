@@ -1,5 +1,5 @@
 [
-{ "keys": ["ctrl+v"], "command": "paste_and_indent" },
+{ "keys": ["ctrl+v"], "command": "paste" },
 { "keys": ["ctrl+shift+;"], "command": "help_for_word" },
 { "keys": ["ctrl+b"], "command": "toggle_side_bar" },
 { "keys": ["ctrl+shift+x"], "command": "delete_trailing_spaces" },
@@ -16,6 +16,8 @@
 { "keys": ["ctrl+shift+t"], "command": "reopen_last_file" },
 { "keys": ["ctrl+alt+s"], "command": "prompt_save_as" },
 { "keys": ["ctrl+shift+s"], "command": "sftp_upload_file" },
+{ "keys": ["ctrl+shift+h"], "command": "show_panel", "args": {"panel": "find_in_files"} },
+{ "keys": ["ctrl+shift+f"], "command": "search_in_project" },
 { "keys": ["ctrl+alt+f"], "command": "sftp_diff_remote_file" },
 { "keys": ["ctrl+alt+super+d"], "command": "svn_wc_diff" },
 { "keys": ["ctrl+shift+alt+super+d"], "command": "svn_diff" },

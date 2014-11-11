@@ -5,6 +5,8 @@ local beautiful = require('beautiful')
 local myhelpers = require('helpers')
 local leimi = {}
 leimi.focused_clients = { {}, {}, {}, {} }
+leimi.previous_tags = { }
+
 
 
 -- custom titlewidget:
@@ -27,24 +29,28 @@ function leimi.titlewidget(c)
 end
 
 function leimi.update_client_colors(c)
-  local bg_color, fg_color
-  if c.maximized then
-    bg_color = beautiful.bg_maximized
-    fg_color = beautiful.fg_maximized
-  elseif awful.client.floating.get(c) or awful.layout.get(client.screen) == awful.layout.suit.floating then
-    bg_color = beautiful.bg_floating
-    fg_color = beautiful.fg_floating
-  elseif client.focus == c then
-    bg_color = beautiful.bg_focus
-    fg_color = beautiful.fg_focus
-  else
-    bg_color = beautiful.bg_normal
-    fg_color = beautiful.fg_normal
+  if beautiful.titlebar_enabled
+    and not myhelpers.contains(c.instance, beautiful.titlebar_blacklist)
+    and (c.type == "normal" or c.type == "dialog") then
+    local bg_color, fg_color
+    if c.maximized then
+      bg_color = beautiful.bg_maximized
+      fg_color = beautiful.fg_maximized
+    elseif awful.client.floating.get(c) or awful.layout.get(client.screen) == awful.layout.suit.floating then
+      bg_color = beautiful.bg_floating
+      fg_color = beautiful.fg_floating
+    elseif client.focus == c then
+      bg_color = beautiful.bg_focus
+      fg_color = beautiful.fg_focus
+    else
+      bg_color = beautiful.bg_normal
+      fg_color = beautiful.fg_normal
+    end
+    local client_titlebar = awful.titlebar(c, { size = 18 })
+    client_titlebar:set_bg(bg_color)
+    client_titlebar:set_fg(fg_color)
+    -- c.border_color = bg_color
   end
-  local client_titlebar = awful.titlebar(c, { size = 18 })
-  client_titlebar:set_bg(bg_color)
-  client_titlebar:set_fg(fg_color)
-  -- c.border_color = bg_color
 end
 
 -- move to a tag through the given callback (awful.tag.viewnext, viewonly, etc)
@@ -62,6 +68,22 @@ function leimi.gototag(callback)
     client.focus = leimi.focused_clients[current_screen][new_tag]
   else
     awful.client.focus.byidx( 1)
+  end
+end
+
+function leimi.toggletag(screen_number, tag_number)
+  tag_number = tonumber(tag_number)
+  local current_tag = tonumber(awful.tag.selected(screen_number).name)
+  if current_tag == tag_number then
+    local previous_tag_number = leimi.previous_tags[screen_number]
+    leimi.gototag(function()
+      awful.tag.viewonly(awful.tag.gettags(screen_number)[previous_tag_number])
+    end)
+  else
+    leimi.previous_tags[screen_number] = current_tag
+    leimi.gototag(function()
+      awful.tag.viewonly(awful.tag.gettags(screen_number)[tag_number])
+    end)
   end
 end
 
@@ -177,6 +199,10 @@ function leimi.ror(cmd, classes, merge)
     return awful.rules.match_any(c, { class = classes })
   end
   return awful.client.run_or_raise(cmd, matcher, merge)
+end
+
+function leimi.run_once(cmd)
+  awful.util.spawn_with_shell("ps -ef | grep -v grep | grep '" .. cmd .. "' > /dev/null || (" .. cmd .. ")")
 end
 
 return leimi

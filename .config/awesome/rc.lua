@@ -51,8 +51,6 @@ modkey = winkey
 local altkey = "Mod1"
 local ctrl = "Control"
 local sft = "Shift"
-local titlebars_enabled = true
-local titlebars_blacklist = { "guake", "exe", "plugin-container", "Plugin-container" }
 local floating_classes = { "MPlayer", "pinentry", "Gimp", "Guake", "Yad"}
 local floating_instances = {"exe", "plugin-container"}
 local noborders_instances = {}
@@ -79,26 +77,20 @@ if beautiful.wallpaper then
 end
 
 
--- each screen has its own set of 6 tags
+-- each screen has its own set of tags
 tags = {}
 for s = 1, screen.count() do
-  tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6 }, s, layouts[1])
+  tags[s] = awful.tag(
+    { 1, 2, 3, 4, 5, 6, 7 },
+    s,
+    { layouts[1], layouts[3], layouts[1], layouts[1], layouts[1], layouts[1], layouts[3]}
+  )
 end
 
 
-main_menu_items = {
-   { "manual", terminal .. " -e man awesome" },
-   { "edit config", editor_cmd .. " " .. awesome.conffile },
-   { "restart", awesome.restart },
-   { "quit", awesome.quit }
-}
-
-main_menu = awful.menu({ items =
-	{
-    	{ "Apps", xdgmenu }
-  	}
-})
-
+table.insert(xdgmenu, { "Terminal", terminal })
+table.insert(xdgmenu, { "Quitter", "lxde-logout" })
+main_menu = awful.menu.new({ items = xdgmenu, theme = { height = 22, width = 200 } })
 
 -- statusbar config: we have a systray, a launcher, a taglist and a tasklist
 statusbars = {}
@@ -155,10 +147,16 @@ launcher = awful.widget.launcher({
   menu = main_menu
 })
 
+
+local statusbar_items_separator = wibox.widget.textbox()
+statusbar_items_separator:set_font("Droid Sans 9")
+statusbar_items_separator:set_valign("center")
+statusbar_items_separator:set_markup('<span foreground="'..beautiful.statusbar_separator_color..'">|</span>')
 for s = 1, screen.count() do
   local statusbar_layout = wibox.layout.align.horizontal()
   statusbars[s] = leimiwibox({ position = "bottom", border_width = beautiful.statusbar_border_width, border_color = beautiful.statusbar_border_color, align = "right", screen = s, height = 26 })
-  taglists[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, taglists.buttons)
+  taglists[s] = awful.widget.taglist(s, function(t) return t.name ~= "7" end, taglists.buttons)
+
   -- we show apps in the tasklist with icons only
   tasklists[s] = awful.widget.tasklist(
     s,
@@ -169,33 +167,41 @@ for s = 1, screen.count() do
     wibox.layout.fixed.horizontal()
   )
 
+  tasklists[s].border_color = beautiful.statusbar_border_color
+  tasklists[s].border_width = 1
   -- show systray, clock and menu on main screen only - others screen have just their taglist and tasklist
   if s == main_screen then
     local statusbar_layout_right = wibox.layout.fixed.horizontal()
 
-    statusbar_layout_right:add(wibox.layout.margin(tasklists[s], beautiful.statusbar_items_margin))
+    statusbar_layout_right:add(wibox.layout.margin(tasklists[s], beautiful.statusbar_items_margin, beautiful.statusbar_items_margin))
+    statusbar_layout_right:add( statusbar_items_separator )
 
     statusbar_layout_right:add( wibox.layout.margin(taglists[s], beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
+    statusbar_layout_right:add( wibox.layout.margin(statusbar_items_separator, 0, beautiful.statusbar_items_margin) )
+
     local mysystray = wibox.widget.systray()
     mysystray:set_base_size(beautiful.statusbar_height - beautiful.statusbar_margin)
     mysystray:fit()
     -- systray seems to be not working with a margin layout
     statusbar_layout_right:add( mysystray )
+    statusbar_layout_right:add( statusbar_items_separator )
 
 
     local clock = awful.widget.textclock("%H:%M")
     clock:set_font(beautiful.clock_font)
-    statusbar_layout_right:add( wibox.layout.margin(clock, beautiful.statusbar_items_margin) )
+    statusbar_layout_right:add( wibox.layout.margin(clock, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
+    statusbar_layout_right:add( statusbar_items_separator )
 
-    statusbar_layout_right:add( wibox.layout.margin(launcher, beautiful.statusbar_items_margin) )
+
+    statusbar_layout_right:add( wibox.layout.margin(launcher, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
 
     statusbar_layout:set_right(statusbar_layout_right)
   else
     local statusbar_layout_left = wibox.layout.fixed.horizontal()
 
-    statusbar_layout_left:add( wibox.layout.margin(taglists[s], 0, beautiful.statusbar_items_margin) )
+    statusbar_layout_left:add( wibox.layout.margin(taglists[s], 0, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
 
-    statusbar_layout_left:add( wibox.layout.margin(tasklists[s], 0, beautiful.statusbar_items_margin) )
+    statusbar_layout_left:add( wibox.layout.margin(tasklists[s], 0, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
 
     statusbar_layout:set_left(statusbar_layout_left)
   end
@@ -231,7 +237,7 @@ globalkeys = awful.util.table.join(
   end),
 
   -- almost normal alt-tab behavior with rofi https://github.com/DaveDavenport/rofi
-  awful.key({ altkey,           }, "Escape",     function()
+  awful.key({ altkey,           }, "a",     function()
     awful.util.spawn_with_shell(string.format(
       'rofi -now -font "%s" -fg "%s" -bg "%s" -hlfg "%s" -hlbg "%s" -o 95 -width 600',
       beautiful.font, beautiful.fg_normal, beautiful.bg_normal, beautiful.fg_focus, beautiful.bg_focus
@@ -315,25 +321,24 @@ globalkeys = awful.util.table.join(
   -- dmenu with fuzzy matching through -z option https://aur.archlinux.org/packages/dmenu-xft-fuzzy/
   awful.key({ modkey            }, "space",   function()
     awful.util.spawn_with_shell(string.format(
-      "dmenu_run -fn '%s' -nf '%s' -nb '%s' -sf '%s' -sb '%s' -b -z",
-      beautiful.font_dmenu, beautiful.fg_normal, beautiful.bg_normal, beautiful.fg_focus, beautiful.bg_focus
-    ))
-  end),
-  awful.key({ modkey            }, "r",       function()
-    awful.util.spawn_with_shell(string.format(
-      "dmenu_run -fn '%s' -nf '%s' -nb '%s' -sf '%s' -sb '%s' -b -z",
+      "dmenu_run_aliases -fn '%s' -nf '%s' -nb '%s' -sf '%s' -sb '%s' -l 30 -i -z",
       beautiful.font_dmenu, beautiful.fg_normal, beautiful.bg_normal, beautiful.fg_focus, beautiful.bg_focus
     ))
   end),
 
-  -- quake like terminal through https://github.com/copycat-killer/awesome-copycats/ scratchdrop
   awful.key({ altkey,           }, "space",   function()
-    scratchdrop(terminal, "top", "center", 1, 0.7, false, main_screen)
+    leimi.toggletag(main_screen, 7);
   end),
 
   awful.key({ ctrl, altkey      }, "l",       function()
     awful.util.spawn_with_shell("xscreensaver-command -lock")
   end),
+
+  awful.key({ }, "XF86AudioLowerVolume",      function() awful.util.spawn("amixer set Master 2-") end),
+  awful.key({ }, "XF86AudioRaiseVolume",      function() awful.util.spawn("amixer set Master 2+") end),
+  awful.key({ }, "XF86AudioMute",             function() awful.util.spawn("amixer set Master toggle") end),
+
+  awful.key({ }, "XF86",             function() awful.util.spawn("lxde-logout") end),
 
   awful.key({ modkey, ctrl      }, "r",       awesome.restart),
   awful.key({ modkey, ctrl, sft }, "q",       awesome.quit)
@@ -419,7 +424,8 @@ awful.rules.rules = {
       border_color = beautiful.border_normal,
       focus = awful.client.focus.filter,
       keys = clientkeys,
-      buttons = clientbuttons
+      buttons = clientbuttons,
+      size_hints_honor = false
     }
   },
   -- some clients are floating by default, others don't have borders - see variables declaration at top
@@ -435,8 +441,9 @@ awful.rules.rules = {
     rule_any = { instance = noborders_instances },
     properties = { border_width = 0 }
   },
-  { rule = { class = "Sublime_text" }, properties = { tag = tags[main_screen][2] } },
-  { rule = { class = "Chromium-browser" }, properties = { tag = tags[secondary_screen][main_screen == secondary_screen and 3 or 2] } }
+  { rule_any = { class = { "Sublime_text", "Subl" } }, properties = { tag = tags[main_screen][2] } },
+  { rule_any = { class = { "Roxterm" } }, properties = { tag = tags[main_screen][7] } },
+  { rule_any = { class = { "Chromium-browser", "Chromium" } }, properties = { tag = tags[secondary_screen][main_screen == secondary_screen and 2 or 2] } }
 }
 
 
@@ -454,9 +461,14 @@ client.connect_signal("manage", function(c, startup)
     end
   end
 
+  if c:tags()[1].name == "7" and c.class ~= "Roxterm" and c.class ~= "roxterm" then
+  	awful.client.movetotag( tags[main_screen][3] )
+    awful.tag.viewonly( tags[main_screen][3] )
+  end
+
   -- titlebar - for some clients we do not want it (their class or instance name is in a blacklist)
-  if titlebars_enabled
-    and not myhelpers.contains(c.instance, titlebars_blacklist)
+  if beautiful.titlebar_enabled
+    and not myhelpers.contains(c.instance, beautiful.titlebar_blacklist)
     and (c.type == "normal" or c.type == "dialog") then
     -- buttons working when clicking the titlebar text on the left (left click = move, right click = resize)
     local mouse_buttons = awful.util.table.join(
@@ -506,11 +518,11 @@ end)
 -- be sure the menu and statusbar are hidden when we are a on client (focusing it or clicking on it)
 client.connect_signal("focus", function(c)
   leimi.update_client_colors(c)
-  -- main_menu:hide()
+  main_menu:hide()
 end)
 
 client.connect_signal("button::press", function(c)
---   main_menu:hide()
+  main_menu:hide()
   leimi.hide_floating_wibox(statusbars[mouse.screen])
 end)
 
@@ -529,3 +541,4 @@ end)
 
 -- autostarting apps - awesome_boot loads every .desktop file in standard autostart folder
 awful.util.spawn_with_shell("awesome_boot")
+leimi.run_once(terminal)

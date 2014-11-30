@@ -1,5 +1,6 @@
 /.config/autostart/
 /.config/sublime-text-2/
+/.config/awesome/archmenu.lua
 
 !.config/sublime-text-3/
 

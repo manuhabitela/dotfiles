@@ -29,10 +29,7 @@ function leimi.titlewidget(c)
 end
 
 function leimi.update_client_colors(c)
-  if beautiful.titlebar_enabled
-    and not myhelpers.contains(c.instance, beautiful.titlebar_blacklist)
-    and (c.type == "normal" or c.type == "dialog") then
-    local bg_color, fg_color
+    local bg_color, fg_color, border_color
     if c.maximized then
       bg_color = beautiful.bg_maximized
       fg_color = beautiful.fg_maximized
@@ -46,11 +43,15 @@ function leimi.update_client_colors(c)
       bg_color = beautiful.bg_normal
       fg_color = beautiful.fg_normal
     end
+  local titlebar_is_hidden = c.titlebar_top ~= 0
+  if beautiful.titlebar_enabled and not titlebar_is_hidden
+    and not myhelpers.contains(c.instance, beautiful.titlebar_blacklist)
+    and (c.type == "normal" or c.type == "dialog") then
     local client_titlebar = awful.titlebar(c, { size = 18 })
     client_titlebar:set_bg(bg_color)
     client_titlebar:set_fg(fg_color)
-    -- c.border_color = bg_color
   end
+  c.border_color = bg_color
 end
 
 -- move to a tag through the given callback (awful.tag.viewnext, viewonly, etc)
@@ -187,6 +188,51 @@ function leimi.icons_only_list(w, buttons, label, data, objects)
     -- local icon_size = beautiful.statusbar_height - beautiful.statusbar_margin
     -- ib:fit(icon_size, icon_size)
     ib:set_image(icon)
+    w:add(bgb)
+  end
+end
+
+-- custom option to pass to the tasklist - show only app names
+function leimi.names_only_list(w, buttons, label, data, objects)
+  w:reset()
+  for i, o in ipairs(objects) do
+    local cache = data[o]
+    local l, tb, m, bgb
+    if cache then
+      tb = cache.tb
+      m = cache.m
+      bgb = cache.bgb
+    else
+      tb = wibox.widget.textbox()
+      bgb = wibox.widget.background()
+      m = wibox.layout.margin(tb, 2, 2, 1, 1)
+      l = wibox.layout.fixed.horizontal()
+
+      l:add(m)
+
+      bgb:set_widget(l)
+
+      bgb:buttons(common.create_buttons(buttons, o))
+
+      data[o] = {
+        tb = tb,
+        bgb = bgb,
+        m = m
+      }
+    end
+
+    local text, bg, bg_image, icon = label(o)
+    -- The text might be invalid, so use pcall
+    if not pcall(tb.set_markup, tb, text) then
+        tb:set_markup("<i>&lt;Invalid text&gt;</i>")
+    end
+    bgb:set_bg(bg)
+    if type(bg_image) == "function" then
+            bg_image = bg_image(tb,o,m,objects,i)
+        end
+    bgb:set_bgimage(bg_image)
+    -- local icon_size = beautiful.statusbar_height - beautiful.statusbar_margin
+    -- ib:fit(icon_size, icon_size)
     w:add(bgb)
   end
 end

@@ -8,10 +8,10 @@ theme.wallpaper = "/home/manu/Dropbox/Mes documents/Mes images/Walls/mhcy2u.jpg"
 
 theme.icon_theme = "Faenza"
 
-theme.font          = "Droid Sans 10"
-theme.font_xft      = "Droid Sans-10"
-theme.font_title    = "Droid Sans 9"
-theme.font_dmenu    = theme.font_xft
+theme.font          = "Lucida Grande 9"
+theme.font_xft      = "Lucida Grande-9"
+theme.font_title    = "Lucida Grande 9"
+theme.font_dmenu    = "Lucida Grande-12"
 
 theme.bg_normal     = "#222222"
 theme.fg_normal     = "#dddddd"
@@ -20,31 +20,32 @@ theme.border_normal = "#000000"
 theme.bg_focus      = "#395899"
 theme.fg_focus      = "#ffffff"
 theme.border_focus  = theme.bg_focus
-theme.font_title_focus = "Droid Sans Bold 9"
+theme.font_title_focus = "Lucida Grande Bold 9"
 
 theme.bg_floating = "#00B2A9"
 theme.fg_floating = theme.fg_focus
 theme.border_floating = theme.bg_floating
 
-theme.bg_maximized = "#008466"
+theme.bg_maximized = "#00740A"
 theme.fg_maximized = theme.fg_focus
 theme.border_maximized = theme.bg_maximized
 
 theme.border_width = 0
 
-theme.taglist_font = "Droid Sans Bold 9"
+theme.taglist_font = "Lucida Grande Bold 9"
 theme.taglist_bg_focus = "#2F497F"
 theme.taglist_squares_sel   = "/usr/share/awesome/themes/default/taglist/squarew.png"
 theme.taglist_squares_unsel = "/usr/share/awesome/themes/default/taglist/squarew.png"
 
-theme.clock_font = "Droid Sans 9"
+theme.clock_font = "Lucida Grande 9"
 
 theme.statusbar_height = 28
 theme.statusbar_margin = 2
 theme.statusbar_items_margin = 6
 theme.statusbar_border_width = 1
 theme.statusbar_border_color = "#333333"
-theme.statusbar_separator_color = "#888888"
+theme.statusbar_bg_color = "#111111"
+theme.statusbar_separator_color = "#888889"
 
 theme.awesome_icon = "/usr/share/awesome/icons/awesome16.png"
 theme.awesome_icon = "/usr/share/icons/Faenza/places/24/distributor-logo.png"
@@ -54,6 +55,7 @@ theme.menu_width  = 200
 
 theme.titlebar_enabled = true
 theme.titlebar_blacklist = { "roxterm", "exe", "plugin-container", "Plugin-container", "vlc" }
+theme.titlebar_blacklist = { }
 theme.titlebar_close_button_normal = "~/.config/awesome/themes/leimi/close.png"
 theme.titlebar_close_button_focus  = "~/.config/awesome/themes/leimi/close.png"
 

@@ -29,29 +29,31 @@ function leimi.titlewidget(c)
 end
 
 function leimi.update_client_colors(c)
-    local bg_color, fg_color, border_color
-    if c.maximized then
-      bg_color = beautiful.bg_maximized
-      fg_color = beautiful.fg_maximized
-    elseif awful.client.floating.get(c) or awful.layout.get(client.screen) == awful.layout.suit.floating then
-      bg_color = beautiful.bg_floating
-      fg_color = beautiful.fg_floating
-    elseif client.focus == c then
-      bg_color = beautiful.bg_focus
-      fg_color = beautiful.fg_focus
-    else
-      bg_color = beautiful.bg_normal
-      fg_color = beautiful.fg_normal
-    end
-  local titlebar_is_hidden = c.titlebar_top ~= 0
-  if beautiful.titlebar_enabled and not titlebar_is_hidden
-    and not myhelpers.contains(c.instance, beautiful.titlebar_blacklist)
-    and (c.type == "normal" or c.type == "dialog") then
+  local bg_color, fg_color, border_color
+  if c.maximized then
+    bg_color = beautiful.bg_maximized
+    fg_color = beautiful.fg_maximized
+    border_color = beautiful.border_maximized
+  elseif awful.client.floating.get(c) or awful.layout.get(client.screen) == awful.layout.suit.floating then
+    bg_color = beautiful.bg_floating
+    fg_color = beautiful.fg_floating
+    border_color = beautiful.border_floating
+  elseif client.focus == c then
+    bg_color = beautiful.bg_focus
+    fg_color = beautiful.fg_focus
+    border_color = beautiful.border_focus
+  else
+    bg_color = beautiful.bg_normal
+    fg_color = beautiful.fg_normal
+    border_color = beautiful.border_normal
+  end
+  local osef, titlebar_size = c.titlebar_top(c)
+  if titlebar_size ~= 0 then
     local client_titlebar = awful.titlebar(c, { size = 18 })
     client_titlebar:set_bg(bg_color)
     client_titlebar:set_fg(fg_color)
   end
-  c.border_color = bg_color
+  c.border_color = border_color
 end
 
 -- move to a tag through the given callback (awful.tag.viewnext, viewonly, etc)
@@ -205,7 +207,7 @@ function leimi.names_only_list(w, buttons, label, data, objects)
     else
       tb = wibox.widget.textbox()
       bgb = wibox.widget.background()
-      m = wibox.layout.margin(tb, 2, 2, 1, 1)
+      m = wibox.layout.margin(tb, 4, 4, 1, 1)
       l = wibox.layout.fixed.horizontal()
 
       l:add(m)

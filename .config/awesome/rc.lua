@@ -145,10 +145,6 @@ tasklists.buttons = awful.util.table.join(
     if client.focus then client.focus:raise() end
   end)
 )
-launcher = awful.widget.launcher({
-  image = beautiful.awesome_icon,
-  menu = main_menu
-})
 
 
 local statusbar_items_separator = wibox.widget.textbox()
@@ -178,9 +174,20 @@ for s = 1, screen.count() do
     local statusbar_layout_left = wibox.layout.fixed.horizontal()
 
   	statusbar_current_layout_name = wibox.widget.textbox( awful.layout.getname())
-		statusbar_current_layout_name:set_font(beautiful.font_title_focus)
+    statusbar_current_layout_name:fit(50, 50)
+		-- statusbar_current_layout_name:set_font(beautiful.font_title_focus)
 
-    statusbar_layout_left:add( wibox.layout.margin(taglists[s], beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
+    local menutext = wibox.widget.textbox('menu')
+    menutext:buttons(awful.button({ }, 1, function() main_menu:toggle() end))
+    statusbar_layout_left:add( wibox.layout.margin(menutext, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
+    statusbar_layout_left:add( statusbar_items_separator )
+
+    local clock = awful.widget.textclock("%H:%M")
+    clock:set_font(beautiful.clock_font)
+    statusbar_layout_left:add( wibox.layout.margin(clock, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
+    statusbar_layout_left:add( statusbar_items_separator )
+
+    statusbar_layout_left:add( wibox.layout.margin(taglists[s], beautiful.statusbar_items_margin) )
     statusbar_layout_left:add( wibox.layout.margin(statusbar_items_separator, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin/2) )
 
     statusbar_layout_left:add( wibox.layout.margin(statusbar_current_layout_name, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin+2) )
@@ -194,15 +201,6 @@ for s = 1, screen.count() do
     mysystray:fit()
     -- systray seems to be not working with a margin layout
     statusbar_layout_right:add( mysystray )
-    statusbar_layout_right:add( statusbar_items_separator )
-
-
-    local clock = awful.widget.textclock("%H:%M")
-    clock:set_font(beautiful.clock_font)
-    statusbar_layout_right:add( wibox.layout.margin(clock, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
-    statusbar_layout_right:add( statusbar_items_separator )
-
-    statusbar_layout_right:add( wibox.layout.margin(launcher, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
 
     statusbar_layout:set_right(statusbar_layout_right)
     statusbar_layout:set_left(statusbar_layout_left)
@@ -487,10 +485,7 @@ client.connect_signal("manage", function(c, startup)
   end
 
   -- titlebar - for some clients we do not want it (their class or instance name is in a blacklist)
-  if beautiful.titlebar_enabled
-    and not myhelpers.contains(c.instance, beautiful.titlebar_blacklist)
-    and (c.type == "normal" or c.type == "dialog")
-    and c.name then
+  if (c.type == "normal" or c.type == "dialog") and c.name then
     -- buttons working when clicking the titlebar text on the left (left click = move, right click = resize)
     local mouse_buttons = awful.util.table.join(
       awful.button({ }, 1, function()
@@ -550,7 +545,9 @@ client.connect_signal("button::press", function(c)
   leimi.hide_floating_wibox(statusbars[mouse.screen])
 end)
 
-client.connect_signal("unfocus", leimi.update_client_colors)
+client.connect_signal("unfocus", function(c)
+  leimi.update_client_colors(c)
+end)
 
 tag.connect_signal("property::layout", function(t)
   for i, client_tag in ipairs(t:clients()) do

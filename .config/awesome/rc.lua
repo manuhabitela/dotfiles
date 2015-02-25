@@ -55,7 +55,7 @@ local sft = "Shift"
 local floating_classes = { "MPlayer", "pinentry", "Gimp", "Yad"}
 local floating_instances = {"exe", "plugin-container"}
 local noborders_instances = {}
-local withborders_instances = { "Roxterm", terminal }
+local withborders_instances = {}
 local main_screen = screen.count() > 1 and 2 or 1
 local secondary_screen = 1
 
@@ -148,12 +148,20 @@ tasklists.buttons = awful.util.table.join(
 
 
 local statusbar_items_separator = wibox.widget.textbox()
+local actual_floating_statusbar = nil
+local statusbar_systray = nil
 statusbar_items_separator:set_font("Droid Sans 9")
 statusbar_items_separator:set_valign("center")
 statusbar_items_separator:set_markup('<span foreground="'..beautiful.statusbar_separator_color..'">|</span>')
 for s = 1, screen.count() do
   local statusbar_layout = wibox.layout.align.horizontal()
-  statusbars[s] = leimiwibox({ position = "bottom", bg = beautiful.statusbar_bg_color, border_width = beautiful.statusbar_border_width, border_color = beautiful.statusbar_border_color, align = "right", screen = s, height = 26 })
+  local statusbar_options = { position = "bottom", bg = beautiful.statusbar_bg_color, border_width = beautiful.statusbar_border_width, border_color = beautiful.statusbar_border_color, align = "right", screen = s, height = 26 }
+  local statusbar_systray_options = { bg = "#00000000", height = 28, border_width = 0, width = 200 }
+  if leimi.floating_statusbar then
+    statusbars[s] = leimiwibox(statusbar_options)
+  else
+    statusbars[s] = awful.wibox(statusbar_options)
+  end
   taglists[s] = awful.widget.taglist(s, function(t) return t.name ~= "7" end, taglists.buttons)
 
   -- we show apps in the tasklist with icons only
@@ -195,12 +203,21 @@ for s = 1, screen.count() do
 
     statusbar_layout_left:add(wibox.layout.margin(tasklists[s], beautiful.statusbar_items_margin, beautiful.statusbar_items_margin))
 
-
     local mysystray = wibox.widget.systray()
     mysystray:set_base_size(beautiful.statusbar_height - beautiful.statusbar_margin)
     mysystray:fit()
-    -- systray seems to be not working with a margin layout
-    statusbar_layout_right:add( mysystray )
+    if leimi.floating_statusbar then
+      -- systray seems to be not working with a margin layout
+      statusbar_layout_right:add( mysystray )
+    else
+      statusbar_systray = leimiwibox(awful.util.table.join(statusbar_options, statusbar_systray_options))
+      local statusbar_systray_layout = wibox.layout.align.horizontal()
+      mysystray:set_base_size(beautiful.statusbar_height - beautiful.statusbar_margin)
+      mysystray:fit()
+      -- systray seems to be not working with a margin layout
+      statusbar_systray_layout:set_third( mysystray )
+      statusbar_systray:set_widget(wibox.layout.margin(statusbar_systray_layout, beautiful.statusbar_margin, beautiful.statusbar_margin, beautiful.statusbar_margin, beautiful.statusbar_margin))
+    end
 
     statusbar_layout:set_right(statusbar_layout_right)
     statusbar_layout:set_left(statusbar_layout_left)
@@ -216,10 +233,14 @@ for s = 1, screen.count() do
   statusbars[s]:set_widget(wibox.layout.margin(statusbar_layout, beautiful.statusbar_margin, beautiful.statusbar_margin, beautiful.statusbar_margin, beautiful.statusbar_margin))
   -- the statusbar is "floating": its height is 1px high when "hidden"
   -- we can then put cursor at bottom of screen to trigger mouse::enter signal and show it above clients
-  leimi.show_floating_wibox(statusbars[s], beautiful.statusbar_height)
-  statusbars[s]:connect_signal('mouse::enter', function()
-    leimi.show_floating_wibox(statusbars[s], beautiful.statusbar_height)
-  end)
+  -- actual_floating_statusbar = leimi.floating_statusbar and statusbars[s] or statusbar_systray
+  -- leimi.show_floating_wibox(statusbars[s], beautiful.statusbar_height)
+  -- statusbars[s]:connect_signal('mouse::enter', function()
+  --   leimi.show_floating_wibox(actual_floating_statusbar, beautiful.statusbar_height, true)
+  -- end)
+  -- statusbar_systray:connect_signal('mouse::enter', function()
+  --   leimi.show_floating_wibox(actual_floating_statusbar, beautiful.statusbar_height, true)
+  -- end)
 end
 
 local delayed_statusbar_hide = timer { timeout = 1 }
@@ -231,21 +252,21 @@ end)
 -- global keyboard shortcuts - work all the time everywhere
 globalkeys = awful.util.table.join(
   -- go to next or prev tag with (shift+)tab + show statusbar for 1 sec to see what tag we're on
-  awful.key({ modkey,           }, "Tab",     function()
-    leimi.gototag(awful.tag.viewnext)
-    leimi.show_floating_wibox(statusbars[mouse.screen], beautiful.statusbar_height)
-    delayed_statusbar_hide:stop()
-    delayed_statusbar_hide:start()
-  end),
-  awful.key({ modkey, sft       }, "Tab",     function()
-    leimi.gototag(awful.tag.viewprev)
-    leimi.show_floating_wibox(statusbars[mouse.screen], beautiful.statusbar_height)
-    delayed_statusbar_hide:stop()
-    delayed_statusbar_hide:start()
-  end),
+  -- awful.key({ modkey,           }, "Tab",     function()
+  --   leimi.gototag(awful.tag.viewnext)
+  --   leimi.show_floating_wibox(statusbars[mouse.screen], beautiful.statusbar_height)
+  --   delayed_statusbar_hide:stop()
+  --   delayed_statusbar_hide:start()
+  -- end),
+  -- awful.key({ modkey, sft       }, "Tab",     function()
+  --   leimi.gototag(awful.tag.viewprev)
+  --   leimi.show_floating_wibox(statusbars[mouse.screen], beautiful.statusbar_height)
+  --   delayed_statusbar_hide:stop()
+  --   delayed_statusbar_hide:start()
+  -- end),
 
   -- almost normal alt-tab behavior with rofi https://github.com/DaveDavenport/rofi
-  awful.key({ altkey,           }, "a",     function()
+  awful.key({ altkey,           }, "Tab",     function()
     awful.util.spawn_with_shell(string.format(
       'rofi -now -font "%s" -fg "%s" -bg "%s" -hlfg "%s" -hlbg "%s" -o 95 -width 600',
       beautiful.font, beautiful.fg_normal, beautiful.bg_normal, beautiful.fg_focus, beautiful.bg_focus
@@ -267,11 +288,11 @@ globalkeys = awful.util.table.join(
     if client.focus then client.focus:raise() end
   end),
   -- focus next or prev client - works accross all screens
-  awful.key({ altkey, sft       }, "Tab",       function()
+  awful.key({ modkey, sft       }, "Tab",       function()
     leimi.client_focus_global_byidx(-1)
     if client.focus then client.focus:raise() end
   end),
-  awful.key({ altkey,           }, "Tab",       function()
+  awful.key({ modkey,           }, "Tab",       function()
     leimi.client_focus_global_byidx(1)
     if client.focus then client.focus:raise() end
   end),
@@ -327,7 +348,7 @@ globalkeys = awful.util.table.join(
   awful.key({ modkey            }, "t",       function() awful.util.spawn(terminal) end),
   awful.key({ modkey            }, "f",       function() leimi.ror("pcmanfm", "Pcmanfm") end),
   awful.key({ modkey            }, "s",       function() leimi.ror("subl", { "Sublime_text", "Subl" }) end),
-  awful.key({ modkey            }, "w",       function() leimi.ror("chromium-browser", { "Chromium-browser", "Chromium" }) end),
+  awful.key({ modkey            }, "w",       function() leimi.ror("LIBGL_DRI3_DISABLE=1 chromium-browser", { "Chromium-browser", "Chromium" }) end),
   awful.key({ modkey            }, "p",       function() leimi.ror("pidgin", "Pidgin") end),
   awful.key({ modkey            }, "g",       function() leimi.ror("git-cola", "Git-cola") end),
 
@@ -542,7 +563,8 @@ end)
 
 client.connect_signal("button::press", function(c)
   main_menu:hide()
-  leimi.hide_floating_wibox(statusbars[mouse.screen])
+  local actual_floating_statusbar = leimi.floating_statusbar and statusbars[mouse.screen] or statusbar_systray
+  leimi.hide_floating_wibox(actual_floating_statusbar, true)
 end)
 
 client.connect_signal("unfocus", function(c)
@@ -561,7 +583,8 @@ tag.connect_signal("property::selected", function(t)
 end)
 
 client.connect_signal("mouse::enter", function(c)
-  leimi.hide_floating_wibox(statusbars[mouse.screen])
+  local actual_floating_statusbar = leimi.floating_statusbar and statusbars[mouse.screen] or statusbar_systray
+  leimi.hide_floating_wibox(actual_floating_statusbar, true)
 end)
 
 

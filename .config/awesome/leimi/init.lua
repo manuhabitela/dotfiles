@@ -6,7 +6,7 @@ local myhelpers = require('helpers')
 local leimi = {}
 leimi.focused_clients = { {}, {}, {}, {} }
 leimi.previous_tags = { }
-
+leimi.floating_statusbar = false
 
 
 -- custom titlewidget:
@@ -128,30 +128,36 @@ end
 
 -- show a wibox, give it the given height and update its struts to only 1px bottom
 -- this put the wibox on top of clients, kinda floating
-function leimi.show_floating_wibox(w, height)
-  height = height or 26
-  if w.height ~= height then
-    w.height = height
-    w.ontop = true
-    w:struts({ left = 0, right = 0, bottom = 1, top = 0 })
+function leimi.show_floating_wibox(w, height, force)
+  if force or leimi.floating_statusbar then
+    height = height or 26
+    if w.height ~= height then
+      w.height = height
+      w.ontop = true
+      w:struts({ left = 0, right = 0, bottom = 1, top = 0 })
+    end
   end
 end
 
 -- "hides" a wibox by setting its height to 1
 -- this allows the mouse::enter signal to still work with the one pixel height
-function leimi.hide_floating_wibox(w)
-  if w.height ~= 1 then
-    w.height = 1
-    w.ontop = false
-    w:struts({ left = 0, right = 0, bottom = 1, top = 0 })
+function leimi.hide_floating_wibox(w, force)
+  if force or leimi.floating_statusbar then
+    if w.height ~= 1 then
+      w.height = 1
+      w.ontop = false
+      w:struts({ left = 0, right = 0, bottom = 1, top = 0 })
+    end
   end
 end
 
-function leimi.toggle_floating_wibox(w, height)
-  if w.height == 1 then
-    leimi.show_floating_wibox(w, height)
-  else
-    leimi.hide_floating_wibox(w)
+function leimi.toggle_floating_wibox(w, height, force)
+  if force or leimi.floating_statusbar then
+    if w.height == 1 then
+      leimi.show_floating_wibox(w, height)
+    else
+      leimi.hide_floating_wibox(w)
+    end
   end
 end
 

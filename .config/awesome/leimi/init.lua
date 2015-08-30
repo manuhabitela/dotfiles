@@ -128,14 +128,12 @@ end
 
 -- show a wibox, give it the given height and update its struts to only 1px bottom
 -- this put the wibox on top of clients, kinda floating
-function leimi.show_floating_wibox(w, height, force)
-  if force or leimi.floating_statusbar then
-    height = height or 26
-    if w.height ~= height then
-      w.height = height
-      w.ontop = true
-      w:struts({ left = 0, right = 0, bottom = 1, top = 0 })
-    end
+function leimi.show_floating_wibox(w, height)
+  height = height or 26
+  if w.height ~= height then
+    w.height = height
+    w.ontop = true
+    w:struts({ left = 0, right = 0, bottom = 1, top = 0 })
   end
 end
 

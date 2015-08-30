@@ -7,8 +7,6 @@ require("awful.remote")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 local myhelpers = require("helpers")
-local scratchdrop = require("scratchdrop")
-local treesome = require("treesome")
 -- homemade stuff
 local leimi = require('leimi')
 local leimiwibox = require('leimi.wibox')
@@ -42,7 +40,6 @@ end
 
 
 -- config stuff
-os.setlocale(os.getenv("LANG"))
 beautiful.init("/home/manu/.config/awesome/themes/leimi/theme.lua")
 terminal = "roxterm"
 editor = os.getenv("EDITOR") or "nano"
@@ -58,6 +55,7 @@ local noborders_instances = {}
 local withborders_instances = {}
 local main_screen = screen.count() > 1 and 2 or 1
 local secondary_screen = 1
+local big_screen = screen[main_screen].geometry.width > 2500 and screen[main_screen].geometry.height > 1400
 
 
 -- layouts: simple tiles and fullscreen layout are enough
@@ -66,9 +64,7 @@ local layouts =
   awful.layout.suit.tile,
   awful.layout.suit.tile.bottom,
   awful.layout.suit.max,
-  awful.layout.suit.fair,
   awful.layout.suit.floating,
-  treesome
 }
 
 
@@ -86,7 +82,7 @@ for s = 1, screen.count() do
   tags[s] = awful.tag(
     { 1, 2, 3, 4, 5, 6, 7 },
     s,
-    { layouts[1], layouts[3], layouts[1], layouts[1], layouts[1], layouts[1], layouts[1]}
+    { layouts[1], layouts[1], layouts[1], layouts[1], layouts[1], layouts[1], layouts[1]}
   )
 end
 
@@ -148,20 +144,15 @@ tasklists.buttons = awful.util.table.join(
 
 
 local statusbar_items_separator = wibox.widget.textbox()
-local actual_floating_statusbar = nil
-local statusbar_systray = nil
+local statusbar_options = { position = "bottom", bg = beautiful.statusbar_bg_color, border_width = beautiful.statusbar_border_width, border_color = beautiful.statusbar_border_color, align = "right", height = 26 }
+local statusbar_systray_options = { bg = "#00000000", height = 28, border_width = 0, width = 300 }
+local statusbar_systray = leimiwibox(awful.util.table.join(statusbar_options, statusbar_systray_options))
 statusbar_items_separator:set_font("Droid Sans 9")
 statusbar_items_separator:set_valign("center")
 statusbar_items_separator:set_markup('<span foreground="'..beautiful.statusbar_separator_color..'">|</span>')
 for s = 1, screen.count() do
   local statusbar_layout = wibox.layout.align.horizontal()
-  local statusbar_options = { position = "bottom", bg = beautiful.statusbar_bg_color, border_width = beautiful.statusbar_border_width, border_color = beautiful.statusbar_border_color, align = "right", screen = s, height = 26 }
-  local statusbar_systray_options = { bg = "#00000000", height = 28, border_width = 0, width = 200 }
-  if leimi.floating_statusbar then
-    statusbars[s] = leimiwibox(statusbar_options)
-  else
-    statusbars[s] = awful.wibox(statusbar_options)
-  end
+  statusbars[s] = awful.wibox(awful.util.table.join(statusbar_options, { screen = s }))
   taglists[s] = awful.widget.taglist(s, function(t) return t.name ~= "7" end, taglists.buttons)
 
   -- we show apps in the tasklist with icons only
@@ -190,7 +181,7 @@ for s = 1, screen.count() do
     statusbar_layout_left:add( wibox.layout.margin(menutext, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
     statusbar_layout_left:add( statusbar_items_separator )
 
-    local clock = awful.widget.textclock("%H:%M")
+    local clock = awful.widget.textclock("%H:%M", 10)
     clock:set_font(beautiful.clock_font)
     statusbar_layout_left:add( wibox.layout.margin(clock, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
     statusbar_layout_left:add( statusbar_items_separator )
@@ -206,19 +197,14 @@ for s = 1, screen.count() do
     local mysystray = wibox.widget.systray()
     mysystray:set_base_size(beautiful.statusbar_height - beautiful.statusbar_margin)
     mysystray:fit()
-    if leimi.floating_statusbar then
-      -- systray seems to be not working with a margin layout
-      statusbar_layout_right:add( mysystray )
-    else
-      statusbar_systray = leimiwibox(awful.util.table.join(statusbar_options, statusbar_systray_options))
-      local statusbar_systray_layout = wibox.layout.align.horizontal()
-      mysystray:set_base_size(beautiful.statusbar_height - beautiful.statusbar_margin)
-      mysystray:fit()
-      -- systray seems to be not working with a margin layout
-      statusbar_systray_layout:set_third( mysystray )
-      statusbar_systray:set_widget(wibox.layout.margin(statusbar_systray_layout, beautiful.statusbar_margin, beautiful.statusbar_margin, beautiful.statusbar_margin, beautiful.statusbar_margin))
-    end
+    -- local statusbar_systray_layout = wibox.layout.align.horizontal()
+    -- mysystray:set_base_size(beautiful.statusbar_height - beautiful.statusbar_margin)
+    -- mysystray:fit()
+    -- -- systray seems to be not working with a margin layout
+    -- statusbar_systray_layout:set_third( mysystray )
+    -- statusbar_systray:set_widget(wibox.layout.margin(statusbar_systray_layout, beautiful.statusbar_margin, beautiful.statusbar_margin, beautiful.statusbar_margin, beautiful.statusbar_margin))
 
+    statusbar_layout_right:add(mysystray)
     statusbar_layout:set_right(statusbar_layout_right)
     statusbar_layout:set_left(statusbar_layout_left)
   else
@@ -231,15 +217,11 @@ for s = 1, screen.count() do
     statusbar_layout:set_left(statusbar_layout_left)
   end
   statusbars[s]:set_widget(wibox.layout.margin(statusbar_layout, beautiful.statusbar_margin, beautiful.statusbar_margin, beautiful.statusbar_margin, beautiful.statusbar_margin))
-  -- the statusbar is "floating": its height is 1px high when "hidden"
-  -- we can then put cursor at bottom of screen to trigger mouse::enter signal and show it above clients
-  -- actual_floating_statusbar = leimi.floating_statusbar and statusbars[s] or statusbar_systray
-  -- leimi.show_floating_wibox(statusbars[s], beautiful.statusbar_height)
   -- statusbars[s]:connect_signal('mouse::enter', function()
-  --   leimi.show_floating_wibox(actual_floating_statusbar, beautiful.statusbar_height, true)
+  --   leimi.show_floating_wibox(statusbar_systray, beautiful.statusbar_height)
   -- end)
   -- statusbar_systray:connect_signal('mouse::enter', function()
-  --   leimi.show_floating_wibox(actual_floating_statusbar, beautiful.statusbar_height, true)
+  --   leimi.show_floating_wibox(statusbar_systray, beautiful.statusbar_height)
   -- end)
 end
 
@@ -251,24 +233,11 @@ end)
 
 -- global keyboard shortcuts - work all the time everywhere
 globalkeys = awful.util.table.join(
-  -- go to next or prev tag with (shift+)tab + show statusbar for 1 sec to see what tag we're on
-  -- awful.key({ modkey,           }, "Tab",     function()
-  --   leimi.gototag(awful.tag.viewnext)
-  --   leimi.show_floating_wibox(statusbars[mouse.screen], beautiful.statusbar_height)
-  --   delayed_statusbar_hide:stop()
-  --   delayed_statusbar_hide:start()
-  -- end),
-  -- awful.key({ modkey, sft       }, "Tab",     function()
-  --   leimi.gototag(awful.tag.viewprev)
-  --   leimi.show_floating_wibox(statusbars[mouse.screen], beautiful.statusbar_height)
-  --   delayed_statusbar_hide:stop()
-  --   delayed_statusbar_hide:start()
-  -- end),
 
   -- almost normal alt-tab behavior with rofi https://github.com/DaveDavenport/rofi
   awful.key({ altkey,           }, "Tab",     function()
     awful.util.spawn_with_shell(string.format(
-      'rofi -now -font "%s" -fg "%s" -bg "%s" -hlfg "%s" -hlbg "%s" -o 95 -width 600',
+      'rofi -show window -font "%s" -fg "%s" -bg "%s" -hlfg "%s" -hlbg "%s" -o 95 -width 600',
       beautiful.font, beautiful.fg_normal, beautiful.bg_normal, beautiful.fg_focus, beautiful.bg_focus
     ))
   end),
@@ -316,7 +285,6 @@ globalkeys = awful.util.table.join(
   -- cycle through existing layouts
   awful.key({ modkey            }, "Return",  function()
     awful.layout.inc(layouts, 1)
-    leimi.show_floating_wibox(statusbars[mouse.screen], beautiful.statusbar_height)
     delayed_statusbar_hide:stop()
     delayed_statusbar_hide:start()
   end),
@@ -327,16 +295,9 @@ globalkeys = awful.util.table.join(
   -- put current client as the master one
   awful.key({ modkey            }, "e",       function() awful.client.setmaster(client.focus) end),
 
-  awful.key({ modkey            }, "b",       function()
-    for s = 1, screen.count() do
-      leimi.toggle_floating_wibox(statusbars[s], beautiful.statusbar_height)
-    end
-  end),
-
   -- "fullscreen mode": toggle the visibility of the statusbar and titlebars
   awful.key({ modkey            }, "v",       function()
     for s = 1, screen.count() do
-      leimi.toggle_floating_wibox(statusbars[s], beautiful.statusbar_height)
       statusbars[s].visible = not statusbars[s].visible
       for i, o in ipairs(client.get(s)) do
         awful.titlebar.toggle(o)
@@ -348,7 +309,10 @@ globalkeys = awful.util.table.join(
   awful.key({ modkey            }, "t",       function() awful.util.spawn(terminal) end),
   awful.key({ modkey            }, "f",       function() leimi.ror("pcmanfm", "Pcmanfm") end),
   awful.key({ modkey            }, "s",       function() leimi.ror("subl", { "Sublime_text", "Subl" }) end),
-  awful.key({ modkey            }, "w",       function() leimi.ror("LIBGL_DRI3_DISABLE=1 chromium-browser", { "Chromium-browser", "Chromium" }) end),
+  awful.key({ modkey            }, "w",       function()
+    leimi.ror("LIBGL_DRI3_DISABLE=1 chromium-browser", { "Chromium-browser", "Chromium" })
+    leimi.ror("chromium", { "Chromium-browser", "Chromium" })
+  end),
   awful.key({ modkey            }, "p",       function() leimi.ror("pidgin", "Pidgin") end),
   awful.key({ modkey            }, "g",       function() leimi.ror("git-cola", "Git-cola") end),
 
@@ -372,8 +336,9 @@ globalkeys = awful.util.table.join(
   awful.key({ }, "XF86AudioRaiseVolume",      function() awful.util.spawn("amixer set Master 2+") end),
   awful.key({ }, "XF86AudioMute",             function() awful.util.spawn("amixer set Master toggle") end),
 
-  awful.key({ }, "XF86",             function() awful.util.spawn("lxde-logout") end),
+  awful.key({ }, "XF86",                      function() awful.util.spawn("lxde-logout") end),
 
+  awful.key({ modkey, sft       }, "Return",  function() awful.util.spawn("monitor switch") end),
   awful.key({ modkey, ctrl      }, "r",       awesome.restart),
   awful.key({ modkey, ctrl, sft }, "q",       awesome.quit)
 )
@@ -387,13 +352,6 @@ for i = 1, 9 do
         awful.tag.viewonly(awful.tag.gettags(mouse.screen)[i])
       end)
     end),
-    -- go to tag x on the other screen, focusing back the client that was last focused on the given tag
-    awful.key({ modkey, ctrl }, "#" .. i + 9, function()
-      local other_screen = mouse.screen == 1 and 2 or 1
-      leimi.gototag(function()
-        awful.tag.viewonly(awful.tag.gettags(other_screen)[i])
-      end)
-    end),
     -- go to tag x on the current screen and move currently focused client on the given tag
     awful.key({ modkey, sft  }, "#" .. i + 9, function()
       leimi.gototag(function()
@@ -402,6 +360,10 @@ for i = 1, 9 do
         awful.client.movetotag(tag)
         awful.tag.viewonly(tag)
       end)
+    end),
+    -- add (or remove) tag x content on current screen
+    awful.key({ modkey, ctrl }, "#" .. i + 9, function()
+      awful.tag.viewtoggle(awful.tag.gettags(mouse.screen)[i])
     end)
   )
 end
@@ -473,16 +435,16 @@ awful.rules.rules = {
     properties = { floating = true }
   },
   {
-    rule_any = { instance = floating_instances },
+    rule_any = { instance = floating_instances, name = noborders_instances },
     properties = { floating = true }
   },
   {
-    rule_any = { instance = noborders_instances },
+    rule_any = { instance = noborders_instances, name = noborders_instances },
     properties = { border_width = 0 }
   },
   { rule_any = { class = { "Sublime_text", "Subl" } }, properties = { tag = tags[main_screen][2] } },
   { rule_any = { class = { "Roxterm", terminal } }, properties = { tag = tags[main_screen][7] } },
-  { rule_any = { class = { "Chromium-browser", "Chromium" } }, properties = { tag = tags[secondary_screen][main_screen == secondary_screen and 2 or 2] } }
+  { rule_any = { class = { "Chromium-browser", "Chromium" } }, properties = { tag = tags[secondary_screen][big_screen and 2 or 3] } }
 }
 
 
@@ -563,8 +525,7 @@ end)
 
 client.connect_signal("button::press", function(c)
   main_menu:hide()
-  local actual_floating_statusbar = leimi.floating_statusbar and statusbars[mouse.screen] or statusbar_systray
-  leimi.hide_floating_wibox(actual_floating_statusbar, true)
+  -- leimi.hide_floating_wibox(statusbar_systray, true)
 end)
 
 client.connect_signal("unfocus", function(c)
@@ -582,10 +543,9 @@ tag.connect_signal("property::selected", function(t)
   statusbar_current_layout_name:set_text(awful.layout.getname())
 end)
 
-client.connect_signal("mouse::enter", function(c)
-  local actual_floating_statusbar = leimi.floating_statusbar and statusbars[mouse.screen] or statusbar_systray
-  leimi.hide_floating_wibox(actual_floating_statusbar, true)
-end)
+-- client.connect_signal("mouse::enter", function(c)
+  -- leimi.hide_floating_wibox(statusbar_systray, true)
+-- end)
 
 
 -- autostarting apps - awesome_boot loads every .desktop file in standard autostart folder

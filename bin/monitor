@@ -1,0 +1,70 @@
+#!/bin/bash
+cmd="${1}"
+other_monitor="${2:-VGA1}"
+mode="${3:-above}"
+internal_monitor=LVDS1
+work_monitor=DP3
+active_monitors=$(xrandr | grep -E " connected (primary )?[1-9]+" | sed -e "s/\([A-Z0-9]\+\) connected.*/\1/")
+
+if [[ $other_monitor == "above" || $other_monitor == "below" ||
+    $other_monitor == "left-of" || $other_monitor == "right-of" ]]; then
+    mode=$other_monitor
+    other_monitor=VGA1
+fi
+
+external_monitor=$other_monitor
+if xrandr -q | grep -q "^$other_monitor connected"; then
+    external_monitor="$other_monitor"
+elif xrandr -q | grep -q "^$work_monitor connected"; then
+    external_monitor="$work_monitor"
+else
+    echo 'No external monitor connected.'
+    cmd="in"
+fi
+
+internal_is_active=0
+if [[ $active_monitors == *"$internal_monitor"* ]]; then
+    internal_is_active=1
+fi
+
+external_is_active=0
+if [[ $active_monitors == *"$external_monitor"* ]]; then
+    external_is_active=1
+fi
+
+current_state=""
+next_state=""
+if [[ $internal_is_active -eq 1 && $external_is_active -eq 1 ]]; then
+    current_state="all"
+    next_state="in"
+elif [[ $internal_is_active -eq 1 ]]; then
+    current_state="in"
+    next_state="out"
+else
+    current_state="out"
+    next_state="all"
+fi
+
+case "$cmd" in
+    -h|--help|'')
+        echo "Toggle laptop and external monitor with ease"
+        echo ""
+        echo "Usage: ${0##*/} all|in|out|switch [external] [mode]"
+        echo ""
+        echo "'all' for both screens, 'in' for laptop monitor only, 'out' for external monitor only, 'switch' to go to next state"
+        echo "external is optional and lets you indicate what is the external monitor name in xrandr (default VGA1)"
+        echo 'mode is optional, and is one of the positional arguments of xrandr:'
+        echo '  above (default), below, left-of and right-of' ;;
+    all)
+        xrandr --output "$internal_monitor" --primary --auto --output "$external_monitor" --auto "--$mode" "$internal_monitor" > /dev/null & ;;
+    in)
+        xrandr --output "$internal_monitor" --auto --output "$other_monitor" --off --output "$work_monitor" --off > /dev/null & ;;
+    out)
+        xrandr --output "$internal_monitor" --off  --output "$external_monitor" --auto > /dev/null & ;;
+    switch)
+        ${0##*/} $next_state $other_monitor $mode ;;
+    *)
+        echo "Command '$cmd' not supported."
+esac
+
+exit 0

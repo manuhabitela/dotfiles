@@ -16,3 +16,19 @@ keycode 49 = twosuperior threesuperior
 keycode 35 = dollar sterling dollar sterling less ecircumflex ecircumflex ediaeresis dollar sterling ecircumflex ediaeresis dollar sterling ecircumflex ediaeresis
 keycode 51 = asterisk mu asterisk mu greater dead_macron dead_grave dead_macron asterisk mu dead_grave dead_macron asterisk mu dead_grave dead_macron
 keycode 134 = colon slash colon slash division U2215 division U2215 colon slash division U2215 colon slash division U2215
+
+keycode 52 = w W w W less greater guillemotleft leftdoublequotemark w W guillemotleft leftdoublequotemark w W guillemotleft leftdoublequotemark
+keycode 53 = x X x X greater guillemotright guillemotright rightdoublequotemark x X guillemotright rightdoublequotemark x X guillemotright rightdoublequotemark
+
+
+!put left down up right on altgr+j k l m
+keycode  44 = j J j J Left Left dead_hook dead_horn j J dead_hook dead_horn j J dead_hook dead_horn
+keycode  45 = k K k K Down Down kra ampersand k K kra ampersand k K kra ampersand
+keycode  46 = l L l L Up Up lstroke Lstroke l L lstroke Lstroke l L lstroke Lstroke
+keycode  47 = m M m M Right Right mu masculine m M mu masculine m M mu masculine
+
+!put home pgdown pgup end on altgr+u i o p
+keycode  30 = u U u U Home Home downarrow uparrow u U downarrow uparrow u U downarrow uparrow
+keycode  31 = i I i I Next Next rightarrow idotless i I rightarrow idotless i I rightarrow idotless
+keycode  32 = o O o O Prior Prior oslash Oslash o O oslash Oslash o O oslash Oslash
+keycode  33 = p P p P End End thorn THORN p P thorn THORN p P thorn THORN

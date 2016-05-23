@@ -1,5 +1,74 @@
 #!/bin/zsh
 
+# git enhanced graph log
+alias glo="git log --graph --pretty=format:'%C(bold red)%h%Creset%C(yellow)%d%Creset %s %Cgreen%cr %C(cyan)%an%Creset' --abbrev-commit --date=relative"
+
+# gimme file with ack!
+alias gmf="ack --ignore-case"
+
+# gimme file with ag!
+alias gm="ag --color-line-number=\"0;33\" --color-match=\"0;32\" --color-path=\"0;91\""
+alias gmt="gm -G .twig$" # twig file
+alias gms="gm -G \"\.scss$\"" #sass file
+alias gmv="gm -G \"\.csv$\"" #csv file
+alias gmj="gm -G \"\.js$\"" #js file
+alias gmc="gm -G \"\.(less|scss)$\"" #css file
+alias gmf="gm -G \"\.(less|scss|twig|js)$\"" #front-end file
+alias gmp="gm -G .php$" #php file
+
+# ecolutis
+alias egit="ecolugit"
+# translation strings search
+alias gmi="gm --nogroup -G fr_FR.php"
+# quick change dir (goes in carpooling or root project dir)
+ec() {
+	if [[ ${PWD} == *"vendor/ecolutis/carpooling" ]]; then
+		cd ../../../
+	else
+		cd vendor/ecolutis/carpooling
+	fi
+	return 0
+}
+
+gpo() {
+	current_branch=$(git rev-parse --abbrev-ref HEAD)
+	git push -u origin $current_branch
+}
+
+gcob() {
+	git checkout -b $1 origin/$1
+}
+
+# zcarpooling_symlink() {
+# 	folder="vendor/ecolutis/carpooling"
+# 	if [[ -L "$folder" && -d "$folder" ]]; then
+# 		echo "already a symlink"
+# 	else
+# 		mv $folder "$folder-old"
+# 		ln -s $HOME/Dev/carpooling ${PWD}/$folder
+# 		echo "symlink created"
+# 	fi
+# }
+
+# zcarpooling_vendor() {
+# 	folder="vendor/ecolutis/carpooling"
+# 	if [[ -L "$folder" && -d "$folder" ]]; then
+# 		rm $folder
+# 		mv "$folder-old" $folder
+# 		echo "symlink deleted, back to normal"
+# 	fi
+# }
+
+#redshift for when geolocation doesn't work
+alias redshift-angers="redshift -l 47.47:0.55"
+
+switch_file() {
+	first_file=$1
+	second_file=$2
+	mv $first_file $first_file.$$
+	mv $second_file $first_file
+	mv $first_file.$$ $second_file
+}
 extract() {
 	if [ -z "$1" ]; then
 		echo "\`extract\` lets you easily extract common archive types"
@@ -26,25 +95,6 @@ extract() {
 	fi
 }
 
-ju() {
-	if [ -z "$1" ]; then
-		echo "\`ju\` (for \"jump up\") lets you directly move into a parent directory, however high it is"
-		echo "Usage: ju sub_directory";
-		return 1
-	fi
-	local upto=$1
-	cd "${PWD/\/$upto\/*//$upto}"
-}
-
-jd() {
-	if [ -z "$1" ]; then
-		echo "\`jd\` (for \"jump down\") lets you directly move into a sub-directory, however deep it is"
-		echo "Usage: jd sub_directory";
-		return 1
-	fi
-	cd **"/$1"
-}
-
 transfer() {
 	if [ -z "$1" ]; then
 		echo "\`transfer\` helps you upload files on https://transfer.sh";
@@ -54,13 +104,15 @@ transfer() {
 	curl --upload-file ./$1 https://transfer.sh/$1;
 }
 
+ggl() {
+	if [ -z "$1" ]; then
+		echo "\`ggl\` starts a google search in chromium";
+		echo "Usage: ggl search_terms";
+		return 1
+	fi
+	chromium "https://google.com/search?q=$*"
+}
+
+# needed for some build stuff looking for jsl instead of jslint
 alias jsl="jslint"
-
-alias glo="git log --graph --pretty=format:'%C(bold red)%h%Creset%C(yellow)%d%Creset %s %Cgreen%cr %C(cyan)%an%Creset' --abbrev-commit --date=relative"
-
-# gimme file!
-alias gmf="ack --ignore-case"
-
-# ecolutis
-alias cdp="cd ../../../../"
-alias egit="ecolugit"
+alias teensy_loader_cli="teensy-loader-cli"

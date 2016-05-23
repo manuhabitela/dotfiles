@@ -1,6 +1,8 @@
 --type-set=twig=.twig
---type-set=sass=.sass
+--type-set=sass=.sass .scss
+--type-set=csv=.csv
 --type-set=allcss=.sass .less .css .scss
+--type-set=allprecss=.sass .less .scss
 
 --color-match=green
 --color-filename=bold bright_red

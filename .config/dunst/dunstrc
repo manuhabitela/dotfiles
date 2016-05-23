@@ -1,5 +1,5 @@
 [global]
-    font = Droid Sans 10
+    font = Tamsyn 10.5
 
     # Allow a small subset of html markup:
     #   <b>bold</b>
@@ -64,7 +64,7 @@
     # the top and down respectevly.
     # The width can be negative.  In this case the actual width is the
     # screen width minus the width defined in within the geometry option.
-    geometry = "300x5-50-50"
+    geometry = "400x7-100+100"
 
     # Shrink window if it's smaller than the width.  Will be ignored if
     # width is 0.
@@ -130,13 +130,13 @@
     # Print a notification on startup.
     # This is mainly for error detection, since dbus (re-)starts dunst
     # automatically after a crash.
-    startup_notification = false
+    startup_notification = true
 
     # dmenu path.
-    dmenu = /usr/bin/dmenu -p dunst:
+    dmenu = /usr/bin/dmenu -fn Tamsyn-10.5 -nf #93a1a1 -nb #001d24 -sf #b58900 -sb #001d24 -l 30 -i -z -p notification
 
     # Browser for opening urls in context menu.
-    browser = /usr/bin/chromium-browser
+    browser = /usr/bin/google-chrome-unstable
 
     # Align icons left/right/off
     icon_position = left
@@ -173,11 +173,11 @@
     # IMPORTANT: colors have to be defined in quotation marks.
     # Otherwise the "#" and following would be interpreted as a comment.
     background = "#222222"
-    foreground = "#888888"
+    foreground = "#cccccc"
     timeout = 10
 
 [urgency_normal]
-    background = "#285577"
+    background = "#073642"
     foreground = "#ffffff"
     timeout = 10
 

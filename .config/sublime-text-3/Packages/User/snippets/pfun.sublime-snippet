@@ -1,0 +1,9 @@
+<snippet>
+    <content><![CDATA[${1:protected }function ${2:FunctionName}(${3:\$${4:value} ${5:= ''}})
+{
+    ${0:# code...}
+}]]></content>
+    <tabTrigger>pfun</tabTrigger>
+    <scope>source.php</scope>
+    <description>protected function …</description>
+</snippet>

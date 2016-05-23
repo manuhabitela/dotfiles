@@ -1,4 +1,7 @@
 {
 	"svn_use_internal_diff": false,
-	"autosave": false
+	"autosave": false,
+    "vcs_options": {
+        "git": ["--no-color", "--no-ext-diff", "--ignore-space-change"]
+    }
 }

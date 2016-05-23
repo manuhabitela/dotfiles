@@ -3,9 +3,9 @@
         "debug": false,
         "delay": 0.25,
         "error_color": "D02000",
-        "gutter_theme": "Packages/SublimeLinter/gutter-themes/Default.gutter-theme",
+        "gutter_theme": "Packages/SublimeLinter/gutter-themes/Blueberry/cross/Blueberry - cross.gutter-theme",
         "gutter_theme_excludes": [],
-        "lint_mode": "background",
+        "lint_mode": "save only",
         "linters": {
             "csslint": {
                 "@disable": true,
@@ -23,16 +23,25 @@
             "json": {
                 "@disable": false,
                 "args": [],
-                "excludes": []
+                "excludes": [],
+                "strict": true
             },
             "php": {
                 "@disable": false,
                 "args": [],
                 "excludes": []
+            },
+            "scss": {
+                "@disable": true,
+                "args": [],
+                "exclude-linter": "",
+                "excludes": [],
+                "include-linter": ""
             }
         },
         "mark_style": "outline",
         "no_column_highlights_line": false,
+        "passive_warnings": false,
         "paths": {
             "linux": [],
             "osx": [],

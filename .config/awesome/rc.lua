@@ -34,6 +34,7 @@ main_screen = screen.count() > 1 and 2 or 1
 secondary_screen = 1
 big_screen = screen[main_screen].geometry.width > 2500 and screen[main_screen].geometry.height > 1400
 
+dofile('/home/manu/Dropbox/dotfiles/not-synced/awesome.lua')
 dofile('/home/manu/.config/awesome/includes/wallpaper.lua')
 dofile('/home/manu/.config/awesome/includes/main_menu.lua')
 dofile('/home/manu/.config/awesome/includes/layouts.lua')

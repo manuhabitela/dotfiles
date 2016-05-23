@@ -21,20 +21,20 @@ function tags.gototag(callback)
   end
 end
 
-function tags.toggletag(screen_number, tag_number)
+function tags.toggletag(screen_number, tag_number, force)
   tag_number = tonumber(tag_number)
   local current_tag = tonumber(awful.tag.selected(screen_number).name)
-  if current_tag == tag_number then
+  if force ~=1 and current_tag == tag_number then
     local previous_tag_number = tags.previous_tags[screen_number]
     tags.gototag(function()
       awful.tag.viewonly(awful.tag.gettags(screen_number)[previous_tag_number])
     end)
   else
-    tags.previous_tags[screen_number] = current_tag
     tags.gototag(function()
       awful.tag.viewonly(awful.tag.gettags(screen_number)[tag_number])
     end)
   end
+  tags.previous_tags[screen_number] = current_tag
 end
 
 return tags

@@ -1,6 +1,6 @@
 -- client keyboard shortcuts
 clientkeys = awful.util.table.join(
-  awful.key({ modkey, sft       }, "q",      function(c) c:kill() end),
+  awful.key({ modkey            }, "q",      function(c) c:kill() end),
   awful.key({ altkey            }, "F4",     function(c) c:kill() end),
   awful.key({ modkey            }, "u",      function(c)
     awful.client.floating.toggle(c)
@@ -11,7 +11,7 @@ clientkeys = awful.util.table.join(
     -- minimized, since minimized clients can't have the focus.
     c.minimized = true
   end),
-  awful.key({ modkey,           }, "m", function(c)
+  awful.key({ modkey,           }, "F12", function(c)
     c.maximized_horizontal = not c.maximized_horizontal
     c.maximized_vertical   = not c.maximized_vertical
     helpers.clients.update_client_colors(c)

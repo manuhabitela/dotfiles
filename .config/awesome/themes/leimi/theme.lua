@@ -4,7 +4,7 @@
 
 theme = {}
 
-theme.wallpaper = "/home/manu/Dropbox/Mes documents/Mes images/Walls/mhcy2u.jpg"
+theme.wallpaper = "/home/manu/.config/awesome/themes/leimi/wall.jpg"
 
 theme.icon_theme = "Faenza"
 

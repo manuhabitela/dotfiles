@@ -54,7 +54,7 @@ local statusbar_items_separator = wibox.widget.textbox()
 local statusbar_options = { position = "bottom", bg = beautiful.statusbar_bg_color, border_width = beautiful.statusbar_border_width, border_color = beautiful.statusbar_border_color, align = "right", height = 26 }
 local statusbar_systray_options = { bg = "#00000000", height = 28, border_width = 0, width = 300 }
 local statusbar_systray = wibox(awful.util.table.join(statusbar_options, statusbar_systray_options))
-statusbar_items_separator:set_font("Droid Sans 9")
+statusbar_items_separator:set_font("Noto Sans 9")
 statusbar_items_separator:set_valign("center")
 statusbar_items_separator:set_markup('<span foreground="'..beautiful.statusbar_separator_color..'">|</span>')
 for s = 1, screen.count() do

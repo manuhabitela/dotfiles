@@ -1,5 +1,5 @@
-VteTerminal {
+VteTerminal,
+vte-terminal {
 	-VteTerminal-inner-border: 10px;
 	padding: 10px;
 }
-

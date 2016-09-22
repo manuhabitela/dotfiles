@@ -68,7 +68,7 @@ globalkeys = awful.util.table.join(
   end),
 
   awful.key({ ctrl, altkey      }, "l",       function()
-    awful.util.spawn_with_shell("xscreensaver-command -lock")
+    awful.util.spawn_with_shell("slock")
   end),
 
   awful.key({ }, "XF86AudioLowerVolume",      function() awful.util.spawn("amixer set Master 2-") end),

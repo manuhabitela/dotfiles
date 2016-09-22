@@ -21,7 +21,7 @@
 	"color_scheme": "Packages/User/SublimeLinter/RailsCastsColorScheme (SL).tmTheme",
 	"detect_slow_plugins": false,
 	"dictionary": "",
-	"draw_indent_guides": true,
+	"draw_indent_guides": false,
 	"draw_minimap_border": false,
 	"fallback_encoding": "Western (ISO 8859-1)",
 	"file_exclude_patterns":
@@ -69,7 +69,7 @@
 		"Vintage",
 		"Vintageous"
 	],
-	"line_numbers": true,
+	"line_numbers": false,
 	"line_padding_bottom": 5,
 	"line_padding_top": 5,
 	"overlay_scroll_bars": "enabled",
@@ -78,6 +78,5 @@
 	"show_encoding": true,
 	"tab_completion": true,
 	"theme": "Cobalt2.sublime-theme",
-	"translate_tabs_to_spaces": true,
 	"word_wrap": true
 }

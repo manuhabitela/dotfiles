@@ -1,3 +1,7 @@
 {
-	"line_numbers": true
+	"line_numbers": false,
+	"font_face": "Arial",
+	"font_size": 13,
+	"word_wrap": true,
+	"wrap_width": 0
 }

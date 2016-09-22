@@ -1,0 +1,4 @@
+#!/bin/bash
+firefox --class=mattermost -P mattermost -no-remote https://mattermost.vtech.fr/vtech0/
+exit 0
+

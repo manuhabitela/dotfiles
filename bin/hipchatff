@@ -1,4 +1,0 @@
-#!/bin/bash
-firefox --class=hipchat -P hipchat -no-remote http://ecolutis.hipchat.com/chat
-exit 0
-

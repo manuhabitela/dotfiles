@@ -16,20 +16,6 @@ alias gmc="gm -G \"\.(less|scss)$\"" #css file
 alias gmf="gm -G \"\.(less|scss|twig|js)$\"" #front-end file
 alias gmp="gm -G .php$" #php file
 
-# ecolutis
-alias egit="ecolugit"
-# translation strings search
-alias gmi="gm --nogroup -G fr_FR.php"
-# quick change dir (goes in carpooling or root project dir)
-ec() {
-	if [[ ${PWD} == *"vendor/ecolutis/carpooling" ]]; then
-		cd ../../../
-	else
-		cd vendor/ecolutis/carpooling
-	fi
-	return 0
-}
-
 gpo() {
 	current_branch=$(git rev-parse --abbrev-ref HEAD)
 	git push -u origin $current_branch
@@ -38,26 +24,6 @@ gpo() {
 gcob() {
 	git checkout -b $1 origin/$1
 }
-
-# zcarpooling_symlink() {
-# 	folder="vendor/ecolutis/carpooling"
-# 	if [[ -L "$folder" && -d "$folder" ]]; then
-# 		echo "already a symlink"
-# 	else
-# 		mv $folder "$folder-old"
-# 		ln -s $HOME/Dev/carpooling ${PWD}/$folder
-# 		echo "symlink created"
-# 	fi
-# }
-
-# zcarpooling_vendor() {
-# 	folder="vendor/ecolutis/carpooling"
-# 	if [[ -L "$folder" && -d "$folder" ]]; then
-# 		rm $folder
-# 		mv "$folder-old" $folder
-# 		echo "symlink deleted, back to normal"
-# 	fi
-# }
 
 #redshift for when geolocation doesn't work
 alias redshift-angers="redshift -l 47.47:0.55"
@@ -69,6 +35,7 @@ switch_file() {
 	mv $second_file $first_file
 	mv $first_file.$$ $second_file
 }
+
 extract() {
 	if [ -z "$1" ]; then
 		echo "\`extract\` lets you easily extract common archive types"
@@ -102,15 +69,6 @@ transfer() {
 		return 1
 	fi
 	curl --upload-file ./$1 https://transfer.sh/$1;
-}
-
-ggl() {
-	if [ -z "$1" ]; then
-		echo "\`ggl\` starts a google search in chromium";
-		echo "Usage: ggl search_terms";
-		return 1
-	fi
-	chromium "https://google.com/search?q=$*"
 }
 
 # needed for some build stuff looking for jsl instead of jslint

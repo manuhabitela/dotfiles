@@ -10,11 +10,8 @@ PATH="$PATH:/usr/lib/lightdm/lightdm"
 PATH="$PATH:/usr/bin/core_perl/"
 PATH="$PATH:/usr/local/go/bin"
 PATH="$PATH:$HOME/.composer/vendor/bin"
-if [[ -a $HOME/Dev/ecolutis/dkr/bin ]]; then
-    PATH="$PATH:$HOME/Dev/ecolutis/dkr/bin"
-fi
-if [[ -a $HOME/Dev/ecolutis/www/cmd/bin ]]; then
-    PATH="$PATH:$HOME/Dev/ecolutis/www/cmd/bin"
+if [[ -a $HOME/.gem/ruby/2.3.0/bin ]]; then
+	PATH="$PATH:$HOME/.gem/ruby/2.3.0/bin"
 fi
 export PATH="$PATH:$HOME/bin"
 
@@ -36,10 +33,7 @@ zstyle :omz:plugins:ssh-agent agent-forwarding on
 source $ZSH/oh-my-zsh.sh
 
 setopt auto_cd
-cdpath=($HOME/Dev $HOME/Dev/ecolutis $HOME/Dev/ecolutis/www/ecolutis.dev $HOME/Dropbox/Web/localhost)
+cdpath=($HOME/vt $HOME/dev $HOME/Dev $HOME/Dropbox/Web/localhost)
 
 source $HOME/.zsh_aliases
-
-if [[ -a $HOME/Dev/ecolutis/dkr ]]; then
-    export EDKR_HOME="$HOME/Dev/ecolutis/dkr"
-fi
+POCKER_HOME=/home/manu/vt

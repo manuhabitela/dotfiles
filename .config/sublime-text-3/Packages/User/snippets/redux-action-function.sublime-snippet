@@ -1,0 +1,16 @@
+<snippet>
+	<content><![CDATA[
+/**
+ *
+ */
+export const ${1:action} = (${2:params}) => ({
+	type: ${3:CONSTANT},
+	payload: {
+		${4:payload}
+	}
+});
+]]></content>
+	<tabTrigger>raf</tabTrigger>
+	<scope>source.js</scope>
+	<description>Redux action function</description>
+</snippet>

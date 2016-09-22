@@ -1,0 +1,8 @@
+<snippet>
+	<content><![CDATA[
+import ${1:{${2:property}\}} from '${3:lodash}';
+]]></content>
+	<tabTrigger>imp</tabTrigger>
+	<scope>source.js</scope>
+	<description>import statement</description>
+</snippet>

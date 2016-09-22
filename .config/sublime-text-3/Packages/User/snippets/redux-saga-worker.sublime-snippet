@@ -1,0 +1,13 @@
+<snippet>
+	<content><![CDATA[
+/**
+ *
+ */
+function* ${1:actionWorker}(${2:{payload\}}) {
+	${3}
+}
+]]></content>
+	<tabTrigger>rsw</tabTrigger>
+	<scope>source.js</scope>
+	<description>Redux saga worker</description>
+</snippet>

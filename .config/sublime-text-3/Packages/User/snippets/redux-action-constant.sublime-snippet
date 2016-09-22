@@ -1,0 +1,9 @@
+<snippet>
+	<content><![CDATA[
+export const ${1:CONSTANT} = '${2:${TM_FILENAME/(.+)\..+|.*/$1/:name}}/${1:CONSTANT}';
+
+]]></content>
+	<tabTrigger>rac</tabTrigger>
+	<scope>source.js</scope>
+	<description>Redux action constant</description>
+</snippet>

@@ -1,0 +1,26 @@
+<snippet>
+	<content><![CDATA[
+import React, {PropTypes} from 'react';
+import classNames from 'classnames';
+
+
+
+/**
+ *
+ */
+export default function ${1:${TM_FILENAME/(.+)\..+|.*/$1/:name}}({}) {
+	return (
+	);
+}
+
+${1:${TM_FILENAME/(.+)\..+|.*/$1/:name}}.propTypes = {
+};
+
+${1:${TM_FILENAME/(.+)\..+|.*/$1/:name}}.defaultProps = {
+};
+
+]]></content>
+	<tabTrigger>rv</tabTrigger>
+	<scope>source.js</scope>
+	<description>React view</description>
+</snippet>

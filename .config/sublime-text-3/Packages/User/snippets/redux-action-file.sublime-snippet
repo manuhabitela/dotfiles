@@ -1,0 +1,24 @@
+<snippet>
+	<content><![CDATA[
+/**
+ *
+ */
+export const ${1:CONSTANT} = '${2:${TM_FILENAME/(.+)\..+|.*/$1/:name}}/${1:CONSTANT}';
+
+
+
+/**
+ *
+ */
+export const ${3:action} = (${4:params}) => ({
+	type: ${1:CONSTANT},
+	payload: {
+		${5:payload}
+	}
+});
+
+]]></content>
+	<tabTrigger>ra</tabTrigger>
+	<scope>source.js</scope>
+	<description>Redux actions file</description>
+</snippet>

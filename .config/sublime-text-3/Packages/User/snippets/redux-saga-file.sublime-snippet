@@ -1,0 +1,29 @@
+<snippet>
+	<content><![CDATA[
+import {takeLatest, takeEvery} from 'redux-saga';
+import {put, call} from 'redux-saga/effects';
+import {${1:ACTION}} from '${2:../actions/${3:${TM_FILENAME/(.+)\..+|.*/$1/:name}}}';
+
+
+
+/**
+ *
+ */
+function* ${5:actionWorker}({payload}) {
+	${6}
+}
+
+
+
+/**
+ *
+ */
+export function* watch${4:Action}() {
+	yield* takeEvery(${1:ACTION}, ${5:actionWorker});
+}
+
+]]></content>
+	<tabTrigger>rs</tabTrigger>
+	<scope>source.js</scope>
+	<description>Redux saga file</description>
+</snippet>

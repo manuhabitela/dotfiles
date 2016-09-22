@@ -1,0 +1,14 @@
+<snippet>
+	<content><![CDATA[
+/**
+ *
+ */
+export function* watch${1:Action}() {
+	yield* takeEvery(${2:ACTION}, ${3:actionWorker});
+}
+
+]]></content>
+	<tabTrigger>rswa</tabTrigger>
+	<scope>source.js</scope>
+	<description>Redux saga watcher</description>
+</snippet>

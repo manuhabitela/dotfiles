@@ -8,10 +8,10 @@ theme.wallpaper = "/home/manu/.config/awesome/themes/leimi/wall.jpg"
 
 theme.icon_theme = "Faenza"
 
-theme.font          = "Tamsyn 10.5"
-theme.font_xft      = "Tamsyn-10.5"
+theme.font          = "Misc Tamsyn 10.5"
+theme.font_xft      = "Misc Tamsyn-10.5"
 theme.font_title    = "Noto Sans 9"
-theme.font_title    = "Tamsyn 10.5"
+theme.font_title    = "Misc Tamsyn 10.5"
 theme.font_dmenu    = theme.font_xft
 
 theme.bg_normal     = "#001d24"

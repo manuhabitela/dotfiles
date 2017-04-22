@@ -16,6 +16,8 @@ alias gmc="gm -G \"\.(less|scss)$\"" #css file
 alias gmf="gm -G \"\.(less|scss|twig|js)$\"" #front-end file
 alias gmp="gm -G .php$" #php file
 
+alias dockerps="docker ps -a --format \"table {{.ID}}\t{{.Names}}\t{{.Status}}\""
+
 gpo() {
 	current_branch=$(git rev-parse --abbrev-ref HEAD)
 	git push -u origin $current_branch

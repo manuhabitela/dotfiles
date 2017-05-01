@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# Automatically pass prettier when a file changes thanks to watchexec.
+#
+# start this at the root of a js directory you want to pass prettier on file save
+#
+# recommended watchexec setup: `watchexec --postpone --exts js`
+#
+# ```
+# cd ~/myproject
+# watchexec -p -e js watchexec-prettier [PRETTIER_OPTIONS]
+# ```
+#
+# default prettier options are "--write --use-tabs --no-bracket-spacing"
+# to use your own options, pass them to the script.
+# A "--" is required for watchexec to work correctly in this case:
+#
+# `watchexec -p -e js -- watchexec-prettier --write`
+#
+
+
+started_from=$(pwd)
+prettier_path="prettier"
+prettier_default_config="--write --single-quote --use-tabs --no-bracket-spacing"
+prettier_config="$*"
+
+# use a locally installed prettier if any
+if [ -e "$started_from/node_modules/.bin/prettier" ]
+then
+	prettier_path="$started_from/node_modules/.bin/prettier"
+fi
+
+# @see http://stackoverflow.com/a/26759734
+if [ ! -x "$(command -v $prettier_path)" ]
+then
+	echo -e "No prettier executable found, exiting.\n"
+	exit 1
+fi
+
+if [ -z "$prettier_config" ]
+then
+	prettier_config=$prettier_default_config
+fi
+
+relative_path=".${WATCHEXEC_UPDATED_PATH/"$started_from"/""}"
+echo $(basename $prettier_path) $prettier_config $relative_path
+
+$prettier_path $prettier_config $WATCHEXEC_UPDATED_PATH
+exit 0

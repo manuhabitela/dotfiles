@@ -66,6 +66,13 @@
 	"highlight_modified_tabs": true,
 	"ignored_packages":
 	[
+		"SHS-At-Rule",
+		"SHS-Bourbon",
+		"SHS-Bourbon-Neat",
+		"SHS-Compass-Mixins",
+		"SHS-Compass-Variables",
+		"SHS-CSS-Properties",
+		"SHS-CSS-Property-Values",
 		"Vintage",
 		"Vintageous"
 	],
@@ -75,6 +82,7 @@
 	"overlay_scroll_bars": "enabled",
 	"scroll_speed": 0,
 	"shift_tab_unindent": true,
+	"show_definitions": false,
 	"show_encoding": true,
 	"tab_completion": true,
 	"theme": "Cobalt2.sublime-theme",

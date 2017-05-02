@@ -29,9 +29,6 @@ gcob() {
 	git checkout -b $1 origin/$1
 }
 
-#redshift for when geolocation doesn't work
-alias redshift-angers="redshift -l 47.47:0.55"
-
 switch_file() {
 	first_file=$1
 	second_file=$2

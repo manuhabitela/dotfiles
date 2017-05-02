@@ -92,6 +92,11 @@ for s = 1, screen.count() do
     statusbar_layout_left:add( wibox.layout.margin(clock, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
     statusbar_layout_left:add( statusbar_items_separator )
 
+    local date = awful.widget.textclock("%d/%m", 10)
+    date:set_font(beautiful.clock_font)
+    statusbar_layout_left:add( wibox.layout.margin(date, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
+    statusbar_layout_left:add( statusbar_items_separator )
+
     statusbar_layout_left:add( wibox.layout.margin(taglists[s], beautiful.statusbar_items_margin) )
     statusbar_layout_left:add( wibox.layout.margin(statusbar_items_separator, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin/2) )
 

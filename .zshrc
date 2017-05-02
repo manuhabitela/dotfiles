@@ -13,6 +13,15 @@ PATH="$PATH:$HOME/.composer/vendor/bin"
 if [[ -a $HOME/.gem/ruby/2.3.0/bin ]]; then
 	PATH="$PATH:$HOME/.gem/ruby/2.3.0/bin"
 fi
+if [[ -a $HOME/.gem/ruby/2.4.0/bin ]]; then
+	PATH="$PATH:$HOME/.gem/ruby/2.4.0/bin"
+fi
+if [[ -a $HOME/android/sdk ]]; then
+	export ANDROID_HOME="$HOME/android/sdk"
+	PATH="$PATH:$ANDROID_HOME/tools"
+	PATH="$PATH:$ANDROID_HOME/platform-tools"
+fi
+
 export PATH="$PATH:$HOME/bin"
 
 # Path to your oh-my-zsh configuration.

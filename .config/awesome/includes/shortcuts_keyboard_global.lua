@@ -55,7 +55,7 @@ globalkeys = awful.util.table.join(
   awful.key({ modkey            }, "f",       function() helpers.launcher.ror("pcmanfm", "Pcmanfm") end),
   awful.key({ modkey            }, "s",       function() helpers.launcher.ror("subl", { "Sublime_text", "Subl" }) end),
   awful.key({ modkey            }, "w",       function()
-    helpers.launcher.ror("google-chrome-unstable", { "google-chrome-unstable" })
+    helpers.launcher.ror("google-chrome-stable", { "google-chrome-stable" })
   end),
   awful.key({ modkey            }, "g",       function() helpers.launcher.ror("git-cola", "Git-cola") end),
 

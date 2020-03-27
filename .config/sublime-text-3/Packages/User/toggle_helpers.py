@@ -9,7 +9,7 @@ class ToggleHelpersCommand(sublime_plugin.ApplicationCommand):
         self.setSettings(toggle)
 
     def areVisibleHelpers(self):
-        return self.settings.get("draw_indent_guides")
+        return self.settings.get("line_numbers")
 
     def setSettings(self, bool):
         self.settings.set("draw_indent_guides", bool)

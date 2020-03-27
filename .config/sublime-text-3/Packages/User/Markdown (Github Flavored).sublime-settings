@@ -1,7 +1,6 @@
 {
 	"line_numbers": false,
-	"font_face": "Arial",
-	"font_size": 13,
 	"word_wrap": true,
-	"wrap_width": 0
+	"wrap_width": 0,
+	"color_scheme": "Packages/Railscasts Extended/Railscasts Extended.tmTheme"
 }

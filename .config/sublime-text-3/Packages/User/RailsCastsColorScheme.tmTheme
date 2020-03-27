@@ -15,8 +15,6 @@
         <string>#FFFFFF</string>
         <key>foreground</key>
         <string>#E6E1DC</string>
-        <key>invisibles</key>
-        <string>#404040</string>
         <key>lineHighlight</key>
         <string>#333435</string>
         <key>selection</key>
@@ -50,7 +48,7 @@
       <key>settings</key>
       <dict>
         <key>fontStyle</key>
-        <string />
+        <string></string>
         <key>foreground</key>
         <string>#CC7833</string>
       </dict>
@@ -63,7 +61,7 @@
       <key>settings</key>
       <dict>
         <key>fontStyle</key>
-        <string />
+        <string></string>
         <key>foreground</key>
         <string>#FFC66D</string>
       </dict>
@@ -87,7 +85,7 @@
       <key>settings</key>
       <dict>
         <key>fontStyle</key>
-        <string />
+        <string></string>
         <key>foreground</key>
         <string>#A5C261</string>
       </dict>
@@ -100,7 +98,7 @@
       <key>settings</key>
       <dict>
         <key>fontStyle</key>
-        <string />
+        <string></string>
         <key>foreground</key>
         <string>#D0D0FF</string>
       </dict>
@@ -124,7 +122,7 @@
       <key>settings</key>
       <dict>
         <key>fontStyle</key>
-        <string />
+        <string></string>
         <key>foreground</key>
         <string>#6D9CBE</string>
       </dict>
@@ -148,7 +146,7 @@
       <key>settings</key>
       <dict>
         <key>fontStyle</key>
-        <string />
+        <string></string>
         <key>foreground</key>
         <string>#6E9CBE</string>
       </dict>
@@ -161,7 +159,7 @@
       <key>settings</key>
       <dict>
         <key>fontStyle</key>
-        <string />
+        <string></string>
         <key>foreground</key>
         <string>#A5C261</string>
       </dict>
@@ -174,7 +172,7 @@
       <key>settings</key>
       <dict>
         <key>fontStyle</key>
-        <string />
+        <string></string>
         <key>foreground</key>
         <string>#DA4939</string>
       </dict>
@@ -209,7 +207,7 @@
       <key>settings</key>
       <dict>
         <key>fontStyle</key>
-        <string />
+        <string></string>
         <key>foreground</key>
         <string>#E8BF6A</string>
       </dict>
@@ -235,7 +233,7 @@
       <key>settings</key>
       <dict>
         <key>fontStyle</key>
-        <string />
+        <string></string>
         <key>foreground</key>
         <string>#519F50</string>
       </dict>
@@ -310,37 +308,7 @@
         <string>#967EFB</string>
       </dict>
     </dict>
-  <dict>
-            <key>name</key>
-            <string>SublimeLinter Warning</string>
-            <key>scope</key>
-            <string>sublimelinter.mark.warning</string>
-            <key>settings</key>
-            <dict>
-                <key>foreground</key>
-                <string>#DDB700</string>
-            </dict>
-        </dict><dict>
-            <key>name</key>
-            <string>SublimeLinter Gutter Mark</string>
-            <key>scope</key>
-            <string>sublimelinter.gutter-mark</string>
-            <key>settings</key>
-            <dict>
-                <key>foreground</key>
-                <string>#FFFFFF</string>
-            </dict>
-        </dict><dict>
-            <key>name</key>
-            <string>SublimeLinter Error</string>
-            <key>scope</key>
-            <string>sublimelinter.mark.error</string>
-            <key>settings</key>
-            <dict>
-                <key>foreground</key>
-                <string>#D02000</string>
-            </dict>
-        </dict></array>
+  </array>
   <key>uuid</key>
   <string>6ABEEF40-83D0-4C2B-BEF9-AAFD8C8256DA</string>
 </dict>

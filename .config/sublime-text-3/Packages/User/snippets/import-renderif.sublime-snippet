@@ -1,0 +1,8 @@
+<snippet>
+	<content><![CDATA[
+import renderIf from 'render-if';
+]]></content>
+	<tabTrigger>impri</tabTrigger>
+	<scope>source.js</scope>
+	<description>import renderIf statement</description>
+</snippet>

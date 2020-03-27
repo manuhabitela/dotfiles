@@ -10,7 +10,7 @@
 	"installed_packages":
 	[
 		"AdvancedNewFile",
-		"ApacheConf.tmLanguage",
+		"ApacheConf",
 		"Babel",
 		"Better CoffeeScript",
 		"ColorHelper",
@@ -28,16 +28,18 @@
 		"Package Control",
 		"PHP-Twig",
 		"Pretty JSON",
-		"RailsCasts Colour Scheme",
+		"Railscasts Extended",
+		"Sass",
 		"SFTP",
 		"SideBarEnhancements",
 		"SublimeGit",
 		"SublimeLinter",
-		"SublimeLinter-contrib-eslint",
-		"SublimeLinter-contrib-stylelint",
+		"SublimeLinter-contrib-php-cs-fixer",
+		"SublimeLinter-eslint",
 		"SublimeLinter-json",
-		"SublimeLinter-php",
-		"Syntax Highlighting for Sass",
-		"TrailingSpaces"
+		"SublimeLinter-stylelint",
+		"TrailingSpaces",
+		"TypeScript Syntax",
+		"Xdebug Client"
 	]
 }

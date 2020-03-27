@@ -1,0 +1,8 @@
+<snippet>
+	<content><![CDATA[
+import classNames from 'classnames';
+]]></content>
+	<tabTrigger>impcn</tabTrigger>
+	<scope>source.js</scope>
+	<description>import classnames statement</description>
+</snippet>

@@ -71,9 +71,10 @@ globalkeys = awful.util.table.join(
     awful.util.spawn_with_shell("slock")
   end),
 
-  awful.key({ }, "XF86AudioLowerVolume",      function() awful.util.spawn("amixer set Master 2-") end),
-  awful.key({ }, "XF86AudioRaiseVolume",      function() awful.util.spawn("amixer set Master 2+") end),
-  awful.key({ }, "XF86AudioMute",             function() awful.util.spawn("amixer set Master toggle") end),
+  awful.key({ }, "XF86AudioLowerVolume",      function() awful.util.spawn("pactl set-sink-volume @DEFAULT_SINK@ -5%") end),
+  awful.key({ }, "XF86AudioRaiseVolume",      function() awful.util.spawn("pactl set-sink-volume @DEFAULT_SINK@ +5%") end),
+  awful.key({ }, "XF86AudioMute",             function() awful.util.spawn("pactl set-sink-mute @DEFAULT_SINK@ toggle") end),
+
 
   awful.key({ }, "XF86",                      function() awful.util.spawn("lxde-logout") end),
 

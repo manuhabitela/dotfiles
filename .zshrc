@@ -21,6 +21,9 @@ if [[ -a $HOME/android/sdk ]]; then
 	PATH="$PATH:$ANDROID_HOME/tools"
 	PATH="$PATH:$ANDROID_HOME/platform-tools"
 fi
+if [[ -a $HOME/.cargo/bin ]]; then
+	PATH="$HOME/.cargo/bin:$PATH"
+fi
 
 export PATH="$PATH:$HOME/bin"
 
@@ -35,7 +38,7 @@ COMPLETION_WAITING_DOTS="true"
 # Plugins: ~/.oh-my-zsh/plugins/
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git nyan ssh-agent colored-man-pages)
+plugins=(git ssh-agent colored-man-pages)
 
 zstyle :omz:plugins:ssh-agent agent-forwarding on
 
@@ -46,3 +49,4 @@ cdpath=($HOME/vt $HOME/dev $HOME/Dev $HOME/Dropbox/Web/localhost)
 
 source $HOME/.zsh_aliases
 POCKER_HOME=/home/manu/vt
+export REACT_EDITOR=subl

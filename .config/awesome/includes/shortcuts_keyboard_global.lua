@@ -77,8 +77,8 @@ globalkeys = awful.util.table.join(
 
   awful.key({ }, "XF86",                      function() awful.util.spawn("lxde-logout") end),
 
-  awful.key({ modkey            }, "F7",  function() awful.util.spawn("monitor switch") end),
-  awful.key({ modkey, ctrl      }, "m",  function() awful.util.spawn("monitor switch") end),
+  awful.key({ modkey            }, "F7",      function() awful.util.spawn("/home/manu/bin/monitor switch") end),
+  awful.key({ modkey, ctrl      }, "m",       function() awful.util.spawn("/home/manu/bin/monitor switch") end),
   awful.key({ modkey, ctrl      }, "r",       awesome.restart),
   awful.key({ modkey, ctrl, sft }, "q",       awesome.quit),
 

@@ -30,8 +30,8 @@ floating_classes = { "MPlayer", "pinentry", "Gimp", "Yad"}
 floating_instances = {"exe", "plugin-container"}
 noborders_instances = {}
 withborders_instances = {}
-main_screen = screen.count() > 1 and 2 or 1
-secondary_screen = 1
+main_screen = 1
+secondary_screen = 2
 big_screen = screen[main_screen].geometry.width > 2500 and screen[main_screen].geometry.height > 1400
 
 dofile('/home/manu/Dropbox/dotfiles/not-synced/awesome.lua')

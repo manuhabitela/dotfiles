@@ -21,9 +21,10 @@ alias gmf="gm -G \"\.(less|scss|twig|ctp|js)$\"" #front-end file
 alias gmp="gm -G .php$" #php file
 
 alias pker="pocker"
+
 alias dockerps="docker ps --format \"table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}\""
 
-alias android-studio="_JAVA_OPTIONS=-Djava.io.tmpdir=/var/tmp /home/manu/opt/android-studio/bin/studio.sh"
+#alias android-studio="_JAVA_OPTIONS=-Djava.io.tmpdir=/var/tmp /home/manu/opt/android-studio/bin/studio.sh"
 
 gpo() {
 	current_branch=$(git rev-parse --abbrev-ref HEAD)

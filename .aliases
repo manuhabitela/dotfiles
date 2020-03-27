@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 # git enhanced graph log
-alias glo="git log --graph --pretty=format:'%C(bold red)%h%Creset%C(yellow)%d%Creset %s %Cgreen%cr %C(cyan)%an%Creset' --abbrev-commit --date=relative"
+alias glo="git log --graph --pretty=format:'%C(bold red)%h%Creset%C(yellow)%d%Creset %s %Cgreen%cr (%cd) %C(cyan)%an%Creset' --abbrev-commit --date=\"format:%a %d %b\""
 
 # gimme file with ack!
 alias gmf="ack --ignore-case"

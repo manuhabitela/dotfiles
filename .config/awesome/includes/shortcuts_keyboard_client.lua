@@ -6,6 +6,12 @@ clientkeys = awful.util.table.join(
     awful.client.floating.toggle(c)
     helpers.clients.update_client_colors(c)
   end),
+  awful.key({ modkey, sft }, "u",      function(c)
+    c.ontop = not c.ontop
+    c.sticky = c.ontop
+    awful.client.floating.set(c, c.ontop)
+    helpers.clients.update_client_colors(c)
+  end),
   awful.key({ modkey,           }, "n",      function(c)
     -- The client currently has the input focus, so it cannot be
     -- minimized, since minimized clients can't have the focus.

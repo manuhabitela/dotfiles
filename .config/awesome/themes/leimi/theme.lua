@@ -52,7 +52,7 @@ theme.taglist_fg_focus = theme.fg_focus
 theme.taglist_squares_sel   = "/usr/share/awesome/themes/default/taglist/squarew.png"
 theme.taglist_squares_unsel = "/usr/share/awesome/themes/default/taglist/squarew.png"
 
-theme.tasklist_plain_task_name = true
+theme.tasklist_plain_task_name = false
 
 theme.clock_font = theme.font
 

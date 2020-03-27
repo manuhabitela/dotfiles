@@ -24,6 +24,8 @@ alias pker="pocker"
 
 alias dockerps="docker ps --format \"table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}\""
 
+alias -g andn="&& notify-send -i /usr/share/icons/Faenza/apps/16/terminal.png 'Commande terminée'"
+
 #alias android-studio="_JAVA_OPTIONS=-Djava.io.tmpdir=/var/tmp /home/manu/opt/android-studio/bin/studio.sh"
 
 gpo() {

@@ -1,0 +1,3 @@
+#!/bin/sh
+lxsession-logout -p "<big>                    Quitter la session ?                    </big>"
+

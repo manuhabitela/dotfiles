@@ -1,5 +1,5 @@
 [global]
-    font = Misc Tamsyn 10.5
+    font = Terminus (TTF) 12
 
     # Allow a small subset of html markup:
     #   <b>bold</b>
@@ -136,13 +136,15 @@
     dmenu = /usr/bin/dmenu -fn Tamsyn-10.5 -nf #93a1a1 -nb #001d24 -sf #b58900 -sb #001d24 -l 30 -i -z -p notification
 
     # Browser for opening urls in context menu.
-    browser = /usr/bin/google-chrome-unstable
+    browser = /usr/bin/google-chrome-stable
+
+    max_icon_size = 48
 
     # Align icons left/right/off
     icon_position = left
 
     # Paths to default icons.
-    icon_folders = /usr/share/icons/gnome/16x16/status/:/usr/share/icons/gnome/16x16/devices/
+    icon_folders = /usr/share/icons/Faenza/16x16/status/:/usr/share/icons/Faenza/16x16/devices/:/usr/share/icons/Faenza/16x16/apps/
 
 [frame]
     width = 0

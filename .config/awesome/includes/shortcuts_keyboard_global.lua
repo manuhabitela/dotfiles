@@ -75,6 +75,8 @@ globalkeys = awful.util.table.join(
   awful.key({ }, "XF86AudioRaiseVolume",      function() awful.util.spawn("pactl set-sink-volume @DEFAULT_SINK@ +5%") end),
   awful.key({ }, "XF86AudioMute",             function() awful.util.spawn("pactl set-sink-mute @DEFAULT_SINK@ toggle") end),
 
+  awful.key({ }, "XF86MonBrightnessUp",       function() awful.util.spawn_with_shell("brillo -u 100000 -A 5 && notify-send -i /home/manu/.config/awesome/themes/leimi/brightness.png -h string:x-canonical-private-synchronous:brillo Luminosité $(brillo -G)%") end),
+  awful.key({ }, "XF86MonBrightnessDown",     function() awful.util.spawn_with_shell("brillo -u 100000 -U 5 && notify-send -i /home/manu/.config/awesome/themes/leimi/brightness.png -h string:x-canonical-private-synchronous:brillo Luminosité $(brillo -G)%") end),
 
   awful.key({ }, "XF86",                      function() awful.util.spawn("lxde-logout") end),
 

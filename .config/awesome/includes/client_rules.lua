@@ -27,6 +27,8 @@ awful.rules.rules = {
     properties = { border_width = 0 }
   },
   { rule_any = { class = { "Sublime_text", "Subl" } }, properties = { tag = tags[main_screen][2] } },
+  { rule_any = { class = { "git-cola", "git-cola" } }, properties = { tag = tags[main_screen][4] } },
   { rule_any = { class = { "Roxterm", terminal } }, properties = { tag = tags[main_screen][7] } },
-  { rule_any = { class = { "Chromium-browser", "Chromium" } }, properties = { tag = tags[secondary_screen][big_screen and 2 or 3] } }
+  { rule_any = { class = { "Chromium-browser", "Chromium" } }, properties = { tag = tags[main_screen][big_screen and 2 or 3] } },
+  { rule_any = { class = { "Google-chrome", "google-chrome" } }, properties = { tag = tags[main_screen][big_screen and 2 or 3] } }
 }

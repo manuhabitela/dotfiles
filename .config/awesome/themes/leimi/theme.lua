@@ -4,14 +4,15 @@
 
 theme = {}
 
-theme.wallpaper = "/home/manu/.config/awesome/themes/leimi/wall.jpg"
+theme.wallpaper = "/home/manu/.config/awesome/themes/leimi/angers.png"
 
 theme.icon_theme = "Faenza"
 
-theme.font          = "Misc Tamsyn 10.5"
-theme.font_xft      = "Misc Tamsyn-10.5"
-theme.font_title    = "Noto Sans 9"
-theme.font_title    = "Misc Tamsyn 10.5"
+-- theme.font          = "Open Sans Semi-Bold 10"
+theme.font          = "Sans Francisco Display Medium 9"
+-- theme.font          = "Misc Tamsyn 10.5"
+theme.font_xft      = "Terminus (TTF)-12"
+theme.font_title    = "Sans Francisco Display Semi-Bold 9"
 theme.font_dmenu    = theme.font_xft
 
 theme.bg_normal     = "#001d24"
@@ -22,6 +23,7 @@ theme.bg_focus      = theme.bg_normal
 theme.fg_focus      = "#b58900"
 theme.border_focus  = theme.fg_focus
 theme.font_title_focus = theme.font_title
+theme.tasklist_font = theme.font
 
 theme.bg_floating = theme.bg_focus
 theme.fg_floating = "#859900"
@@ -35,6 +37,9 @@ theme.border_width = 0
 
 theme.statusbar_height = 28
 theme.statusbar_margin = 2
+theme.statusbar_margin_horizontal = 2
+theme.statusbar_margin_top = 2
+theme.statusbar_margin_bottom = 2
 theme.statusbar_items_margin = 6
 theme.statusbar_border_width = 1
 theme.statusbar_border_color = "#073642"

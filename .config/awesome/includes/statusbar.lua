@@ -121,5 +121,5 @@ for s = 1, screen.count() do
 
     statusbar_layout:set_left(statusbar_layout_left)
   end
-  statusbars[s]:set_widget(wibox.layout.margin(statusbar_layout, beautiful.statusbar_margin, beautiful.statusbar_margin, beautiful.statusbar_margin, beautiful.statusbar_margin))
+  statusbars[s]:set_widget(wibox.layout.margin(statusbar_layout, beautiful.statusbar_margin_horizontal, beautiful.statusbar_margin_horizontal, beautiful.statusbar_margin_top, beautiful.statusbar_margin_bottom))
 end

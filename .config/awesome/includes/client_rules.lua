@@ -10,7 +10,7 @@ awful.rules.rules = {
       keys = clientkeys,
       buttons = clientbuttons,
       size_hints_honor = false,
-      border_width = 2
+      border_width = 1
     }
   },
   -- some clients are floating by default, others don't have borders - see variables declaration at top

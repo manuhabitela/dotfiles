@@ -9,10 +9,10 @@ theme.wallpaper = "/home/manu/.config/awesome/themes/leimi/angers.png"
 theme.icon_theme = "Faenza"
 
 -- theme.font          = "Open Sans Semi-Bold 10"
-theme.font          = "Sans Francisco Display Medium 9"
+theme.font          = "San Francisco Text Regular 10"
 -- theme.font          = "Misc Tamsyn 10.5"
 theme.font_xft      = "Terminus (TTF)-12"
-theme.font_title    = "Sans Francisco Display Semi-Bold 9"
+theme.font_title    = "San Francisco Text Medium 10"
 theme.font_dmenu    = theme.font_xft
 
 theme.bg_normal     = "#001d24"
@@ -23,7 +23,7 @@ theme.bg_focus      = theme.bg_normal
 theme.fg_focus      = "#b58900"
 theme.border_focus  = theme.fg_focus
 theme.font_title_focus = theme.font_title
-theme.tasklist_font = theme.font
+theme.tasklist_font = theme.font_title
 
 theme.bg_floating = theme.bg_focus
 theme.fg_floating = "#859900"

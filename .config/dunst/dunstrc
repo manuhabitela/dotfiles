@@ -133,7 +133,7 @@
     startup_notification = true
 
     # dmenu path.
-    dmenu = /usr/bin/dmenu -fn Tamsyn-10.5 -nf #93a1a1 -nb #001d24 -sf #b58900 -sb #001d24 -l 30 -i -z -p notification
+    dmenu = /usr/bin/dmenu -fn "Terminus (TTF)-12" -nf #93a1a1 -nb #001d24 -sf #b58900 -sb #001d24 -l 30 -i -z -p notification
 
     # Browser for opening urls in context menu.
     browser = /usr/bin/google-chrome-stable
@@ -175,7 +175,7 @@
     # IMPORTANT: colors have to be defined in quotation marks.
     # Otherwise the "#" and following would be interpreted as a comment.
     background = "#222222"
-    foreground = "#cccccc"
+    foreground = "#dddddd"
     timeout = 10
 
 [urgency_normal]

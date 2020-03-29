@@ -1,4 +1,6 @@
--- not in use since awesome 4
+-- I guess I should not need this thanks to
+-- theme.tasklist_disable_icon but i can't get it to work…
+
 local tasklist = {}
 
 -- custom option to pass to the tasklist - show only app names

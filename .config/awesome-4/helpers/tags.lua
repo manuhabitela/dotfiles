@@ -22,15 +22,15 @@ end
 
 function tags.toggletag(screen_number, tag_number, force)
   tag_number = tonumber(tag_number)
-  local current_tag = tonumber(screen_number.selected_tag.name)
+  local current_tag = tonumber(screen[screen_number].selected_tag.name)
   if force ~=1 and current_tag == tag_number then
     local previous_tag_number = tags.previous_tags[screen_number]
     tags.gototag(function()
-      screen_number.tags[previous_tag_number]:view_only()
+      screen[screen_number].tags[previous_tag_number]:view_only()
     end)
   else
     tags.gototag(function()
-      screen_number.tags[tag_number]:view_only()
+      screen[screen_number].tags[tag_number]:view_only()
     end)
   end
   tags.previous_tags[screen_number] = current_tag

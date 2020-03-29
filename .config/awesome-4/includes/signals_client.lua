@@ -16,20 +16,22 @@ client.connect_signal("request::titlebars", function(c)
     end),
   }
 
-  awful.titlebar(c, { size = 18 }).widget = {
-    { -- Left
-      awful.titlebar.widget.titlewidget(c),
-      buttons = buttons,
-      layout  = wibox.layout.fixed.horizontal
-    },
-    { -- Right ? or middle maybe
-      awful.titlebar.widget.minimizebutton(c),
-      awful.titlebar.widget.maximizedbutton(c),
-      awful.titlebar.widget.closebutton(c),
-      layout = wibox.layout.fixed.horizontal()
-    },
-    layout = wibox.layout.align.horizontal
+  local left_layout = wibox.layout.fixed.horizontal()
+  left_layout:add(wibox.container.margin(awful.titlebar.widget.titlewidget(c), 10, 0, 0, 1))
+  left_layout:buttons(mouse_buttons)
+  local right_layout = wibox.layout.fixed.horizontal()
+  local title_buttons = {
+    awful.titlebar.widget.minimizebutton(c),
+    awful.titlebar.widget.maximizedbutton(c),
+    awful.titlebar.widget.closebutton(c)
   }
+  for i, title_button in ipairs(title_buttons) do
+    right_layout:add(title_button)
+  end
+  local layout = wibox.layout.align.horizontal()
+  layout:set_left(left_layout)
+  layout:set_right(right_layout)
+  awful.titlebar(c, { size = beautiful.titlebar_size }):set_widget(layout)
 end)
 
 -- change client's border on focus change

@@ -8,11 +8,11 @@ theme.wallpaper = "/home/manu/.config/awesome/themes/leimi/angers.png"
 
 theme.icon_theme = "Faenza"
 
--- theme.font          = "Open Sans Semi-Bold 10"
-theme.font          = "Sans Francisco Display Medium 9"
+theme.font          = "San Francisco Display Semi-Bold 10"
 -- theme.font          = "Misc Tamsyn 10.5"
 theme.font_xft      = "Terminus (TTF)-12"
-theme.font_title    = "Sans Francisco Display Semi-Bold 9"
+theme.font_title    = "San Francisco Display Regular 10"
+theme.font_title_focus = theme.font_title
 theme.font_dmenu    = theme.font_xft
 
 theme.bg_normal     = "#001d24"
@@ -22,7 +22,6 @@ theme.border_normal = theme.bg_normal
 theme.bg_focus      = theme.bg_normal
 theme.fg_focus      = "#b58900"
 theme.border_focus  = theme.fg_focus
-theme.font_title_focus = theme.font_title
 theme.tasklist_font = theme.font
 
 theme.bg_floating = theme.bg_focus
@@ -61,6 +60,10 @@ theme.awesome_icon = "/usr/share/icons/Faenza/places/24/distributor-logo.png"
 theme.menu_submenu_icon = "/usr/share/awesome/themes/zenburn/titlebar/maximized_focus_inactive.png"
 theme.menu_height = 22
 theme.menu_width  = 200
+
+theme.titlebar_size = 24
+theme.titlebar_fg = "#aaaaaa"
+theme.titlebar_fg_focus = "#dddddd"
 
 theme.titlebar_close_button_normal = "~/.config/awesome/themes/leimi/close.png"
 theme.titlebar_close_button_focus  = "~/.config/awesome/themes/leimi/close.png"

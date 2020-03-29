@@ -63,31 +63,31 @@ local tasklist_buttons = awful.util.table.join(
   end)
 )
 
-screen.connect_signal("property::geometry", function(s)
-  helpers.wallpaper.set(s, beautiful.wallpaper)
+screen.connect_signal("request::wallpaper", function(s)
+  local wallpaper = beautiful.wallpaper
+  -- If wallpaper is a function, call it with the screen
+  if type(wallpaper) == "function" then
+      wallpaper = wallpaper(s)
+  end
+  gears.wallpaper.maximized(wallpaper, s, true)
 end)
 
-awful.screen.connect_for_each_screen(function(s)
-  helpers.wallpaper.set(s, beautiful.wallpaper)
+screen.connect_signal("request::desktop_decoration", function(s)
+  -- if on big screen, we default to the "bspwm-like" layout (spiral.dwindle), otherwise default to tile
+  -- always use tile by default on the roxterm specific layout
+  local default_layout = helpers.screen.is_big(s) and awful.layout.layouts[2] or awful.layout.layouts[1]
+  awful.tag({ "1", "2", "3", "4", "5", "6", "7" }, s, {default_layout, default_layout, default_layout, default_layout, default_layout, default_layout, awful.layout.layouts[1]})
 
-  awful.tag({ "1", "2", "3", "4", "5", "6", "7" }, s, awful.layout.layouts[1])
-
-  local statusbar_widget = awful.wibox(awful.util.table.join(statusbar_options, { screen = s }))
+  local statusbar_widget = awful.wibar(awful.util.table.join(statusbar_options, { screen = s }))
 
   local taglist_widget = awful.widget.taglist(s, function(t) return t.name ~= "7" end, taglist_buttons)
-  local tasklist_widget = awful.widget.tasklist(
-    s,
-    awful.widget.tasklist.filter.alltags,
-    tasklist_buttons,
-    nil,
-    wibox.layout.fixed.horizontal()
-  )
+  local tasklist_widget = awful.widget.tasklist(s, awful.widget.tasklist.filter.alltags, tasklist_buttons)
   tasklist_widget.border_color = beautiful.statusbar_border_color
   tasklist_widget.border_width = 1
 
   -- show systray, clock and menu on main screen only - others screen have just their taglist and tasklist
   local statusbar_layout = wibox.layout.align.horizontal()
-  if s == main_screen then
+  if s == screen.primary then
     local statusbar_layout_right = wibox.layout.fixed.horizontal()
     local statusbar_layout_left = wibox.layout.fixed.horizontal()
 
@@ -96,26 +96,26 @@ awful.screen.connect_for_each_screen(function(s)
 
     local menutext = wibox.widget.textbox('menu')
     menutext:buttons(awful.button({ }, 1, function() main_menu:toggle() end))
-    statusbar_layout_left:add( wibox.layout.margin(menutext, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
+    statusbar_layout_left:add( wibox.container.margin(menutext, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
     statusbar_layout_left:add( statusbar_items_separator )
 
     local clock = wibox.widget.textclock("%H:%M", 10)
     clock:set_font(beautiful.clock_font)
-    statusbar_layout_left:add( wibox.layout.margin(clock, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
+    statusbar_layout_left:add( wibox.container.margin(clock, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
     statusbar_layout_left:add( statusbar_items_separator )
 
     local date = wibox.widget.textclock("%d/%m", 10)
     date:set_font(beautiful.clock_font)
-    statusbar_layout_left:add( wibox.layout.margin(date, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
+    statusbar_layout_left:add( wibox.container.margin(date, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
     statusbar_layout_left:add( statusbar_items_separator )
 
-    statusbar_layout_left:add( wibox.layout.margin(taglist_widget, beautiful.statusbar_items_margin) )
-    statusbar_layout_left:add( wibox.layout.margin(statusbar_items_separator, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin/2) )
+    statusbar_layout_left:add( wibox.container.margin(taglist_widget, beautiful.statusbar_items_margin) )
+    statusbar_layout_left:add( wibox.container.margin(statusbar_items_separator, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin/2) )
 
-    statusbar_layout_left:add( wibox.layout.margin(statusbar_current_layout_name, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin+2) )
+    statusbar_layout_left:add( wibox.container.margin(statusbar_current_layout_name, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin+2) )
     statusbar_layout_left:add( statusbar_items_separator )
 
-    statusbar_layout_left:add(wibox.layout.margin(tasklist_widget, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin))
+    statusbar_layout_left:add(wibox.container.margin(tasklist_widget, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin))
 
     local mysystray = wibox.widget.systray()
     mysystray:set_base_size(beautiful.statusbar_height - beautiful.statusbar_margin)
@@ -138,11 +138,15 @@ awful.screen.connect_for_each_screen(function(s)
   else
     local statusbar_layout_left = wibox.layout.fixed.horizontal()
 
-    statusbar_layout_left:add( wibox.layout.margin(taglist_widget, 0, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
+    statusbar_layout_left:add( wibox.container.margin(taglist_widget, 0, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
 
-    statusbar_layout_left:add( wibox.layout.margin(tasklist_widget, 0, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
+    statusbar_layout_left:add( wibox.container.margin(tasklist_widget, 0, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
 
     statusbar_layout:set_left(statusbar_layout_left)
   end
-  statusbar_widget:set_widget(wibox.layout.margin(statusbar_layout, beautiful.statusbar_margin_horizontal, beautiful.statusbar_margin_horizontal, beautiful.statusbar_margin_top, beautiful.statusbar_margin_bottom)),
+  statusbar_widget:set_widget(wibox.container.margin(statusbar_layout, beautiful.statusbar_margin_horizontal, beautiful.statusbar_margin_horizontal, beautiful.statusbar_margin_top, beautiful.statusbar_margin_bottom))
+end)
+
+screen.connect_signal("primary_changed", function(s)
+  big_screen = screen.primary.geometry.width > 2500 and screen.primary.geometry.height > 1400
 end)

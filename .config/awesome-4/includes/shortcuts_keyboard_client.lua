@@ -14,13 +14,10 @@ client.connect_signal("request::default_keybindings", function()
       helpers.clients.update_client_colors(c)
     end),
     awful.key({ modkey,           }, "n",      function(c)
-      -- The client currently has the input focus, so it cannot be
-      -- minimized, since minimized clients can't have the focus.
       c.minimized = true
     end),
     awful.key({ modkey,           }, "F12", function(c)
-      c.maximized_horizontal = not c.maximized_horizontal
-      c.maximized_vertical   = c.maximized_horizontal
+      c.maximized = not c.maximized
       helpers.clients.update_client_colors(c)
     end),
     awful.key({ modkey            }, "y", function(c)

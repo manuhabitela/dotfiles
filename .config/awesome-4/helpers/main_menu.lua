@@ -7,7 +7,6 @@ local main_menu = {}
 
 function main_menu.create()
   local hotkeys_popup = require("awful.hotkeys_popup")
-  require("awful.hotkeys_popup.keys")
   table.insert(xdgmenu, { "Raccourcis clavier", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end })
   table.insert(xdgmenu, { "Terminal", terminal })
   table.insert(xdgmenu, { "Quitter", "/home/manu/bin/lxde-logout" })

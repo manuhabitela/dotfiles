@@ -11,6 +11,8 @@ ruled.client.connect_signal("request::rules", function()
       raise = true,
       size_hints_honor = false,
       border_width = 1,
+      screen = awful.screen.preferred,
+      callback = awful.client.setslave,
       placement = awful.placement.no_overlap+awful.placement.no_offscreen
     }
   }
@@ -32,26 +34,22 @@ ruled.client.connect_signal("request::rules", function()
 
   ruled.client.append_rule {
     rule_any = { class = { "Sublime_text", "Subl" } },
-    properties = { tag = screen[main_screen].tags[2] }
+    properties = { tag = screen.primary.tags[2] }
   }
-
   ruled.client.append_rule {
     rule_any = { class = { "git-cola", "git-cola" } },
-    properties = { tag = screen[main_screen].tags[4] }
+    properties = { tag = screen.primary.tags[4] }
   }
-
   ruled.client.append_rule {
     rule_any = { class = { "Roxterm", terminal } },
-    properties = { tag = screen[main_screen].tags[7] }
+    properties = { tag = screen.primary.tags[7] }
   }
-
   ruled.client.append_rule {
     rule_any = { class = { "Chromium-browser", "Chromium" } },
-    properties = { tag = screen[main_screen].tags[big_screen and 2 or 3] }
+    properties = { tag = screen.primary.tags[big_screen and 2 or 3] }
   }
-
   ruled.client.append_rule {
     rule_any = { class = { "Google-chrome", "google-chrome" } },
-    properties = { tag = screen[main_screen].tags[big_screen and 2 or 3] }
+    properties = { tag = screen.primary.tags[big_screen and 2 or 3] }
   }
-}
+end)

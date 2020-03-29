@@ -54,7 +54,7 @@ awful.keyboard.append_global_keybindings({
   awful.key({ modkey            }, "f",       function() helpers.launcher.ror("pcmanfm", "Pcmanfm") end),
   awful.key({ modkey            }, "s",       function() helpers.launcher.ror("subl", { "Sublime_text", "Subl" }) end),
   awful.key({ modkey            }, "w",       function()
-    helpers.launcher.ror("google-chrome-stable", { "google-chrome-stable" })
+    helpers.launcher.ror("google-chrome-stable", { "Google-chrome", "google-chrome" })
   end),
   awful.key({ modkey            }, "g",       function() helpers.launcher.ror("git-cola", "Git-cola") end),
 
@@ -76,8 +76,6 @@ awful.keyboard.append_global_keybindings({
 
   awful.key({ }, "XF86MonBrightnessUp",       function() awful.spawn.with_shell("brillo -u 100000 -A 5 && notify-send -i /home/manu/.config/awesome/themes/leimi/brightness.png -h string:x-canonical-private-synchronous:manu-brightness -u low Luminosité $(brillo -G)%") end),
   awful.key({ }, "XF86MonBrightnessDown",     function() awful.spawn.with_shell("brillo -u 100000 -U 5 && notify-send -i /home/manu/.config/awesome/themes/leimi/brightness.png -h string:x-canonical-private-synchronous:manu-brightness -u low Luminosité $(brillo -G)%") end),
-
-  awful.key({ }, "XF86",                      function() awful.spawn("lxde-logout") end),
 
   awful.key({ modkey            }, "F7",      function() awful.spawn("/home/manu/bin/monitor switch") end),
   awful.key({ modkey, ctrl      }, "m",       function() awful.spawn("/home/manu/bin/monitor switch") end),

@@ -91,8 +91,8 @@ screen.connect_signal("request::desktop_decoration", function(s)
     local statusbar_layout_right = wibox.layout.fixed.horizontal()
     local statusbar_layout_left = wibox.layout.fixed.horizontal()
 
-    statusbar_current_layout_name = wibox.widget.textbox( awful.layout.getname())
-    statusbar_current_layout_name:fit(50, 50)
+    local statusbar_current_layout_name = wibox.widget.textbox(awful.layout.getname())
+    -- statusbar_current_layout_name:fit(50, 50)
 
     local menutext = wibox.widget.textbox('menu')
     menutext:buttons(awful.button({ }, 1, function() main_menu:toggle() end))
@@ -119,7 +119,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
 
     local mysystray = wibox.widget.systray()
     mysystray:set_base_size(beautiful.statusbar_height - beautiful.statusbar_margin)
-    mysystray:fit()
+    -- mysystray:fit()
 
     statusbar_layout_right:add(mysystray)
     statusbar_layout:set_right(statusbar_layout_right)

@@ -47,9 +47,9 @@
 --         filter   = awful.widget.tasklist.filter.currenttags,
 --         buttons  = tasklist_buttons,
 --         style    = {
---             border_width = 1,
---             border_color = '#777777',
---             shape        = gears.shape.rounded_bar,
+--             shape_border_width = 1,
+--             shape_border_color = '#777777',
+--             shape  = gears.shape.rounded_bar,
 --         },
 --         layout   = {
 --             spacing = 10,
@@ -156,11 +156,17 @@
 --                 widget        = wibox.container.background,
 --             },
 --             {
---                 awful.widget.clienticon,
+--                 {
+--                     id     = 'clienticon',
+--                     widget = awful.widget.clienticon,
+--                 },
 --                 margins = 5,
 --                 widget  = wibox.container.margin
 --             },
 --             nil,
+--             create_callback = function(self, c, index, objects) --luacheck: no unused args
+--                 self:get_children_by_id('clienticon')[1].client = c
+--             end,
 --             layout = wibox.layout.align.vertical,
 --         },
 --     }
@@ -213,7 +219,7 @@
 --
 -- @author Julien Danjou &lt;julien@danjou.info&gt;
 -- @copyright 2008-2009 Julien Danjou
--- @widgetmod awful.widget.tasklist
+-- @classmod awful.widget.tasklist
 ---------------------------------------------------------------------------
 
 -- Grab environment we need
@@ -230,13 +236,7 @@ local timer = require("gears.timer")
 local gcolor = require("gears.color")
 local gstring = require("gears.string")
 local gdebug = require("gears.debug")
-local dpi = require("beautiful").xresources.apply_dpi
 local base = require("wibox.widget.base")
-local wfixed = require("wibox.layout.fixed")
-local wmargin = require("wibox.container.margin")
-local wtextbox = require("wibox.widget.textbox")
-local clienticon = require("awful.widget.clienticon")
-local wbackground = require("wibox.container.background")
 
 local function get_screen(s)
     return s and screen[s]
@@ -396,32 +396,6 @@ local instances
 -- Public structures
 tasklist.filter, tasklist.source = {}, {}
 
--- This is the same template as awful.widget.common, but with an clienticon widget
-local default_template = {
-    {
-        {
-            clienticon,
-            id     = "icon_margin_role",
-            left   = dpi(4),
-            widget = wmargin
-        },
-        {
-            {
-                id     = "text_role",
-                widget = wtextbox,
-            },
-            id     = "text_margin_role",
-            left   = dpi(4),
-            right  = dpi(4),
-            widget = wmargin
-        },
-        fill_space = true,
-        layout     = wfixed.horizontal
-    },
-    id     = "background_role",
-    widget = wbackground
-}
-
 local function tasklist_label(c, args, tb)
     if not args then args = {} end
     local theme = beautiful.get()
@@ -454,7 +428,6 @@ local function tasklist_label(c, args, tb)
     local shape              = args.shape or theme.tasklist_shape
     local shape_border_width = args.shape_border_width or theme.tasklist_shape_border_width
     local shape_border_color = args.shape_border_color or theme.tasklist_shape_border_color
-    local icon_size = args.icon_size or theme.tasklist_icon_size
 
     -- symbol to use to indicate certain client properties
     local sticky = args.sticky or theme.tasklist_sticky or "▪"
@@ -486,7 +459,6 @@ local function tasklist_label(c, args, tb)
         end
     end
 
-
     if not disable_task_name then
         local function default_client_name(c)
           local name = c.name or "<untitled>"
@@ -499,7 +471,7 @@ local function tasklist_label(c, args, tb)
         name = name .. client_name
     end
 
-    local focused = c.active
+    local focused = capi.client.focus == c
     -- Handle transient_for: the first parent that does not skip the taskbar
     -- is considered to be focused, if the real client has skip_taskbar.
     if not focused and capi.client.focus and capi.client.focus.skip_taskbar
@@ -574,15 +546,9 @@ local function tasklist_label(c, args, tb)
         shape              = shape,
         shape_border_width = shape_border_width,
         shape_border_color = shape_border_color,
-        icon_size          = icon_size,
     }
 
     return text, bg, bg_image, not tasklist_disable_icon and c.icon or nil, other_args
-end
-
--- Remove some callback boilerplate from the user provided templates.
-local function create_callback(w, t)
-    common._set_common_property(w, "client", t)
 end
 
 local function tasklist_update(s, w, buttons, filter, data, style, update_function, args)
@@ -601,10 +567,7 @@ local function tasklist_update(s, w, buttons, filter, data, style, update_functi
 
     local function label(c, tb) return tasklist_label(c, style, tb) end
 
-    update_function(w, buttons, label, data, clients, {
-        widget_template = args.widget_template or default_template,
-        create_callback = create_callback,
-    })
+    update_function(w, buttons, label, data, clients, args)
 end
 
 --- Create a new tasklist widget.
@@ -640,7 +603,6 @@ end
 -- @tparam[opt=nil] string args.style.bg_image_urgent
 -- @tparam[opt=nil] string args.style.bg_image_minimize
 -- @tparam[opt=nil] boolean args.style.tasklist_disable_icon
--- @tparam[opt=nil] number args.style.icon_size The size of the icon
 -- @tparam[opt=false] boolean args.style.disable_task_name
 -- @tparam[opt=nil] string args.style.font
 -- @tparam[opt=left] string args.style.align *left*, *right* or *center*
@@ -665,7 +627,7 @@ end
 -- @param style **DEPRECATED** use args.style
 -- @param update_function **DEPRECATED** use args.update_function
 -- @param base_widget **DEPRECATED** use args.base_widget
--- @constructorfct awful.widget.tasklist
+-- @function awful.tasklist
 function tasklist.new(args, filter, buttons, style, update_function, base_widget)
     local screen = nil
 
@@ -768,7 +730,7 @@ function tasklist.new(args, filter, buttons, style, update_function, base_widget
         capi.client.connect_signal("property::hidden", u)
         capi.client.connect_signal("tagged", u)
         capi.client.connect_signal("untagged", u)
-        capi.client.connect_signal("request::unmanage", function(c)
+        capi.client.connect_signal("unmanage", function(c)
             u(c)
             for _, i in pairs(instances) do
                 for _, tlist in pairs(i) do
@@ -777,7 +739,8 @@ function tasklist.new(args, filter, buttons, style, update_function, base_widget
             end
         end)
         capi.client.connect_signal("list", u)
-        capi.client.connect_signal("property::active", u)
+        capi.client.connect_signal("focus", u)
+        capi.client.connect_signal("unfocus", u)
         capi.screen.connect_signal("removed", function(s)
             instances[get_screen(s)] = nil
         end)
@@ -869,7 +832,7 @@ end
 -- @filterfunction awful.tasklist.filter.focused
 function tasklist.filter.focused(c, screen)
     -- Only print client on the same screen as this widget
-    return get_screen(c.screen) == get_screen(screen) and c.active
+    return get_screen(c.screen) == get_screen(screen) and capi.client.focus == c
 end
 
 --- Get all the clients in an undefined order.
@@ -884,241 +847,6 @@ end
 function tasklist.mt:__call(...)
     return tasklist.new(...)
 end
-
---
---- Get a widget index.
--- @param widget The widget to look for
--- @param[opt] recursive Also check sub-widgets
--- @param[opt] ... Additional widgets to add at the end of the path
--- @return The index
--- @return The parent layout
--- @return The path between self and widget
--- @method index
--- @baseclass wibox.widget
-
---- Get or set the children elements.
--- @property children
--- @tparam table children The children.
--- @baseclass wibox.widget
-
---- Get all direct and indirect children widgets.
--- This will scan all containers recursively to find widgets
--- Warning: This method it prone to stack overflow id the widget, or any of its
--- children, contain (directly or indirectly) itself.
--- @property all_children
--- @tparam table children The children.
--- @baseclass wibox.widget
-
---- Set a declarative widget hierarchy description.
--- See [The declarative layout system](../documentation/03-declarative-layout.md.html)
--- @param args An array containing the widgets disposition
--- @method setup
--- @baseclass wibox.widget
-
---- Force a widget height.
--- @property forced_height
--- @tparam number|nil height The height (`nil` for automatic)
--- @baseclass wibox.widget
-
---- Force a widget width.
--- @property forced_width
--- @tparam number|nil width The width (`nil` for automatic)
--- @baseclass wibox.widget
-
---- The widget opacity (transparency).
--- @property opacity
--- @tparam[opt=1] number opacity The opacity (between 0 and 1)
--- @baseclass wibox.widget
-
---- The widget visibility.
--- @property visible
--- @param boolean
--- @baseclass wibox.widget
-
---- The widget buttons.
---
--- The table contains a list of `awful.button` objects.
---
--- @property buttons
--- @param table
--- @see awful.button
--- @baseclass wibox.widget
-
---- Add a new `awful.button` to this widget.
--- @tparam awful.button button The button to add.
--- @method add_button
--- @baseclass wibox.widget
-
---- Emit a signal and ensure all parent widgets in the hierarchies also
--- forward the signal. This is useful to track signals when there is a dynamic
--- set of containers and layouts wrapping the widget.
--- @tparam string signal_name
--- @param ... Other arguments
--- @baseclass wibox.widget
--- @method emit_signal_recursive
-
---- When the layout (size) change.
--- This signal is emitted when the previous results of `:layout()` and `:fit()`
--- are no longer valid.  Unless this signal is emitted, `:layout()` and `:fit()`
--- must return the same result when called with the same arguments.
--- @signal widget::layout_changed
--- @see widget::redraw_needed
--- @baseclass wibox.widget
-
---- When the widget content changed.
--- This signal is emitted when the content of the widget changes. The widget will
--- be redrawn, it is not re-layouted. Put differently, it is assumed that
--- `:layout()` and `:fit()` would still return the same results as before.
--- @signal widget::redraw_needed
--- @see widget::layout_changed
--- @baseclass wibox.widget
-
---- When a mouse button is pressed over the widget.
--- @signal button::press
--- @tparam table self The current object instance itself.
--- @tparam number lx The horizontal position relative to the (0,0) position in
--- the widget.
--- @tparam number ly The vertical position relative to the (0,0) position in the
--- widget.
--- @tparam number button The button number.
--- @tparam table mods The modifiers (mod4, mod1 (alt), Control, Shift)
--- @tparam table find_widgets_result The entry from the result of
--- @{wibox.drawable:find_widgets} for the position that the mouse hit.
--- @tparam wibox.drawable find_widgets_result.drawable The drawable containing
--- the widget.
--- @tparam widget find_widgets_result.widget The widget being displayed.
--- @tparam wibox.hierarchy find_widgets_result.hierarchy The hierarchy
--- managing the widget's geometry.
--- @tparam number find_widgets_result.x An approximation of the X position that
--- the widget is visible at on the surface.
--- @tparam number find_widgets_result.y An approximation of the Y position that
--- the widget is visible at on the surface.
--- @tparam number find_widgets_result.width An approximation of the width that
--- the widget is visible at on the surface.
--- @tparam number find_widgets_result.height An approximation of the height that
--- the widget is visible at on the surface.
--- @tparam number find_widgets_result.widget_width The exact width of the widget
--- in its local coordinate system.
--- @tparam number find_widgets_result.widget_height The exact height of the widget
--- in its local coordinate system.
--- @see mouse
--- @baseclass wibox.widget
-
---- When a mouse button is released over the widget.
--- @signal button::release
--- @tparam table self The current object instance itself.
--- @tparam number lx The horizontal position relative to the (0,0) position in
--- the widget.
--- @tparam number ly The vertical position relative to the (0,0) position in the
--- widget.
--- @tparam number button The button number.
--- @tparam table mods The modifiers (mod4, mod1 (alt), Control, Shift)
--- @tparam table find_widgets_result The entry from the result of
--- @{wibox.drawable:find_widgets} for the position that the mouse hit.
--- @tparam wibox.drawable find_widgets_result.drawable The drawable containing
--- the widget.
--- @tparam widget find_widgets_result.widget The widget being displayed.
--- @tparam wibox.hierarchy find_widgets_result.hierarchy The hierarchy
--- managing the widget's geometry.
--- @tparam number find_widgets_result.x An approximation of the X position that
--- the widget is visible at on the surface.
--- @tparam number find_widgets_result.y An approximation of the Y position that
--- the widget is visible at on the surface.
--- @tparam number find_widgets_result.width An approximation of the width that
--- the widget is visible at on the surface.
--- @tparam number find_widgets_result.height An approximation of the height that
--- the widget is visible at on the surface.
--- @tparam number find_widgets_result.widget_width The exact width of the widget
--- in its local coordinate system.
--- @tparam number find_widgets_result.widget_height The exact height of the widget
--- in its local coordinate system.
--- @see mouse
--- @baseclass wibox.widget
-
---- When the mouse enter a widget.
--- @signal mouse::enter
--- @tparam table self The current object instance itself.
--- @tparam table find_widgets_result The entry from the result of
--- @{wibox.drawable:find_widgets} for the position that the mouse hit.
--- @tparam wibox.drawable find_widgets_result.drawable The drawable containing
--- the widget.
--- @tparam widget find_widgets_result.widget The widget being displayed.
--- @tparam wibox.hierarchy find_widgets_result.hierarchy The hierarchy
--- managing the widget's geometry.
--- @tparam number find_widgets_result.x An approximation of the X position that
--- the widget is visible at on the surface.
--- @tparam number find_widgets_result.y An approximation of the Y position that
--- the widget is visible at on the surface.
--- @tparam number find_widgets_result.width An approximation of the width that
--- the widget is visible at on the surface.
--- @tparam number find_widgets_result.height An approximation of the height that
--- the widget is visible at on the surface.
--- @tparam number find_widgets_result.widget_width The exact width of the widget
--- in its local coordinate system.
--- @tparam number find_widgets_result.widget_height The exact height of the widget
--- in its local coordinate system.
--- @see mouse
--- @baseclass wibox.widget
-
---- When the mouse leave a widget.
--- @signal mouse::leave
--- @tparam table self The current object instance itself.
--- @tparam table find_widgets_result The entry from the result of
--- @{wibox.drawable:find_widgets} for the position that the mouse hit.
--- @tparam wibox.drawable find_widgets_result.drawable The drawable containing
--- the widget.
--- @tparam widget find_widgets_result.widget The widget being displayed.
--- @tparam wibox.hierarchy find_widgets_result.hierarchy The hierarchy
--- managing the widget's geometry.
--- @tparam number find_widgets_result.x An approximation of the X position that
--- the widget is visible at on the surface.
--- @tparam number find_widgets_result.y An approximation of the Y position that
--- the widget is visible at on the surface.
--- @tparam number find_widgets_result.width An approximation of the width that
--- the widget is visible at on the surface.
--- @tparam number find_widgets_result.height An approximation of the height that
--- the widget is visible at on the surface.
--- @tparam number find_widgets_result.widget_width The exact width of the widget
--- in its local coordinate system.
--- @tparam number find_widgets_result.widget_height The exact height of the widget
--- in its local coordinate system.
--- @see mouse
--- @baseclass wibox.widget
-
---
---- Disconnect from a signal.
--- @tparam string name The name of the signal.
--- @tparam function func The callback that should be disconnected.
--- @method disconnect_signal
--- @baseclass gears.object
-
---- Emit a signal.
---
--- @tparam string name The name of the signal.
--- @param ... Extra arguments for the callback functions. Each connected
---   function receives the object as first argument and then any extra
---   arguments that are given to emit_signal().
--- @method emit_signal
--- @baseclass gears.object
-
---- Connect to a signal.
--- @tparam string name The name of the signal.
--- @tparam function func The callback to call when the signal is emitted.
--- @method connect_signal
--- @baseclass gears.object
-
---- Connect to a signal weakly.
---
--- This allows the callback function to be garbage collected and
--- automatically disconnects the signal when that happens.
---
--- **Warning:**
--- Only use this function if you really, really, really know what you
--- are doing.
--- @tparam string name The name of the signal.
--- @tparam function func The callback to call when the signal is emitted.
--- @method weak_connect_signal
--- @baseclass gears.object
 
 return setmetatable(tasklist, tasklist.mt)
 

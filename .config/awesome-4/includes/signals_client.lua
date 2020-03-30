@@ -1,8 +1,15 @@
 -- signal function to execute when a new client appears.
-client.connect_signal("request::manage", function(c)
+client.connect_signal("manage", function(c)
   if c.first_tag.name == "7" and c.class ~= "Roxterm" and c.class ~= "roxterm" then
     c:move_to_tag(screen[main_screen].tags[3], c)
     screen[main_screen].tags[3]:view_only()
+  end
+
+  if awesome.startup
+    and not c.size_hints.user_position
+    and not c.size_hints.program_position then
+      -- Prevent clients from being unreachable after screen count changes.
+      awful.placement.no_offscreen(c)
   end
 end)
 

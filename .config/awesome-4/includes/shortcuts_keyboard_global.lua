@@ -1,5 +1,5 @@
 -- global keyboard shortcuts - work all the time everywhere
-awful.keyboard.append_global_keybindings({
+globalkeys = gears.table.join(
   -- almost normal alt-tab behavior with rofi https://github.com/DaveDavenport/rofi
   awful.key({ altkey,           }, "Escape",     function()
     awful.spawn.with_shell(string.format(
@@ -86,12 +86,12 @@ awful.keyboard.append_global_keybindings({
     -- helpers.tags.toggletag(main_screen, 7);
     screen[main_screen].tags[7]:view_only()
   end)
-})
+)
 
 
 -- bind all key numbers to tags
 for i = 1, 9 do
-  awful.keyboard.append_global_keybindings({
+  globalkeys = gears.table.join(globalkeys,
     -- go to tag x on the current screen, focusing back the client that was last focused on the given tag
     awful.key({ modkey       }, "#" .. i + 9, function()
       local screen = awful.screen.focused()
@@ -106,5 +106,8 @@ for i = 1, 9 do
       -- helpers.tags.toggletag(mouse.screen, i, 1)
       client.focus:move_to_tag(client.focus.screen.tags[i])
     end)
-  })
+  )
 end
+
+root.keys(globalkeys)
+

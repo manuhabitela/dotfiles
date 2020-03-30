@@ -2,12 +2,9 @@ pcall(require, "luarocks.loader")
 gears = require("gears")
 awful = require("awful")
 require("awful.autofocus")
-awful.rules = require("awful.rules")
-ruled = require("ruled")
 common = require("awful.widget.common")
 wibox = require("wibox")
 beautiful = require("beautiful")
-naughty = require("naughty")
 
 -- homemade stuff
 helpers = {}
@@ -40,15 +37,12 @@ main_screen = screen.primary
 big_screen = helpers.screen.is_big(main_screen)
 main_menu = helpers.main_menu.create()
 
--- i guess the default_layouts signal should work anywhere in the code
--- but it seems it actually must be at the beginning of the rc.lua file to work…
--- so, putting signals_tag before others
-dofile('/home/manu/.config/awesome/includes/signals_tag.lua')
 dofile('/home/manu/.config/awesome/includes/autostart.lua')
-dofile('/home/manu/.config/awesome/includes/rules.lua')
+dofile('/home/manu/.config/awesome/includes/signals_tag.lua')
+dofile('/home/manu/.config/awesome/includes/signals_screen.lua')
 dofile('/home/manu/.config/awesome/includes/shortcuts_keyboard_client.lua')
 dofile('/home/manu/.config/awesome/includes/shortcuts_keyboard_global.lua')
 dofile('/home/manu/.config/awesome/includes/shortcuts_mouse_client.lua')
 dofile('/home/manu/.config/awesome/includes/shortcuts_mouse_global.lua')
+dofile('/home/manu/.config/awesome/includes/rules.lua')
 dofile('/home/manu/.config/awesome/includes/signals_client.lua')
-dofile('/home/manu/.config/awesome/includes/signals_screen.lua')

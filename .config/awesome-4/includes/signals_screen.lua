@@ -94,16 +94,17 @@ local tasklist_template = {
     widget = wibox.container.background
 }
 
-screen.connect_signal("request::wallpaper", function(s)
-  local wallpaper = beautiful.wallpaper
-  -- If wallpaper is a function, call it with the screen
-  if type(wallpaper) == "function" then
-      wallpaper = wallpaper(s)
+local function set_wallpaper(s)
+  if beautiful.wallpaper then
+    gears.wallpaper.maximized(beautiful.wallpaper, s, true)
   end
-  gears.wallpaper.maximized(wallpaper, s, true)
-end)
+end
 
-screen.connect_signal("request::desktop_decoration", function(s)
+screen.connect_signal("property::geometry", set_wallpaper)
+
+awful.screen.connect_for_each_screen(function(s)
+  set_wallpaper(s)
+
   -- if on big screen, we default to the "bspwm-like" layout (spiral.dwindle), otherwise default to tile
   -- always use tile by default on the roxterm specific layout
   local default_layout = helpers.screen.is_big(s) and awful.layout.layouts[2] or awful.layout.layouts[1]

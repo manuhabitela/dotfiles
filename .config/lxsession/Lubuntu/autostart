@@ -1,6 +1,0 @@
-@xcompmgr -n
-@pytyle
-@nitrogen --restore
-@kupfer
-@guake
-@xfce4-panel

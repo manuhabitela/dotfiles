@@ -2,7 +2,7 @@
 
 DOTFILES="/home/manu/dotfiles"
 
-FILES=( bin .aliases .gtkrc-2.0 .xmodmaprc .zshrc .ackrc .dmenurc .Xresources )
+FILES=( bin .icons .zsh_aliases .gtkrc-2.0 .xmodmaprc .zshrc .zprofile .dmenurc .Xresources )
 
 for FILE in $FILES
 do
@@ -10,7 +10,7 @@ do
 	ln -s $DOTFILES/$FILE $HOME/$FILE
 done
 
-CONFIGS=( awesome dunst gtk-3.0 lxsession )
+CONFIGS=( redshift.conf awesome dunst gtk-3.0 lxsession picom volumeicon )
 for CONFIG in $CONFIGS
 do
 	echo "ln -s $DOTFILES/.config/$CONFIG $HOME/.config/$CONFIG"

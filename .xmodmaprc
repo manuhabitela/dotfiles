@@ -9,6 +9,7 @@ keycode 105 = Control_R
 keycode 37 = Super_L
 add Control = Control_L
 add Control = Control_R
+
 !remove œ and put ² and ³ (with shift) on it
 keycode 49 = twosuperior threesuperior
 

@@ -63,14 +63,36 @@ local tasklist_buttons = awful.util.table.join(
   end)
 )
 
-gstring = require("gears.string")
+local gstring = require("gears.string")
 local function tasklist_client_name(c)
-  local name = string.lower(c.class)
+  local name = helpers.string.replace(c.class:lower(), "_", "-")
   if c.minimized then
     return "-" .. name
   end
   return gstring.xml_escape(name)
 end
+
+local dpi = require("beautiful").xresources.apply_dpi
+local tasklist_template = {
+    {
+        {
+            id     = "text_role",
+            widget = wibox.widget.textbox,
+            create_callback = function(self, c)
+              self.text = "prout"
+            end,
+            update_callback = function(self, c)
+              self.text = "prout"
+            end
+        },
+        id     = "text_margin_role",
+        left   = dpi(4),
+        right  = dpi(4),
+        widget = wibox.container.margin
+    },
+    id     = "background_role",
+    widget = wibox.container.background
+}
 
 screen.connect_signal("request::wallpaper", function(s)
   local wallpaper = beautiful.wallpaper
@@ -90,15 +112,16 @@ screen.connect_signal("request::desktop_decoration", function(s)
   local statusbar_widget = awful.wibar(awful.util.table.join(statusbar_options, { screen = s }))
 
   local taglist_widget = awful.widget.taglist(s, function(t) return t.name ~= "7" end, taglist_buttons)
+  -- local tasklist_widget = awful.widget.tasklist({
   local tasklist_widget = helpers.tasklist_widget({
     screen = s,
     filter = awful.widget.tasklist.filter.alltags,
     buttons = tasklist_buttons,
-    update_function = helpers.tasklist.names_only_list,
     style = {
       client_name_function = tasklist_client_name
     },
-    layout = wibox.layout.fixed.horizontal()
+    layout = wibox.layout.fixed.horizontal(),
+    widget_template = tasklist_template
   })
   tasklist_widget.border_color = beautiful.statusbar_border_color
   tasklist_widget.border_width = 1

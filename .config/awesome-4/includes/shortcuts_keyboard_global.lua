@@ -56,7 +56,7 @@ globalkeys = gears.table.join(
   awful.key({ modkey            }, "w",       function()
     helpers.launcher.ror("google-chrome-stable", { "Google-chrome", "google-chrome" })
   end),
-  awful.key({ modkey            }, "g",       function() helpers.launcher.ror("git-cola", "Git-cola") end),
+  awful.key({ modkey            }, "g",       function() helpers.launcher.ror("git-cola", "git-cola") end),
 
   -- dmenu with fuzzy matching through -z option https://aur.archlinux.org/packages/dmenu-xft-fuzzy/
   awful.key({ modkey            }, "space",   function()

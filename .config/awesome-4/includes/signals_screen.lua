@@ -111,8 +111,6 @@ awful.screen.connect_for_each_screen(function(s)
     layout = wibox.layout.fixed.horizontal(),
     widget_template = tasklist_template
   })
-  tasklist_widget.border_color = beautiful.statusbar_border_color
-  tasklist_widget.border_width = 1
 
   -- show systray, clock and menu on main screen only - others screen have just their taglist and tasklist
   local statusbar_layout = wibox.layout.align.horizontal()
@@ -121,7 +119,8 @@ awful.screen.connect_for_each_screen(function(s)
     local statusbar_layout_left = wibox.layout.fixed.horizontal()
 
     s.statusbar_current_layout_name = wibox.widget.textbox(awful.layout.getname())
-    -- s.statusbar_current_layout_name:fit(50, 50)
+    s.statusbar_current_layout_name.align = 'center'
+    s.statusbar_current_layout_name.forced_width = beautiful.statusbar_current_layout_width
 
     local menutext = wibox.widget.textbox('menu')
     menutext:buttons(awful.button({ }, 1, function() main_menu:toggle() end))
@@ -130,11 +129,15 @@ awful.screen.connect_for_each_screen(function(s)
 
     local clock = wibox.widget.textclock("%H:%M", 10)
     clock:set_font(beautiful.clock_font)
+    clock.align = 'center'
+    clock.forced_width = beautiful.clock_width
     statusbar_layout_left:add( wibox.container.margin(clock, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
     statusbar_layout_left:add( statusbar_items_separator )
 
     local date = wibox.widget.textclock("%d/%m", 10)
     date:set_font(beautiful.clock_font)
+    date.align = 'center'
+    date.forced_width = beautiful.date_width
     statusbar_layout_left:add( wibox.container.margin(date, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
     statusbar_layout_left:add( statusbar_items_separator )
 
@@ -148,7 +151,7 @@ awful.screen.connect_for_each_screen(function(s)
 
     local mysystray = wibox.widget.systray()
     mysystray:set_base_size(beautiful.statusbar_height - beautiful.statusbar_margin)
-    -- mysystray:fit()
+    mysystray:fit({dpi = s.dpi })
 
     statusbar_layout_right:add(mysystray)
     statusbar_layout:set_right(statusbar_layout_right)

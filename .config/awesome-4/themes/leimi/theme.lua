@@ -6,7 +6,7 @@ theme = {}
 
 theme.wallpaper = "/home/manu/.config/awesome/themes/leimi/angers.png"
 
-theme.icon_theme = "Faenza"
+theme.icon_theme = "/usr/share/icons/Faenza-Dark"
 
 theme.font          = "San Francisco Display Semi-Bold 10"
 -- theme.font          = "Misc Tamsyn 10.5"
@@ -44,6 +44,7 @@ theme.statusbar_border_width = 1
 theme.statusbar_border_color = "#073642"
 theme.statusbar_bg_color = theme.bg_normal
 theme.statusbar_separator_color = "#073642"
+theme.statusbar_current_layout_width = 29
 
 theme.taglist_font = theme.font
 theme.taglist_bg_focus = theme.bg_normal
@@ -54,6 +55,9 @@ theme.taglist_squares_unsel = "/usr/share/awesome/themes/default/taglist/squarew
 theme.tasklist_plain_task_name = false
 
 theme.clock_font = theme.font
+theme.clock_width = 35
+
+theme.date_width = 40
 
 theme.awesome_icon = "/usr/share/awesome/icons/awesome16.png"
 theme.awesome_icon = "/usr/share/icons/Faenza/places/24/distributor-logo.png"

@@ -6,9 +6,17 @@ awful.layout.layouts = {
   awful.layout.suit.floating
 }
 
+local tag_map = {
+  tile = "tile",
+  dwindle = "dwin",
+  tilebottom = "tileb",
+  max = "max",
+  floating = "float"
+}
+
 local function update_statusbar_tag(t)
   if t.screen.statusbar_current_layout_name then
-    t.screen.statusbar_current_layout_name:set_text(awful.layout.getname())
+    t.screen.statusbar_current_layout_name:set_text(tag_map[awful.layout.getname()])
   end
 end
 

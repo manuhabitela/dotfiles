@@ -85,16 +85,10 @@ local tasklist_template = {
   end
 }
 
-local function set_wallpaper(s)
-  if beautiful.wallpaper then
-    gears.wallpaper.maximized(beautiful.wallpaper, s, true)
-  end
-end
-
-screen.connect_signal("property::geometry", set_wallpaper)
+screen.connect_signal("property::geometry", helpers.wallpaper.update)
 
 awful.screen.connect_for_each_screen(function(s)
-  set_wallpaper(s)
+  helpers.wallpaper.update(s)
 
   -- if on big screen, we default to the "bspwm-like" layout (spiral.dwindle), otherwise default to tile
   -- always use tile by default on the roxterm specific layout

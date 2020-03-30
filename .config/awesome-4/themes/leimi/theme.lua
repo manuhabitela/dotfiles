@@ -4,7 +4,8 @@
 
 theme = {}
 
-theme.wallpaper = "/home/manu/.config/awesome/themes/leimi/angers.png"
+theme.wallpaper = "/home/manu/.config/awesome/themes/leimi/angers-fhd.png"
+theme.wallpaper_blur = "/home/manu/.config/awesome/themes/leimi/angers-fhd-blur.png"
 
 theme.icon_theme = "/usr/share/icons/Faenza-Dark"
 
@@ -31,8 +32,8 @@ theme.border_floating = theme.fg_floating
 theme.bg_maximized = theme.bg_focus
 theme.fg_maximized = "#6c71c4"
 theme.border_maximized = theme.fg_maximized
-
-theme.border_width = 1
+theme.border_width = 2
+theme.useless_gap = 5
 
 theme.statusbar_height = 28
 theme.statusbar_margin = 2

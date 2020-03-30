@@ -1,5 +1,7 @@
 -- signal function to execute when a new client appears.
 client.connect_signal("manage", function(c)
+  helpers.wallpaper.update(c.screen)
+
   if c.first_tag.name == "7" and c.class ~= "Roxterm" and c.class ~= "roxterm" then
     c:move_to_tag(screen[main_screen].tags[3], c)
     screen[main_screen].tags[3]:view_only()
@@ -55,4 +57,12 @@ end)
 
 client.connect_signal("focus", function(c)
   main_menu:hide()
+end)
+
+client.connect_signal("unmanage", function(c)
+  helpers.wallpaper.update(c.screen)
+end)
+
+client.connect_signal("property::minimized", function(c)
+  helpers.wallpaper.update(c.screen)
 end)

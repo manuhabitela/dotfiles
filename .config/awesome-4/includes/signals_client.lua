@@ -41,13 +41,12 @@ client.connect_signal("request::titlebars", function(c)
   awful.titlebar(c, { size = beautiful.titlebar_size }):set_widget(layout)
 end)
 
--- change client's border on focus change
 client.connect_signal("focus", function(c)
-  helpers.clients.update_client_colors(c)
+  c.border_color = beautiful.border_focus
 end)
 
 client.connect_signal("unfocus", function(c)
-  helpers.clients.update_client_colors(c)
+  c.border_color = beautiful.border_normal
 end)
 
 client.connect_signal("button::press", function(c)

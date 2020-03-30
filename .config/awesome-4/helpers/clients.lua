@@ -36,32 +36,4 @@ function clients.client_focus_global_byidx(i, c)
   end
 end
 
-function clients.update_client_colors(c)
-  local bg_color, fg_color, border_color
-  if c.maximized then
-    bg_color = beautiful.bg_maximized
-    -- fg_color = beautiful.fg_maximized
-    border_color = beautiful.border_maximized
-  elseif c.floating or awful.layout.get(client.screen) == awful.layout.suit.floating then
-    bg_color = beautiful.bg_floating
-    -- fg_color = beautiful.fg_floating
-    border_color = beautiful.border_floating
-  elseif client.focus == c then
-    bg_color = beautiful.bg_focus
-    -- fg_color = beautiful.fg_focus
-    border_color = beautiful.border_focus
-  else
-    bg_color = beautiful.bg_normal
-    fg_color = beautiful.fg_normal
-    border_color = beautiful.border_normal
-  end
-  local osef, titlebar_size = c.titlebar_top(c)
-  if titlebar_size ~= 0 then
-    local client_titlebar = awful.titlebar(c, { size = beautiful.titlebar_size })
-    client_titlebar:set_bg(bg_color)
-    -- client_titlebar:set_fg(fg_color)
-  end
-  c.border_color = border_color
-end
-
 return clients

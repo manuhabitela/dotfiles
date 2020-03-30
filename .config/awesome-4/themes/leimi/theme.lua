@@ -17,11 +17,11 @@ theme.font_dmenu    = theme.font_xft
 
 theme.bg_normal     = "#001d24"
 theme.fg_normal     = "#93a1a1"
-theme.border_normal = theme.bg_normal
 
 theme.bg_focus      = theme.bg_normal
 theme.fg_focus      = "#b58900"
-theme.border_focus  = theme.fg_focus
+theme.border_normal = theme.bg_normal
+theme.border_focus = theme.fg_focus
 theme.tasklist_font = theme.font
 
 theme.bg_floating = theme.bg_focus
@@ -32,7 +32,7 @@ theme.bg_maximized = theme.bg_focus
 theme.fg_maximized = "#6c71c4"
 theme.border_maximized = theme.fg_maximized
 
-theme.border_width = 0
+theme.border_width = 1
 
 theme.statusbar_height = 28
 theme.statusbar_margin = 2

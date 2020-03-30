@@ -11,7 +11,6 @@ awful.rules.rules = {
       focus = awful.client.focus.filter,
       raise = true,
       size_hints_honor = false,
-      border_width = 1,
       screen = awful.screen.preferred,
       callback = awful.client.setslave,
       placement = awful.placement.no_overlap+awful.placement.no_offscreen

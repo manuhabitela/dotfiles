@@ -21,9 +21,6 @@ local function update_statusbar_tag(t)
 end
 
 tag.connect_signal("property::layout", function(t)
-  for i, client_tag in ipairs(t:clients()) do
-    helpers.clients.update_client_colors(client_tag)
-  end
   update_statusbar_tag(t)
 end)
 

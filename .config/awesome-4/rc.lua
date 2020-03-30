@@ -10,7 +10,6 @@ beautiful = require("beautiful")
 helpers = {}
 helpers.notifier = require("helpers.notifier")
 helpers.launcher = require("helpers.launcher")
-helpers.titlebar = require("helpers.titlebar")
 helpers.tags = require("helpers.tags")
 helpers.screen = require("helpers.screen")
 helpers.clients = require("helpers.clients")

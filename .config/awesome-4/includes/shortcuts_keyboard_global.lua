@@ -83,8 +83,7 @@ globalkeys = gears.table.join(
   awful.key({ modkey, ctrl, sft }, "q",       awesome.quit),
 
   awful.key({ altkey,           }, "space",   function()
-    -- helpers.tags.toggletag(main_screen, 7);
-    screen[main_screen].tags[7]:view_only()
+    helpers.tags.toggle_tag(main_screen, 7);
   end)
 )
 
@@ -94,17 +93,17 @@ for i = 1, 9 do
   globalkeys = gears.table.join(globalkeys,
     -- go to tag x on the current screen, focusing back the client that was last focused on the given tag
     awful.key({ modkey       }, "#" .. i + 9, function()
-      local screen = awful.screen.focused()
-      -- helpers.tags.toggletag(screen, i)
-      local tag = screen.tags[i]
-      if tag then
-        tag:view_only()
-      end
+      helpers.tags.toggle_tag(awful.screen.focused(), i)
     end),
     -- go to tag x on the current screen and move currently focused client on the given tag
     awful.key({ modkey, sft  }, "#" .. i + 9, function()
-      -- helpers.tags.toggletag(mouse.screen, i, 1)
-      client.focus:move_to_tag(client.focus.screen.tags[i])
+      local tag = client.focus.screen.tags[i]
+      if tag then
+        local c = client.focus
+        c:move_to_tag(tag)
+        tag:view_only()
+        client.focus = c
+      end
     end)
   )
 end

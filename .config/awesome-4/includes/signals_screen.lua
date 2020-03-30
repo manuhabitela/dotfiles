@@ -132,8 +132,8 @@ screen.connect_signal("request::desktop_decoration", function(s)
     local statusbar_layout_right = wibox.layout.fixed.horizontal()
     local statusbar_layout_left = wibox.layout.fixed.horizontal()
 
-    local statusbar_current_layout_name = wibox.widget.textbox(awful.layout.getname())
-    -- statusbar_current_layout_name:fit(50, 50)
+    s.statusbar_current_layout_name = wibox.widget.textbox(awful.layout.getname())
+    -- s.statusbar_current_layout_name:fit(50, 50)
 
     local menutext = wibox.widget.textbox('menu')
     menutext:buttons(awful.button({ }, 1, function() main_menu:toggle() end))
@@ -153,7 +153,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
     statusbar_layout_left:add( wibox.container.margin(taglist_widget, beautiful.statusbar_items_margin) )
     statusbar_layout_left:add( wibox.container.margin(statusbar_items_separator, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin/2) )
 
-    statusbar_layout_left:add( wibox.container.margin(statusbar_current_layout_name, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin+2) )
+    statusbar_layout_left:add( wibox.container.margin(s.statusbar_current_layout_name, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin+2) )
     statusbar_layout_left:add( statusbar_items_separator )
 
     statusbar_layout_left:add(wibox.container.margin(tasklist_widget, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin))
@@ -165,17 +165,6 @@ screen.connect_signal("request::desktop_decoration", function(s)
     statusbar_layout_right:add(mysystray)
     statusbar_layout:set_right(statusbar_layout_right)
     statusbar_layout:set_left(statusbar_layout_left)
-
-    tag.connect_signal("property::layout", function(t)
-      for i, client_tag in ipairs(t:clients()) do
-        helpers.clients.update_client_colors(client_tag)
-      end
-        statusbar_current_layout_name:set_text(awful.layout.getname())
-    end)
-
-    tag.connect_signal("property::selected", function(t)
-      statusbar_current_layout_name:set_text(awful.layout.getname())
-    end)
   else
     local statusbar_layout_left = wibox.layout.fixed.horizontal()
 

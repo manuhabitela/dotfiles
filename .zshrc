@@ -49,4 +49,5 @@ cdpath=($HOME/vt $HOME/dev $HOME/Dev $HOME/Dropbox/Web/localhost)
 
 source $HOME/.zsh_aliases
 POCKER_HOME=/home/manu/vt
+EDITOR=nano
 export REACT_EDITOR=subl

@@ -2,9 +2,9 @@
 client.connect_signal("manage", function(c)
   helpers.wallpaper.update(c.screen)
 
-  if c.first_tag.name == "7" and c.class ~= "Roxterm" and c.class ~= "roxterm" then
-    c:move_to_tag(screen[main_screen].tags[3], c)
-    screen[main_screen].tags[3]:view_only()
+  if c.screen == main_screen and c.first_tag.name == terminal_tag and not gears.table.hasitem(terminal_tag_classes, c.class) then
+    c:move_to_tag(c.screen.tags[3], c)
+    c.screen.tags[3]:view_only()
   end
 
   if awesome.startup

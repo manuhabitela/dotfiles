@@ -33,6 +33,9 @@ floating_classes = { "MPlayer", "pinentry", "Gimp", "Yad"}
 floating_instances = {"exe", "plugin-container", "shutter"}
 -- apps = client.name (= app "title")
 terminal_app_names = {"spotify-tui"}
+-- the tag 7 is exclusively for the terminal
+terminal_tag = "7"
+terminal_tag_classes = { "Roxterm", "Roxterm-config" }
 main_screen = screen.primary
 big_screen = helpers.screen.is_big(main_screen)
 main_menu = helpers.main_menu.create()

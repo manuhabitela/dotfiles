@@ -41,7 +41,7 @@ awful.rules.rules = {
     properties = { tag = screen.primary.tags[4] }
   },
   {
-    rule_any = { class = { "Roxterm" } },
+    rule_any = { class = terminal_tag_classes },
     except_any = { name = terminal_app_names },
     properties = { tag = screen.primary.tags[7] }
   }

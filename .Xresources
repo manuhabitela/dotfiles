@@ -1,5 +1,5 @@
 ! black
-*color0: #000000
+*color0: #333333
 *color8: #555753
 
 ! red
@@ -15,7 +15,7 @@
 *color11: #FCE94F
 
 ! blue
-*color4: #3465A4
+*color4: #4f9eee
 *color12: #739FCF
 
 ! magenta

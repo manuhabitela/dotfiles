@@ -89,6 +89,27 @@ local tasklist_template = {
   widget = wibox.container.margin
 }
 
+-- show the clients ordered as they are shown on the screen:
+--  first show the clients in tag 1, then tag 2, then tag 3, etc
+--  clients in same tag are shown as they appear in the tag: first master, then slave 1, slave 2, etc
+local function tasklist_source(s, args)
+  local clients = s.all_clients
+  local tag_clients_cache = {}
+  table.sort(clients, function(a, b)
+    if a.first_tag.name == b.first_tag.name then
+      if not tag_clients_cache[a.first_tag.name] then
+        tag_clients_cache[a.first_tag.name] = a.first_tag:clients()
+      end
+      local tag_clients = tag_clients_cache[a.first_tag.name]
+      local a_position = gears.table.find_first_key(tag_clients, function(k, v) return v == a end)
+      local b_position = gears.table.find_first_key(tag_clients, function(k, v) return v == b end)
+      return a_position < b_position
+    end
+    return a.first_tag.name < b.first_tag.name
+  end)
+  return clients
+end
+
 screen.connect_signal("property::geometry", helpers.wallpaper.update)
 
 awful.screen.connect_for_each_screen(function(s)
@@ -106,6 +127,7 @@ awful.screen.connect_for_each_screen(function(s)
     screen = s,
     filter = awful.widget.tasklist.filter.alltags,
     buttons = tasklist_buttons,
+    source = tasklist_source,
     style = {
       client_name_function = tasklist_client_name
     },

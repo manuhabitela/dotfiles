@@ -45,7 +45,7 @@ zstyle :omz:plugins:ssh-agent agent-forwarding on
 source $ZSH/oh-my-zsh.sh
 
 setopt auto_cd
-cdpath=($HOME/vt $HOME/dev $HOME/Dev $HOME/Dropbox/Web/localhost)
+cdpath=($HOME $HOME/dev)
 
 source $HOME/.zsh_aliases
 POCKER_HOME=/home/manu/vt

@@ -85,7 +85,7 @@ OTHER_WRITABLE 33;48;5;233
 STICKY_OTHER_WRITABLE 33;48;5;235
 
 # This is for files with execute permission:
-EXEC 0;38;5;154
+EXEC 0;38;5;111;48;5;234
 
 # Data
 .json            0;38;5;201

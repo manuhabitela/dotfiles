@@ -54,7 +54,7 @@ globalkeys = gears.table.join(
   awful.key({ modkey            }, "f",       function() helpers.launcher.ror("pcmanfm", "Pcmanfm") end),
   awful.key({ modkey            }, "s",       function() helpers.launcher.ror("subl", { "Sublime_text", "Subl" }) end),
   awful.key({ modkey            }, "w",       function()
-    helpers.launcher.ror("google-chrome-stable", { "Google-chrome", "google-chrome" })
+    helpers.launcher.ror("google-chrome-stable", "Google-chrome")
   end),
   awful.key({ modkey            }, "g",       function() helpers.launcher.ror("git-cola", "git-cola") end),
 

@@ -17,38 +17,32 @@ awful.rules.rules = {
     }
   },
 
-  -- some clients are floating by default, others don't have borders - see variables declaration at top
-  {
-    rule_any = { class = floating_classes },
-    properties = { floating = true }
-  },
-  {
-    rule_any = { instance = floating_instances, name = noborders_instances },
-    properties = { floating = true }
-  },
-  {
-    rule_any = { instance = noborders_instances, name = noborders_instances },
-    properties = { border_width = 0 }
-  },
+  -- note: I might not have understood how the "rule" keyword works, as it's not
+  -- working when I use it... so using rule_any all the time, even for really specific rules
 
+  {
+    rule_any = { class = floating_classes, instance = floating_instances },
+    properties = { floating = true }
+  },
+  {
+    rule_any = { name = { "spotify-tui" }, class = { "Spotify" } },
+    properties = { tag = screen.primary.tags[1] }
+  },
   {
     rule_any = { class = { "Sublime_text", "Subl" } },
     properties = { tag = screen.primary.tags[2] }
   },
   {
-    rule_any = { class = { "git-cola", "git-cola" } },
+    rule_any = { class = { "Google-chrome" } },
+    properties = { tag = screen.primary.tags[big_screen and 2 or 3] }
+  },
+  {
+    rule_any = { class = { "git-cola" } },
     properties = { tag = screen.primary.tags[4] }
   },
   {
-    rule_any = { class = { "Roxterm", terminal } },
+    rule_any = { class = { "Roxterm" } },
+    except_any = { name = terminal_app_names },
     properties = { tag = screen.primary.tags[7] }
-  },
-  {
-    rule_any = { class = { "Chromium-browser", "Chromium" } },
-    properties = { tag = screen.primary.tags[big_screen and 2 or 3] }
-  },
-  {
-    rule_any = { class = { "Google-chrome", "google-chrome" } },
-    properties = { tag = screen.primary.tags[big_screen and 2 or 3] }
   }
 }

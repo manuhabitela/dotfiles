@@ -1,3 +1,0 @@
-#!/bin/bash
-
-DMENU="dmenu -fn 'gohufont-10' -nf #dddddd -nb #222222 -sf #ffffff -sb #395899 -l 30 -i -z"

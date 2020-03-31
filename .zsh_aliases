@@ -1,7 +1,8 @@
 #!/bin/zsh
 
 alias l="LC_COLLATE=C ls -lah --group-directories-first"
-alias ll="LC_COLLATE=C ls -lh --group-directories-first"
+alias lk="LC_COLLATE=C ls -lh --group-directories-first"
+alias ll="LC_COLLATE=C ls -1ah --group-directories-first"
 
 # git enhanced graph log
 alias glo="git log --graph --pretty=format:'%C(bold red)%h%Creset%C(yellow)%d%Creset %s %Cgreen%cr (%cd) %C(cyan)%an%Creset' --abbrev-commit --date=\"format:%a %d %b\""

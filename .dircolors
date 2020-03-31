@@ -42,11 +42,11 @@ FILE 00
 RESET 0
 
 # Directory
-DIR 0;38;5;2
+DIR 0;33
 
 # Symbolic link. (If you set this to 'target' instead of a
 # numerical value, the color is as for the file pointed to.)
-LINK 01;38;5;111
+LINK 03
 
 # Regular file with more than one link
 MULTIHARDLINK 00
@@ -67,7 +67,7 @@ CHR ;1;230;38;5;94;01
 ORPHAN 38;5;009;48;5;052
 
 # File that is setuid (u+s)
-SETUID 48;5;160;38;5;230 
+SETUID 48;5;160;38;5;230
 
 # File that is setgid (g+s)
 SETGID 48;5;136;38;5;230
@@ -76,254 +76,170 @@ SETGID 48;5;136;38;5;230
 CAPABILITY 30;41
 
 # Dir with the sticky bit set (+t) and not other-writable
-STICKY 48;5;33;38;5;230 
+STICKY 33;48;5;234
 
 # Dir that is other-writable (o+w) and not sticky
-OTHER_WRITABLE 38;5;110
+OTHER_WRITABLE 33;48;5;233
 
 # Dir that is sticky and other-writable (+t,o+w)
-STICKY_OTHER_WRITABLE 48;5;64;38;5;230
+STICKY_OTHER_WRITABLE 33;48;5;235
 
 # This is for files with execute permission:
 EXEC 0;38;5;154
 
-# Code
-.s               01;38;5;123
-.c               01;38;5;148
-.h               01;38;5;150
-.cpp             01;38;5;064
-.go              01;38;5;081
-*_test.go        01;38;5;025
-.rb              00;38;5;160
-.ru              01;38;5;088
-.lua             01;38;5;025
-.js              01;38;5;003
-.sh              01;38;5;067
-
-*Makefile        0;38;5;243
-*Rakefile        0;38;5;124
-*Gemfile         0;38;5;3
-*Gemfile.lock    0;38;5;239
-.gemspec         0;38;5;3
-*Procfile        0;38;5;244
-*Gopkg.toml      0;38;5;3
-*Gopkg.lock      0;38;5;239
-.gitignore       0;38;5;243
-.gitattributes   0;38;5;243
-
-# Templates
-.erb             01;38;5;012
-.html            01;38;5;012
-.slim            01;38;5;012
-.haml            01;38;5;012
-.sass            01;38;5;012
-.scss            01;38;5;012
-
 # Data
-.json            01;38;5;3
-.ndjson          01;38;5;3
-.ldjson          01;38;5;3
-.yml             01;38;5;3
-.yaml            01;38;5;3
-.xml             01;38;5;3
-.csv             01;38;5;3
+.json            0;38;5;201
+.ndjson          0;38;5;201
+.ldjson          0;38;5;201
+.yml             0;38;5;201
+.yaml            0;38;5;201
+.xml             0;38;5;201
+.csv             0;38;5;201
 
 # Binary serialization formats
-.pb              01;38;5;201
-.proto           01;38;5;201
-.bson            01;38;5;201
+.pb              0;38;5;201
+.proto           0;38;5;201
+.bson            0;38;5;201
 
 # Documents
-.txt             01;38;5;15
-.tex             01;38;5;15
-.nfo             01;38;5;5
-.rdf             01;38;5;5
-.docx            01;38;5;5
-.pdf             01;38;5;5
-.markdown        01;38;5;5
-.md              01;38;5;5
-*README          01;38;5;200
-*README.md       01;38;5;200
-*README.txt      01;38;5;200
-*readme.txt      01;38;5;200
-*LICENSE         01;38;5;165
-*LICENSE.txt     01;38;5;165
-*AUTHORS         01;38;5;165
-*COPYRIGHT       01;38;5;165
-*CONTRIBUTORS    01;38;5;165
-*CONTRIBUTING.md 01;38;5;165
-*PATENTS         01;38;5;165
+.txt             0;38;5;197
+.tex             0;38;5;197
+.nfo             0;38;5;197
+.rdf             0;38;5;197
+.doc             0;38;5;197
+.docx            0;38;5;197
+.xls             0;38;5;197
+.xlsx            0;38;5;197
+.odt             0;38;5;197
+.ods             0;38;5;197
+.ppt             0;38;5;197
+.pptx            0;38;5;197
+.pdf             0;38;5;197
+.markdown        0;38;5;197
+.md              0;38;5;197
+*README          0;38;5;197
+*README.md       0;38;5;197
+*README.txt      0;38;5;197
+*readme.txt      0;38;5;197
+*LICENSE         0;38;5;197
+*LICENSE.txt     0;38;5;197
+*AUTHORS         0;38;5;197
+*COPYRIGHT       0;38;5;197
+*CONTRIBUTORS    0;38;5;197
+*CONTRIBUTING.md 0;38;5;197
+*PATENTS         0;38;5;197
 
 # Files of special interest
-.torrent         00;38;5;120
-*rc              01;38;5;141
-.cfg             01;38;5;005
-.conf            01;38;5;005
+*rc              0;38;5;15;48;5;235
+.cfg             0;38;5;15;48;5;235
+.conf            0;38;5;15;48;5;235
 
 # "transient" files as logs and backups (dark gray)
-.log             00;38;5;239
-.bak             00;38;5;239
-.aux             00;38;5;239
-.out             00;38;5;239
-.toc             00;38;5;239
-*~               00;38;5;239
-*#               00;38;5;239
-.part            00;38;5;239
-.incomplete      00;38;5;239
-.swp             00;38;5;239
-.tmp             00;38;5;239
-.temp            00;38;5;239
-.o               00;38;5;239
-.pyc             00;38;5;239
-.class           00;38;5;239
-.cache           00;38;5;239
-.rdb             00;38;5;239
+.log             00;38;5;242
+.bak             00;38;5;242
+.aux             00;38;5;242
+.out             00;38;5;242
+.toc             00;38;5;242
+*~               00;38;5;242
+*#               00;38;5;242
+.part            00;38;5;242
+.incomplete      00;38;5;242
+.swp             00;38;5;242
+.tmp             00;38;5;242
+.temp            00;38;5;242
+.o               00;38;5;242
+.pyc             00;38;5;242
+.class           00;38;5;242
+.cache           00;38;5;242
+.rdb             00;38;5;242
 
-# Audio formats (orange)
-.aac             00;38;5;166
-.au              00;38;5;166
-.flac            00;38;5;166
-.mid             00;38;5;166
-.midi            00;38;5;166
-.mka             00;38;5;166
-.mp3             00;38;5;166
-.ogg             00;38;5;166
-.wav             00;38;5;166
-.m4a             00;38;5;166
+# Audio formats
+.aac             00;38;5;035
+.au              00;38;5;035
+.flac            00;38;5;035
+.mid             00;38;5;035
+.midi            00;38;5;035
+.mka             00;38;5;035
+.mp3             00;38;5;035
+.ogg             00;38;5;035
+.wav             00;38;5;035
+.m4a             00;38;5;035
 
-# Video formats (darker orange + bold)
-.mov             01;38;5;202
-.mpg             01;38;5;202
-.mpeg            01;38;5;202
-.m2v             01;38;5;202
-.mkv             01;38;5;202
-.ogm             01;38;5;202
-.mp4             01;38;5;202
-.m4v             01;38;5;202
-.mp4v            01;38;5;202
-.vob             01;38;5;202
-.qt              01;38;5;202
-.nuv             01;38;5;202
-.wmv             01;38;5;202
-.asf             01;38;5;202
-.rm              01;38;5;202
-.rmvb            01;38;5;202
-.flc             01;38;5;202
-.avi             01;38;5;202
-.fli             01;38;5;202
-.flv             01;38;5;202
-.gl              01;38;5;202
-.m2ts            01;38;5;202
-.divx            01;38;5;202
-.webm            01;38;5;202
+# Video formats
+.mov             0;38;5;034
+.mpg             0;38;5;034
+.mpeg            0;38;5;034
+.m2v             0;38;5;034
+.mkv             0;38;5;034
+.ogm             0;38;5;034
+.mp4             0;38;5;034
+.m4v             0;38;5;034
+.mp4v            0;38;5;034
+.vob             0;38;5;034
+.qt              0;38;5;034
+.nuv             0;38;5;034
+.wmv             0;38;5;034
+.asf             0;38;5;034
+.rm              0;38;5;034
+.rmvb            0;38;5;034
+.flc             0;38;5;034
+.avi             0;38;5;034
+.fli             0;38;5;034
+.flv             0;38;5;034
+.gl              0;38;5;034
+.m2ts            0;38;5;034
+.divx            0;38;5;034
+.webm            0;38;5;034
 
-# Image formats (yellow)
-.jpg             00;38;5;215
-.JPG             00;38;5;215 #stupid but needed
-.jpeg            00;38;5;215
-.gif             00;38;5;215
-.bmp             00;38;5;215
-.pbm             00;38;5;215
-.pgm             00;38;5;215
-.ppm             00;38;5;215
-.tga             00;38;5;215
-.xbm             00;38;5;215
-.xpm             00;38;5;215
-.tif             00;38;5;215
-.tiff            00;38;5;215
-.pxm             00;38;5;215
-.png             00;38;5;215
-.PNG             00;38;5;215
-.svg             00;38;5;215
-.svgz            00;38;5;215
-.mng             00;38;5;215
-.pcx             00;38;5;215
-.dl              00;38;5;215
-.xcf             00;38;5;215
-.xwd             00;38;5;215
-.yuv             00;38;5;215
-.cgm             00;38;5;215
-.emf             00;38;5;215
-.eps             00;38;5;215
-.CR2             00;38;5;215
-.ico             00;38;5;215
+# Image formats
+.jpg             00;38;5;040
+.JPG             00;38;5;040 #stupid but needed
+.jpeg            00;38;5;040
+.gif             00;38;5;040
+.bmp             00;38;5;040
+.pbm             00;38;5;040
+.pgm             00;38;5;040
+.ppm             00;38;5;040
+.tga             00;38;5;040
+.xbm             00;38;5;040
+.xpm             00;38;5;040
+.tif             00;38;5;040
+.tiff            00;38;5;040
+.pxm             00;38;5;040
+.png             00;38;5;040
+.PNG             00;38;5;040
+.svg             00;38;5;040
+.svgz            00;38;5;040
+.mng             00;38;5;040
+.pcx             00;38;5;040
+.dl              00;38;5;040
+.xcf             00;38;5;040
+.xwd             00;38;5;040
+.yuv             00;38;5;040
+.cgm             00;38;5;040
+.emf             00;38;5;040
+.eps             00;38;5;040
+.CR2             00;38;5;040
+.ico             00;38;5;040
 
 # Disk images
-.iso             01;38;5;209
-.dmg             01;38;5;209
+.iso             0;38;5;209
+.dmg             0;38;5;209
 
 # Archives or compressed (violet)
-.zip             01;38;5;61
-.tar             00;38;5;61
-.tgz             01;38;5;61
-.lzh             01;38;5;61
-.z               01;38;5;61
-.Z               01;38;5;61
-.7z              01;38;5;61
-.gz              01;38;5;61
-.bz2             01;38;5;61
-.bz              01;38;5;61
-.deb             01;38;5;61
-.rpm             01;38;5;61
-.jar             01;38;5;61
-.rar             01;38;5;61
-.apk             01;38;5;61
-.gem             01;38;5;61
-
-# Term Section
-TERM Eterm
-TERM ansi
-TERM color-xterm
-TERM con132x25
-TERM con132x30
-TERM con132x43
-TERM con132x60
-TERM con80x25
-TERM con80x28
-TERM con80x30
-TERM con80x43
-TERM con80x50
-TERM con80x60
-TERM cons25
-TERM console
-TERM cygwin
-TERM dtterm
-TERM eterm-color
-TERM fbterm
-TERM gnome
-TERM gnome-256color
-TERM jfbterm
-TERM konsole
-TERM konsole-256color
-TERM kterm
-TERM linux
-TERM linux-c
-TERM mach-color
-TERM mlterm
-TERM putty
-TERM putty-256color
-TERM rxvt
-TERM rxvt-256color
-TERM rxvt-cygwin
-TERM rxvt-cygwin-native
-TERM rxvt-unicode
-TERM rxvt-unicode256
-TERM rxvt-unicode-256color
-TERM screen
-TERM screen-256color
-TERM screen-256color-bce
-TERM screen-256color-s
-TERM screen-256color-bce-s
-TERM screen-bce
-TERM screen-w
-TERM screen.linux
-TERM st
-TERM st-256color
-TERM vt100
-TERM xterm
-TERM xterm-16color
-TERM xterm-256color
-TERM xterm-88color
-TERM xterm-color
-TERM xterm-debian
-TERM xterm-termite
+.zip             0;38;5;63
+.tar             0;38;5;63
+.tgz             0;38;5;63
+.lzh             0;38;5;63
+.z               0;38;5;63
+.Z               0;38;5;63
+.7z              0;38;5;63
+.gz              0;38;5;63
+.bz2             0;38;5;63
+.bz              0;38;5;63
+.deb             0;38;5;63
+.rpm             0;38;5;63
+.jar             0;38;5;63
+.rar             0;38;5;63
+.apk             0;38;5;63
+.gem             0;38;5;63

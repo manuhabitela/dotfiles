@@ -1,13 +1,5 @@
 -- global keyboard shortcuts - work all the time everywhere
 globalkeys = gears.table.join(
-  -- almost normal alt-tab behavior with rofi https://github.com/DaveDavenport/rofi
-  awful.key({ altkey,           }, "Escape",     function()
-    awful.spawn.with_shell(string.format(
-      'rofi -show window -font "%s" -fg "%s" -bg "%s" -hlfg "%s" -hlbg "%s" -o 95 -width 600',
-      beautiful.font, beautiful.fg_normal, beautiful.bg_normal, beautiful.fg_focus, beautiful.bg_focus
-    ))
-  end),
-
   -- focus next or prev client - works accross all screens
   awful.key({ altkey, sft       }, "Tab",       function()
     helpers.clients.client_focus_global_byidx(-1)

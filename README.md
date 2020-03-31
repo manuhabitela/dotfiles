@@ -4,6 +4,7 @@ A few stuff I keep here to ease up configs across my machines:
 * oh my zsh with a home made theme
 * dunst
 * gtk 2 and gtk 3
+* roxterm/xresources colors
 * lxsession
 * lightdm
 * sublime text 3, with home made snippets

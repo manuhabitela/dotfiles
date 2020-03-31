@@ -10,7 +10,7 @@ do
 	ln -s $DOTFILES/$FILE $HOME/$FILE
 done
 
-CONFIGS=( redshift.conf awesome dunst gtk-3.0 lxsession picom volumeicon )
+CONFIGS=( redshift.conf awesome dunst gtk-3.0 lxsession picom volumeicon roxterm.sourceforge.net )
 for CONFIG in $CONFIGS
 do
 	echo "ln -s $DOTFILES/.config/$CONFIG $HOME/.config/$CONFIG"

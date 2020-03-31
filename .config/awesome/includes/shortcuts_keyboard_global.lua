@@ -95,7 +95,6 @@ for i = 1, 9 do
     awful.key({ modkey       }, "#" .. i + 9, function()
       local s = awful.screen.focused()
       helpers.tags.toggle_tag(s, i)
-      helpers.wallpaper.update(s)
     end),
     -- go to tag x on the current screen and move currently focused client on the given tag
     awful.key({ modkey, sft  }, "#" .. i + 9, function()
@@ -106,7 +105,6 @@ for i = 1, 9 do
         c:move_to_tag(tag)
         tag:view_only()
         client.focus = c
-        helpers.wallpaper.update(s)
       end
     end)
   )

@@ -24,4 +24,7 @@ tag.connect_signal("property::layout", function(t)
   update_statusbar_tag(t)
 end)
 
-tag.connect_signal("property::selected", update_statusbar_tag)
+tag.connect_signal("property::selected", function(t)
+  update_statusbar_tag(t)
+  helpers.wallpaper.update(awful.screen.focused())
+end)

@@ -63,14 +63,21 @@ local tasklist_buttons = awful.util.table.join(
   end)
 )
 
-local gstring = require("gears.string")
 local function tasklist_client_name(c)
-  local name = helpers.string.replace(c.class:lower(), "_", "-")
+  local name
+  if gears.table.hasitem(terminal_app_names, c.name) then
+    name = c.name
+  else
+    name = helpers.string.replace(c.class:lower(), "_", "-")
+  end
+
   if c.minimized then
     return "-" .. name
   end
-  return gstring.xml_escape(name)
+
+  return gears.string.xml_escape(name)
 end
+
 local tasklist_template = {
   {
     id = "text_role",

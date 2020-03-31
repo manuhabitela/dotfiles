@@ -27,10 +27,12 @@ modkey = winkey
 altkey = "Mod1"
 ctrl = "Control"
 sft = "Shift"
+-- classes = xprop > WM_CLASS > second string
 floating_classes = { "MPlayer", "pinentry", "Gimp", "Yad"}
+-- instances = xprop > WM_CLASS > first string
 floating_instances = {"exe", "plugin-container", "shutter"}
-noborders_instances = {}
-withborders_instances = {}
+-- apps = client.name (= app "title")
+terminal_app_names = {"spotify-tui"}
 main_screen = screen.primary
 big_screen = helpers.screen.is_big(main_screen)
 main_menu = helpers.main_menu.create()

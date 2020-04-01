@@ -19,4 +19,17 @@ function stringutils.capitalize(str)
   return str:gsub("(%a)([%w_']*)", tchelper)
 end
 
+local days_map = {
+  ["Mon"] = "Lun",
+  ["Tue"] = "Mar",
+  ["Wed"] = "Mer",
+  ["Thu"] = "Jeu",
+  ["Fri"] = "Ven",
+  ["Sat"] = "Sam",
+  ["Sun"] = "Dim"
+}
+function stringutils.french_day(day)
+  return days_map[day]
+end
+
 return stringutils

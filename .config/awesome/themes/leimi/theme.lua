@@ -58,7 +58,7 @@ theme.tasklist_plain_task_name = false
 theme.clock_font = theme.font
 theme.clock_width = 35
 
-theme.date_width = 40
+theme.date_width = 70
 
 theme.awesome_icon = "/usr/share/awesome/icons/awesome16.png"
 theme.awesome_icon = "/usr/share/icons/Faenza/places/24/distributor-logo.png"

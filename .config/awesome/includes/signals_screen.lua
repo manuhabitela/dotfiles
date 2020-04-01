@@ -157,7 +157,11 @@ awful.screen.connect_for_each_screen(function(s)
     statusbar_layout_left:add( wibox.container.margin(clock, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
     statusbar_layout_left:add( statusbar_items_separator )
 
-    local date = wibox.widget.textclock("%d/%m", 10)
+    local date = wibox.widget.textclock("%a. %d/%m", 10)
+    date:connect_signal("widget::redraw_needed", function()
+      local day = os.date('%a')
+      date.text = helpers.string.replace(date.text, day, helpers.string.french_day(day))
+    end)
     date:set_font(beautiful.clock_font)
     date.align = 'center'
     date.forced_width = beautiful.date_width

@@ -58,6 +58,12 @@ globalkeys = gears.table.join(
     ))
   end),
 
+  awful.key({ modkey            }, "d",       function()
+    local cal = awful.screen.focused().statusbar_calendar
+    cal:call_calendar(0, "bl")
+    cal.visible = not cal.visible
+  end),
+
   awful.key({ ctrl, altkey      }, "l",       function()
     awful.spawn.with_shell("slock")
   end),

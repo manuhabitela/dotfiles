@@ -53,10 +53,12 @@ end)
 
 client.connect_signal("button::press", function(c)
   main_menu:hide()
+  c.screen.statusbar_calendar.visible = false
 end)
 
 client.connect_signal("focus", function(c)
   main_menu:hide()
+  c.screen.statusbar_calendar.visible = false
 end)
 
 client.connect_signal("unmanage", function(c)

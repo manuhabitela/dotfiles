@@ -17,6 +17,8 @@ helpers.main_menu = require("helpers.main_menu")
 helpers.string = require("helpers.string")
 helpers.wallpaper = require("helpers.wallpaper")
 helpers.tasklist_widget = require("helpers.tasklist_widget")
+helpers.calendar_widget = require("helpers.calendar_widget")
+helpers.calendar_popup = require("helpers.calendar_popup")
 
 dofile('/home/manu/.config/awesome/includes/errors.lua')
 

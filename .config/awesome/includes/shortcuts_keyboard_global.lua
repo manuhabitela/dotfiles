@@ -102,6 +102,13 @@ for i = 1, 9 do
         tag:view_only()
         client.focus = c
       end
+    end),
+    awful.key({ modkey, ctrl }, "#" .. i + 9, function()
+      local s = awful.screen.focused()
+      local tag = s.tags[i]
+      if tag then
+        awful.tag.viewtoggle(tag)
+      end
     end)
   )
 end

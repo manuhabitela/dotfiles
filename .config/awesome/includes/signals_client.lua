@@ -16,18 +16,20 @@ client.connect_signal("manage", function(c)
 end)
 
 client.connect_signal("request::titlebars", function(c)
-  local buttons = {
+  local buttons = gears.table.join(
     awful.button({ }, 1, function()
-      c:activate { context = "titlebar", action = "mouse_move"  }
+      c:emit_signal("request::activate", "titlebar", {raise = true})
+      awful.mouse.client.move(c)
     end),
     awful.button({ }, 3, function()
-      c:activate { context = "titlebar", action = "mouse_resize"}
-    end),
-  }
+      c:emit_signal("request::activate", "titlebar", {raise = true})
+      awful.mouse.client.resize(c)
+    end)
+  )
 
   local left_layout = wibox.layout.fixed.horizontal()
   left_layout:add(wibox.container.margin(awful.titlebar.widget.titlewidget(c), 10, 0, 0, 1))
-  left_layout:buttons(mouse_buttons)
+  left_layout:buttons(buttons)
   local right_layout = wibox.layout.fixed.horizontal()
   local title_buttons = {
     awful.titlebar.widget.minimizebutton(c),

@@ -25,6 +25,16 @@ awful.rules.rules = {
     properties = { floating = true }
   },
   {
+    rule_any = { name = { "calendar-widget" } },
+    properties = {
+      placement = awful.placement.bottom_left,
+      border_width = 0,
+      floating = true,
+      ontop = true,
+      sticky = true,
+    }
+  },
+  {
     rule_any = { name = { "spotify-tui" }, class = { "Spotify" } },
     properties = { tag = screen.primary.tags[1] }
   },

@@ -17,8 +17,6 @@ helpers.main_menu = require("helpers.main_menu")
 helpers.string = require("helpers.string")
 helpers.wallpaper = require("helpers.wallpaper")
 helpers.tasklist_widget = require("helpers.tasklist_widget")
-helpers.calendar_widget = require("helpers.calendar_widget")
-helpers.calendar_popup = require("helpers.calendar_popup")
 
 dofile('/home/manu/.config/awesome/includes/errors.lua')
 
@@ -34,13 +32,14 @@ floating_classes = { "MPlayer", "pinentry", "Gimp", "Yad"}
 -- instances = xprop > WM_CLASS > first string
 floating_instances = {"exe", "plugin-container", "shutter"}
 -- apps = client.name (= app "title")
-terminal_app_names = {"spotify-tui"}
+terminal_app_names = {"spotify-tui", "calendar-widget"}
 -- the tag 7 is exclusively for the terminal
 terminal_tag = "7"
 terminal_tag_classes = { "Roxterm", "Roxterm-config" }
 main_screen = screen.primary
 big_screen = helpers.screen.is_big(main_screen)
 main_menu = helpers.main_menu.create()
+calendar_widget_cmd = terminal .. ' -g 65x9 -p Awesome -T calendar-widget -e \'bash -c "cal -3; read line"\''
 
 dofile('/home/manu/.config/awesome/includes/autostart.lua')
 dofile('/home/manu/.config/awesome/includes/signals_tag.lua')

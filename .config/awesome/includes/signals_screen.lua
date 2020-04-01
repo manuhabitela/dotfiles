@@ -158,8 +158,9 @@ awful.screen.connect_for_each_screen(function(s)
     statusbar_layout_left:add( statusbar_items_separator )
 
     local date = wibox.widget.textclock("%a. %d/%m", 10)
-    s.statusbar_calendar = helpers.calendar_popup.months()
-    s.statusbar_calendar:attach(date, "bl", {on_hover = false})
+    date:buttons(awful.util.table.join(
+      awful.button({ }, 1, function() awful.spawn.with_shell(calendar_widget_cmd) end)
+    ))
     date:connect_signal("widget::redraw_needed", function()
       local day = os.date('%a')
       date.text = helpers.string.replace(date.text, day, helpers.string.french_day(day))

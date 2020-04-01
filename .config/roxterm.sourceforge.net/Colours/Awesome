@@ -1,0 +1,38 @@
+[roxterm colour scheme]
+palette_size=16
+background=#001d24
+foreground=#93a1a1
+cursor=#93a1a1
+cursorfg=#001d24
+
+# black
+0=#333333
+8=#555753
+
+# red
+1=#b41818
+9=#FF5E5E
+
+# green
+2=#59b106
+10=#8AE234
+
+# yellow
+3=#e08700
+11=#FCE94F
+
+# blue
+4=#4f9eee
+12=#739FCF
+
+# magenta
+5=#75507B
+13=#AD7FA8
+
+# cyan
+6=#06989A
+14=#34E2E2
+
+# white
+7=#D3D7CF
+15=#93a1a1

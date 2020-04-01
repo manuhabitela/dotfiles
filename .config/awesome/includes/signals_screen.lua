@@ -96,6 +96,12 @@ local function tasklist_source(s, args)
   local clients = s.all_clients
   local tag_clients_cache = {}
   table.sort(clients, function(a, b)
+    if a.sticky then
+      return true
+    end
+    if b.sticky then
+      return false
+    end
     if a.first_tag.name == b.first_tag.name then
       if not tag_clients_cache[a.first_tag.name] then
         tag_clients_cache[a.first_tag.name] = a.first_tag:clients()

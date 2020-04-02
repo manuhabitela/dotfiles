@@ -40,7 +40,19 @@ main_screen = screen.primary
 big_screen = helpers.screen.is_big(main_screen)
 main_menu = helpers.main_menu.create()
 calendar_widget_cmd = terminal .. ' -g 65x9 -p Awesome -T calendar-widget -e \'bash -c "cal -3; read line"\''
-
+rofi_cmd = string.format(
+  "rofi -show {mode} -font '%s'"
+  .. " -color-normal '%s,%s,%s,%s,%s'" -- bg, fg, bgalt, bg-focus, fg-focus
+  .. " -color-window '%s,%s,%s'" -- bg, border, separator
+  .. " -location 1 -width 100 -lines 15 -i -matching fuzzy"
+  .. " -terminal " .. terminal
+  .. " -theme-str '"
+  ..   "* { highlight: none; } "
+  ..   "inputbar { children:  [ entry, num-filtered-rows, textbox-num-sep, num-rows, case-indicator ]; }'",
+  beautiful.font_rofi,
+  beautiful.bg_normal, beautiful.fg_normal, beautiful.bg_normal, beautiful.bg_focus, beautiful.fg_focus,
+  beautiful.bg_normal, beautiful.bg_normal, beautiful.bg_normal
+)
 dofile('/home/manu/.config/awesome/includes/autostart.lua')
 dofile('/home/manu/.config/awesome/includes/signals_tag.lua')
 dofile('/home/manu/.config/awesome/includes/signals_screen.lua')

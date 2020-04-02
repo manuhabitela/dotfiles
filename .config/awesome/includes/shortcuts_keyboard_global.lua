@@ -50,12 +50,12 @@ globalkeys = gears.table.join(
   end),
   awful.key({ modkey            }, "g",       function() helpers.launcher.ror("git-cola", "git-cola") end),
 
-  -- dmenu with fuzzy matching through -z option https://aur.archlinux.org/packages/dmenu-xft-fuzzy/
   awful.key({ modkey            }, "space",   function()
-    awful.spawn.with_shell(string.format(
-      "dmenu_run_aliases -fn '%s' -nf '%s' -nb '%s' -sf '%s' -sb '%s' -l 15 -i -z",
-      beautiful.font_dmenu, beautiful.fg_normal, beautiful.bg_normal, beautiful.fg_focus, beautiful.bg_focus
-    ))
+    awful.spawn.with_shell(helpers.string.replace(rofi_cmd, '{mode}', 'run'))
+  end),
+
+  awful.key({ modkey, altkey    }, "space",   function()
+    awful.spawn.with_shell(helpers.string.replace(rofi_cmd, '{mode}', 'ssh'))
   end),
 
   awful.key({ modkey            }, "d",       function()

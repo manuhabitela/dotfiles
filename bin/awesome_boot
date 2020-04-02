@@ -1,8 +1,0 @@
-#!/bin/bash
-# Run autostart programs at awesome boot
-
-# dirty trick: we check if volumeicon (one of the startup programs) is already running before starting everything
-if [ -z "`ps -Af | grep -o -w ".*nm-applet" | grep -v grep | grep -v run-once`" ]; then
-  dex -a -e Awesome
-fi
-

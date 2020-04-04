@@ -17,6 +17,7 @@ theme.colors = {
   blue_very_dark = "#001d24",
   blue_very_light = "#93a1a1",
   orange = "#b58900",
+  orange_light = "#e6ac00",
   white = "#dddddd",
   gray = "#aaaaaa"
 }
@@ -25,13 +26,13 @@ theme.font = theme.fonts.default
 theme.bg_normal = theme.colors.blue_very_dark
 theme.fg_normal = theme.colors.blue_very_light
 theme.border_normal = theme.bg_normal
-theme.border_width = 2
+theme.border_width = 3
 theme.useless_gap = 2.5
 theme.gap_single_client = false
 
 theme.bg_focus = theme.bg_normal
 theme.fg_focus = theme.colors.orange
-theme.border_focus = theme.fg_focus
+theme.border_focus = theme.colors.orange_light
 
 theme.font_rofi = theme.fonts.monospace
 

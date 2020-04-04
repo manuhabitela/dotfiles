@@ -73,8 +73,9 @@ globalkeys = gears.table.join(
   awful.key({ }, "XF86MonBrightnessUp",       function() awful.spawn.with_shell("brillo -u 100000 -A 5 && notify-send -i /home/manu/.config/awesome/themes/leimi/brightness.png -h string:x-canonical-private-synchronous:manu-brightness -u low Luminosité $(brillo -G)%") end),
   awful.key({ }, "XF86MonBrightnessDown",     function() awful.spawn.with_shell("brillo -u 100000 -U 5 && notify-send -i /home/manu/.config/awesome/themes/leimi/brightness.png -h string:x-canonical-private-synchronous:manu-brightness -u low Luminosité $(brillo -G)%") end),
 
-  awful.key({ modkey            }, "F7",      function() awful.spawn("/home/manu/bin/monitor switch") end),
-  awful.key({ modkey, ctrl      }, "m",       function() awful.spawn("/home/manu/bin/monitor switch") end),
+  awful.key({ modkey            }, "F7",      function() awful.spawn("mon switch") end),
+  awful.key({ modkey, ctrl      }, "m",       function() awful.spawn("mon switch") end),
+
   awful.key({ modkey, ctrl      }, "r",       awesome.restart),
   awful.key({ modkey, ctrl, sft }, "q",       awesome.quit),
 

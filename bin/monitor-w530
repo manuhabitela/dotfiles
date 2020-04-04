@@ -1,0 +1,17 @@
+#!/bin/bash
+# my w530 uses optimus-manager to switch between intel/nvidia card
+# the monitors dont have the same name depending on used card
+
+# intel
+i="LVDS-1"
+w="DP-2"
+o="VGA-1"
+
+# nvidia
+if [[ -n "$(xrandr | grep VGA-1-1)" ]]; then
+	i="LVDS-1-1"
+	w="DP-4"
+	o="VGA-1-1"
+fi
+
+INTERNAL_MONITOR=$i WORK_MONITOR=$w OTHER_MONITOR=$o POSITION=right-of /home/manu/bin/monitor "$@"

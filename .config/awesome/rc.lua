@@ -32,10 +32,10 @@ floating_classes = { "MPlayer", "pinentry", "Gimp", "Yad"}
 -- instances = xprop > WM_CLASS > first string
 floating_instances = {"exe", "plugin-container", "shutter"}
 -- apps = client.name (= app "title")
-terminal_app_names = {"spotify-tui", "calendar-widget"}
+terminal_app_names = {"spotify-tui", "calendar-widget", "pcmanfm-term"}
 -- the tag 7 is exclusively for the terminal
 terminal_tag = "7"
-terminal_tag_classes = { "Roxterm", "Roxterm-config" }
+terminal_tag_classes = { "Roxterm", "Roxterm-config", "kitty" }
 main_screen = screen.primary
 big_screen = helpers.screen.is_big(main_screen)
 main_menu = helpers.main_menu.create()

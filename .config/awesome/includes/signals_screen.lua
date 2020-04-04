@@ -63,12 +63,33 @@ local tasklist_buttons = awful.util.table.join(
   end)
 )
 
+local names_mapping = {
+  ["sublime-text"] = "Sublime Text",
+  ["roxterm"] = "Terminal",
+  ["google-chrome"] = "Chrome",
+  ["firefox"] = "Firefox",
+  ["spotify"] = "Spotify",
+  ["spotify-tui"] = "Spotify tui",
+  ["git-cola"] = "Git Cola",
+  ["pcmanfm"] = "Fichiers",
+  ["gimp-2.10"] = "Gimp",
+  ["eog"] = "Eog",
+  ["vlc"] = "VLC",
+  ["evince"] = "Evince",
+  ["file-roller"] = "Archive",
+  ["libreoffice"] = "LibreOffice",
+  ["libreoffice-writer"] = "LibreOffice",
+  ["libreoffice-calc"] = "LibreOffice"
+}
 local function tasklist_client_name(c)
   local name
   if gears.table.hasitem(terminal_app_names, c.name) then
     name = c.name
   else
     name = helpers.string.replace(c.class:lower(), "_", "-")
+  end
+  if names_mapping[name] then
+    name = names_mapping[name]
   end
 
   if c.minimized then

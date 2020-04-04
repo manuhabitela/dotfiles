@@ -7,12 +7,10 @@ theme = {}
 theme.wallpaper = "/home/manu/.config/awesome/themes/leimi/angers-fhd.png"
 theme.wallpaper_blur = "/home/manu/.config/awesome/themes/leimi/angers-fhd-blur.png"
 
-theme.fonts = {
-  default = "San Francisco Display Semi-Bold 10",
-  -- best_font_ever_i_cant_use_anymore = "Misc Tamsyn 10.5",
-  titlebar = "San Francisco Display Regular 10",
-  monospace = "Terminus (TTF) 12"
-}
+theme.fonts = { default = "San Francisco Display Semi-Bold 10" }
+theme.fonts.statusbar = theme.fonts.default
+theme.fonts.titlebar = theme.fonts.default
+theme.fonts.monospace = "Terminus (TTF) 12"
 
 theme.colors = {
   blue_dark = "#073642",
@@ -37,6 +35,7 @@ theme.border_focus = theme.fg_focus
 
 theme.font_rofi = theme.fonts.monospace
 
+theme.statusbar_font = theme.fonts.statusbar
 theme.statusbar_bg_color = theme.colors.blue_very_dark
 theme.statusbar_border_color = theme.colors.blue_dark
 theme.statusbar_border_width = 1
@@ -56,16 +55,17 @@ theme.date_width = 70
 
 theme.taglist_bg_focus = theme.bg_normal
 theme.taglist_fg_focus = theme.fg_focus
+theme.taglist_font = theme.fonts.statusbar
 theme.taglist_squares_sel = "/usr/share/awesome/themes/default/taglist/squarew.png"
 theme.taglist_squares_unsel = "/usr/share/awesome/themes/default/taglist/squarew.png"
 
-theme.tasklist_font = theme.font
+theme.tasklist_font = theme.fonts.statusbar
 theme.tasklist_plain_task_name = false
 
-theme.font_title = theme.fonts.titlebar
 theme.titlebar_size = 24
 theme.titlebar_fg = theme.colors.gray
 theme.titlebar_fg_focus = theme.colors.white
+theme.titlebar_font = theme.fonts.titlebar
 theme.titlebar_close_button = "~/.config/awesome/themes/leimi/close.png"
 theme.titlebar_close_button_normal_inactive = theme.titlebar_close_button
 theme.titlebar_close_button_normal_active = theme.titlebar_close_button

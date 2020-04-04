@@ -28,7 +28,9 @@ client.connect_signal("request::titlebars", function(c)
   )
 
   local left_layout = wibox.layout.fixed.horizontal()
-  left_layout:add(wibox.container.margin(awful.titlebar.widget.titlewidget(c), 10, 0, 0, 1))
+  local titlewidget = awful.titlebar.widget.titlewidget(c)
+  titlewidget:set_font(beautiful.titlebar_font)
+  left_layout:add(wibox.container.margin(titlewidget, 10, 0, 0, 1))
   left_layout:buttons(buttons)
   local right_layout = wibox.layout.fixed.horizontal()
   local title_buttons = {

@@ -148,16 +148,18 @@ awful.screen.connect_for_each_screen(function(s)
     local statusbar_layout_left = wibox.layout.fixed.horizontal()
 
     s.statusbar_current_layout_name = wibox.widget.textbox(awful.layout.getname())
+    s.statusbar_current_layout_name:set_font(beautiful.statusbar_font)
     s.statusbar_current_layout_name.align = 'center'
     s.statusbar_current_layout_name.forced_width = beautiful.statusbar_current_layout_width
 
     local menutext = wibox.widget.textbox('menu')
+    menutext:set_font(beautiful.statusbar_font)
     menutext:buttons(awful.button({ }, 1, function() main_menu:toggle() end))
     statusbar_layout_left:add( wibox.container.margin(menutext, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
     statusbar_layout_left:add( statusbar_items_separator )
 
     local clock = wibox.widget.textclock("%H:%M", 10)
-    clock:set_font(beautiful.clock_font)
+    clock:set_font(beautiful.statusbar_font)
     clock.align = 'center'
     clock.forced_width = beautiful.clock_width
     statusbar_layout_left:add( wibox.container.margin(clock, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
@@ -171,7 +173,7 @@ awful.screen.connect_for_each_screen(function(s)
       local day = os.date('%a')
       date.text = helpers.string.replace(date.text, day, helpers.string.french_day(day))
     end)
-    date:set_font(beautiful.clock_font)
+    date:set_font(beautiful.statusbar_font)
     date.align = 'center'
     date.forced_width = beautiful.date_width
     statusbar_layout_left:add( wibox.container.margin(date, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )

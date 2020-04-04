@@ -15,14 +15,17 @@ alias gm="ag --color-line-number=\"0;33\" --color-match=\"0;32\" --color-path=\"
 alias gmh="gm -G \"\.html$\""
 alias gms="gm -G \"\.scss$\""
 alias gmv="gm -G \"\.csv$\""
-alias gmj="gm -G \"\.js$\""
+alias gmj="gm -G \"\.(js|ts)$\""
+alias gmjs="gm -G \"\.js$\""
+alias gmts="gm -G \"\.ts$\""
 alias gmjn="gm -G \"\.json$\""
 alias gmc="gm -G \"\.(less|scss)$\"" #css file
 alias gmtw="gm -G .twig$"
 alias gmct="gm -G .ctp$"
 alias gmt="gm -G \"\.(twig|ctp)$\"" #template files
-alias gmf="gm -G \"\.(less|scss|twig|ctp|js)$\"" #front-end file
+alias gmf="gm -G \"\.(less|scss|twig|ctp|js|ts)$\"" #front-end file
 alias gmp="gm -G .php$" #php file
+alias gmp="gm -G .inc$" #php files for a project i maintain
 
 alias pker="pocker"
 

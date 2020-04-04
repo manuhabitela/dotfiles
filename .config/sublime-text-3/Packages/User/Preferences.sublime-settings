@@ -59,12 +59,12 @@
 		"CVS",
 		".sass-cache"
 	],
-	"font_face": "Monaco",
+	"font_face": "Input",
 	"font_options":
 	[
 		"no_italic"
 	],
-	"font_size": 11,
+	"font_size": 10.5,
 	"highlight_line": true,
 	"highlight_modified_tabs": true,
 	"ignored_packages":

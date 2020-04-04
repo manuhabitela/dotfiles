@@ -142,10 +142,7 @@ screen.connect_signal("property::geometry", helpers.wallpaper.update)
 awful.screen.connect_for_each_screen(function(s)
   helpers.wallpaper.update(s)
 
-  -- if on big screen, we default to the "bspwm-like" layout (spiral.dwindle), otherwise default to tile
-  -- always use tile by default on the roxterm specific layout
-  local default_layout = helpers.screen.is_big(s) and awful.layout.layouts[2] or awful.layout.layouts[1]
-  awful.tag({ "1", "2", "3", "4", "5", "6", "7" }, s, {default_layout, default_layout, default_layout, default_layout, default_layout, default_layout, awful.layout.layouts[1]})
+  awful.tag({ "1", "2", "3", "4", "5", "6", "7" }, s, awful.layout.layouts[1])
 
   local statusbar_widget = awful.wibar(awful.util.table.join(statusbar_options, { screen = s }))
 

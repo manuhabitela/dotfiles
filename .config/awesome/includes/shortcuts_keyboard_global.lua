@@ -66,8 +66,8 @@ globalkeys = gears.table.join(
     awful.spawn.with_shell("slock")
   end),
 
-  awful.key({ }, "XF86AudioLowerVolume",      function() awful.spawn.with_shell("pactl set-sink-volume @DEFAULT_SINK@ -5% && notify-send -i /home/manu/.config/awesome/themes/leimi/volume-low.png -h string:x-canonical-private-synchronous:manu-volume -u low Volume $(/home/manu/bin/pactl-utils current)%") end),
-  awful.key({ }, "XF86AudioRaiseVolume",      function() awful.spawn.with_shell("pactl set-sink-volume @DEFAULT_SINK@ +5% && notify-send -i /home/manu/.config/awesome/themes/leimi/volume-high.png -h string:x-canonical-private-synchronous:manu-volume -u low Volume $(/home/manu/bin/pactl-utils current)%") end),
+  awful.key({ }, "XF86AudioLowerVolume",      function() awful.spawn.with_shell("pactl set-sink-volume @DEFAULT_SINK@ -2% && notify-send -i /home/manu/.config/awesome/themes/leimi/volume-low.png -h string:x-canonical-private-synchronous:manu-volume -u low Volume $(/home/manu/bin/pactl-utils current)%") end),
+  awful.key({ }, "XF86AudioRaiseVolume",      function() awful.spawn.with_shell("pactl set-sink-volume @DEFAULT_SINK@ +2% && notify-send -i /home/manu/.config/awesome/themes/leimi/volume-high.png -h string:x-canonical-private-synchronous:manu-volume -u low Volume $(/home/manu/bin/pactl-utils current)%") end),
   awful.key({ }, "XF86AudioMute",             function() awful.spawn.with_shell("pactl set-sink-mute @DEFAULT_SINK@ toggle && sleep 0.1 && notify-send -h string:x-canonical-private-synchronous:manu-volume -u low Volume \"$(/home/manu/bin/pactl-utils muted)\"") end),
 
   awful.key({ }, "XF86MonBrightnessUp",       function() awful.spawn.with_shell("brillo -u 100000 -A 5 && notify-send -i /home/manu/.config/awesome/themes/leimi/brightness.png -h string:x-canonical-private-synchronous:manu-brightness -u low Luminosité $(brillo -G)%") end),

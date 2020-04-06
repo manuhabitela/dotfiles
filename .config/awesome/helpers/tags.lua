@@ -2,7 +2,6 @@ local tags = {}
 local prev_tags = {}
 
 function tags.toggle_tag(s, i)
-  local s = awful.screen.focused()
   local current_tag = s.selected_tag
   local destination_tag = s.tags[i]
   if current_tag ~= destination_tag then

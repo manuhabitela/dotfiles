@@ -64,9 +64,9 @@ local tasklist_buttons = awful.util.table.join(
 )
 
 local names_mapping = {
-  ["sublime-text"] = "Sublime Text",
-  ["roxterm"] = "Terminal",
-  ["Roxterm-temp"] = "Terminal",
+  ["sublime-text"] = "Subl",
+  ["roxterm"] = "Term",
+  ["Roxterm-temp"] = "Term",
   ["google-chrome"] = "Chrome",
   ["firefox"] = "Firefox",
   ["spotify"] = "Spotify",
@@ -82,8 +82,9 @@ local names_mapping = {
   ["libreoffice-writer"] = "LibreOffice",
   ["libreoffice-calc"] = "LibreOffice"
 }
-local function tasklist_client_name(c)
-  local name
+local short_names_count = {}
+local function short_client_name(c)
+  local name = "untitled"
   if c.name and gears.table.hasitem(terminal_app_names, c.name) then
     name = c.name
   elseif c.class then
@@ -92,7 +93,20 @@ local function tasklist_client_name(c)
   if names_mapping[name] then
     name = names_mapping[name]
   end
+  return name
+end
 
+local function tasklist_client_name(c, all_clients)
+  local name = short_client_name(c)
+  if short_names_count[name]
+    and short_names_count[name] > 1
+    and c.name
+  then
+    name = name
+      .. ': '
+      .. c.name:sub(0, 15)
+      .. (c.name:len() > 15 and '…' or '')
+  end
   if c.minimized then
     return "-" .. name
   end
@@ -106,8 +120,8 @@ local tasklist_template = {
     widget = wibox.widget.textbox
   },
   id = "text_margin_role",
-  left = 4,
-  right = 4,
+  left = 6,
+  right = 6,
   widget = wibox.container.margin
 }
 
@@ -135,6 +149,16 @@ local function tasklist_source(s, args)
     end
     return a.first_tag.name < b.first_tag.name
   end)
+
+  short_names_count = {}
+  for k,v in ipairs(clients) do
+    local short_name = short_client_name(v)
+    if short_names_count[short_name] == nil then
+      short_names_count[short_name] = 0
+    end
+    short_names_count[short_name] = short_names_count[short_name] + 1
+  end
+
   return clients
 end
 
@@ -154,7 +178,7 @@ awful.screen.connect_for_each_screen(function(s)
     buttons = tasklist_buttons,
     source = tasklist_source,
     style = {
-      client_name_function = tasklist_client_name
+      client_name_function = function(c) return tasklist_client_name(c, tasklist_source) end
     },
     layout = wibox.layout.fixed.horizontal(),
     widget_template = tasklist_template

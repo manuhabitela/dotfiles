@@ -240,6 +240,7 @@ awful.screen.connect_for_each_screen(function(s)
     mysystray:set_base_size(beautiful.statusbar_height - beautiful.statusbar_margin)
     mysystray:fit({dpi = s.dpi })
 
+    statusbar_layout_right:add(wibox.container.margin(awful.widget.watch('/home/manu/bin/echo-bat-cap', 20), beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
     statusbar_layout_right:add(mysystray)
     statusbar_layout:set_right(statusbar_layout_right)
   end

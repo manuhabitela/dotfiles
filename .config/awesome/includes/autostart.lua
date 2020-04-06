@@ -3,6 +3,5 @@
 -- I just *can't* manage to start xmodmap at boot correctly, so, putting that here...
 helpers.launcher.run_once("xmodmap ~/.xmodmaprc")
 helpers.launcher.run_once("picom -b")
-helpers.launcher.run_once("cbatticon")
 helpers.launcher.run_once("pasystray")
 helpers.launcher.run_once(terminal)

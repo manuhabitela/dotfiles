@@ -1,8 +1,8 @@
 awful.layout.layouts = {
   awful.layout.suit.tile,
-  awful.layout.suit.tile.bottom,
+  awful.layout.suit.floating,
   awful.layout.suit.max,
-  awful.layout.suit.floating
+  awful.layout.suit.tile.bottom
 }
 
 local tag_map = {
@@ -21,6 +21,10 @@ local function update_statusbar_tag(t)
 end
 
 tag.connect_signal("property::layout", function(t)
+  local toggle_titlebar = awful.layout.getname() == "floating" and awful.titlebar.show or awful.titlebar.hide
+  for k, c in ipairs(t:clients()) do
+    toggle_titlebar(c)
+  end
   update_statusbar_tag(t)
 end)
 

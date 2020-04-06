@@ -84,9 +84,9 @@ local names_mapping = {
 }
 local function tasklist_client_name(c)
   local name
-  if gears.table.hasitem(terminal_app_names, c.name) then
+  if c.name and gears.table.hasitem(terminal_app_names, c.name) then
     name = c.name
-  else
+  elseif c.class then
     name = helpers.string.replace(c.class:lower(), "_", "-")
   end
   if names_mapping[name] then

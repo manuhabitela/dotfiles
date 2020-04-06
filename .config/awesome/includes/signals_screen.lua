@@ -184,68 +184,62 @@ awful.screen.connect_for_each_screen(function(s)
     widget_template = tasklist_template
   })
 
-  -- show systray, clock and menu on main screen only - others screen have just their taglist and tasklist
   local statusbar_layout = wibox.layout.align.horizontal()
+  local statusbar_layout_left = wibox.layout.fixed.horizontal()
+
+  s.statusbar_current_layout_name = wibox.widget.textbox(awful.layout.getname())
+  s.statusbar_current_layout_name:set_font(beautiful.statusbar_font)
+  s.statusbar_current_layout_name.align = 'center'
+  s.statusbar_current_layout_name.forced_width = beautiful.statusbar_current_layout_width
+
+  local menutext = wibox.widget.textbox('menu')
+  menutext:set_font(beautiful.statusbar_font)
+  menutext:buttons(awful.button({ }, 1, function() main_menu:toggle() end))
+  statusbar_layout_left:add( wibox.container.margin(menutext, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
+  statusbar_layout_left:add( statusbar_items_separator )
+
+  local clock = wibox.widget.textclock("%H:%M", 10)
+  clock:set_font(beautiful.statusbar_font)
+  clock.align = 'center'
+  clock.forced_width = beautiful.clock_width
+  statusbar_layout_left:add( wibox.container.margin(clock, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
+  statusbar_layout_left:add( statusbar_items_separator )
+
+  local date = wibox.widget.textclock("%a. %d/%m", 10)
+  date:buttons(awful.util.table.join(
+    awful.button({ }, 1, function() awful.spawn.with_shell(calendar_widget_cmd) end)
+  ))
+  date:connect_signal("widget::redraw_needed", function()
+    local day = os.date('%a')
+    date.text = helpers.string.replace(date.text, day, helpers.string.french_day(day))
+  end)
+  date:set_font(beautiful.statusbar_font)
+  date.align = 'center'
+  date.forced_width = beautiful.date_width
+  statusbar_layout_left:add( wibox.container.margin(date, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
+  statusbar_layout_left:add( statusbar_items_separator )
+
+  statusbar_layout_left:add( wibox.container.margin(taglist_widget, beautiful.statusbar_items_margin) )
+  statusbar_layout_left:add( wibox.container.margin(statusbar_items_separator, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin/2) )
+
+  statusbar_layout_left:add( wibox.container.margin(s.statusbar_current_layout_name, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin+2) )
+  statusbar_layout_left:add( statusbar_items_separator )
+
+  statusbar_layout_left:add(wibox.container.margin(tasklist_widget, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin))
+
+  statusbar_layout:set_left(statusbar_layout_left)
+
+  -- on main screen only, show the systray (it can't be shown on multiple screens)
   if s == screen.primary then
     local statusbar_layout_right = wibox.layout.fixed.horizontal()
-    local statusbar_layout_left = wibox.layout.fixed.horizontal()
-
-    s.statusbar_current_layout_name = wibox.widget.textbox(awful.layout.getname())
-    s.statusbar_current_layout_name:set_font(beautiful.statusbar_font)
-    s.statusbar_current_layout_name.align = 'center'
-    s.statusbar_current_layout_name.forced_width = beautiful.statusbar_current_layout_width
-
-    local menutext = wibox.widget.textbox('menu')
-    menutext:set_font(beautiful.statusbar_font)
-    menutext:buttons(awful.button({ }, 1, function() main_menu:toggle() end))
-    statusbar_layout_left:add( wibox.container.margin(menutext, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
-    statusbar_layout_left:add( statusbar_items_separator )
-
-    local clock = wibox.widget.textclock("%H:%M", 10)
-    clock:set_font(beautiful.statusbar_font)
-    clock.align = 'center'
-    clock.forced_width = beautiful.clock_width
-    statusbar_layout_left:add( wibox.container.margin(clock, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
-    statusbar_layout_left:add( statusbar_items_separator )
-
-    local date = wibox.widget.textclock("%a. %d/%m", 10)
-    date:buttons(awful.util.table.join(
-      awful.button({ }, 1, function() awful.spawn.with_shell(calendar_widget_cmd) end)
-    ))
-    date:connect_signal("widget::redraw_needed", function()
-      local day = os.date('%a')
-      date.text = helpers.string.replace(date.text, day, helpers.string.french_day(day))
-    end)
-    date:set_font(beautiful.statusbar_font)
-    date.align = 'center'
-    date.forced_width = beautiful.date_width
-    statusbar_layout_left:add( wibox.container.margin(date, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
-    statusbar_layout_left:add( statusbar_items_separator )
-
-    statusbar_layout_left:add( wibox.container.margin(taglist_widget, beautiful.statusbar_items_margin) )
-    statusbar_layout_left:add( wibox.container.margin(statusbar_items_separator, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin/2) )
-
-    statusbar_layout_left:add( wibox.container.margin(s.statusbar_current_layout_name, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin+2) )
-    statusbar_layout_left:add( statusbar_items_separator )
-
-    statusbar_layout_left:add(wibox.container.margin(tasklist_widget, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin))
-
     local mysystray = wibox.widget.systray()
     mysystray:set_base_size(beautiful.statusbar_height - beautiful.statusbar_margin)
     mysystray:fit({dpi = s.dpi })
 
     statusbar_layout_right:add(mysystray)
     statusbar_layout:set_right(statusbar_layout_right)
-    statusbar_layout:set_left(statusbar_layout_left)
-  else
-    local statusbar_layout_left = wibox.layout.fixed.horizontal()
-
-    statusbar_layout_left:add( wibox.container.margin(taglist_widget, 0, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
-
-    statusbar_layout_left:add( wibox.container.margin(tasklist_widget, 0, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
-
-    statusbar_layout:set_left(statusbar_layout_left)
   end
+
   statusbar_widget:set_widget(wibox.container.margin(statusbar_layout, beautiful.statusbar_margin_horizontal, beautiful.statusbar_margin_horizontal, beautiful.statusbar_margin_top, beautiful.statusbar_margin_bottom))
 end)
 

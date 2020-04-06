@@ -66,6 +66,7 @@ local tasklist_buttons = awful.util.table.join(
 local names_mapping = {
   ["sublime-text"] = "Sublime Text",
   ["roxterm"] = "Terminal",
+  ["Roxterm-temp"] = "Terminal",
   ["google-chrome"] = "Chrome",
   ["firefox"] = "Firefox",
   ["spotify"] = "Spotify",

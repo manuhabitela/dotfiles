@@ -167,7 +167,12 @@ screen.connect_signal("property::geometry", helpers.wallpaper.update)
 awful.screen.connect_for_each_screen(function(s)
   helpers.wallpaper.update(s)
 
-  awful.tag({ "1", "2", "3", "4", "5", "6", "7" }, s, awful.layout.layouts[1])
+  -- the "7" tag, which is reserved for the terminal, is only on the main screen
+  local screen_tags = { "1", "2", "3", "4", "5", "6" }
+  if s == main_screen then
+    table.insert(screen_tags, "7")
+  end
+  awful.tag(screen_tags, s, awful.layout.layouts[1])
 
   local statusbar_widget = awful.wibar(awful.util.table.join(statusbar_options, { screen = s }))
 

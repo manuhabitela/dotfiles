@@ -104,7 +104,7 @@ local function tasklist_client_name(c, all_clients)
   then
     name = name
       .. ': '
-      .. c.name:sub(0, 15)
+      .. helpers.string.sub8(c.name, 0, 15)
       .. (c.name:len() > 15 and '…' or '')
   end
   if c.minimized then

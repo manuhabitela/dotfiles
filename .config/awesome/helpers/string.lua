@@ -6,6 +6,12 @@ function stringutils.replace(str, search, replace)
   return string.gsub(str, search, replace)
 end
 
+function stringutils.sub8(s,i,j)
+  i=utf8.offset(s,i)
+  j=utf8.offset(s,j+1)-1
+  return string.sub(s,i,j)
+end
+
 local function tchelper(first, rest)
    return first:upper()..rest:lower()
 end

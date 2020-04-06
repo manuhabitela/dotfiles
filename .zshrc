@@ -18,6 +18,12 @@ source $ZSH/oh-my-zsh.sh
 setopt auto_cd
 cdpath=($HOME $HOME/dev)
 
+function omz_termsupport_precmd {
+  [[ "$DISABLE_AUTO_TITLE" == true ]] && return
+  # dont show our local user@host in title
+  title "%15<..<%~%<<" "%15<..<%~%<<"
+}
+
 source $HOME/.zshaliases
 POCKER_HOME=/home/manu/vt
 EDITOR=nano

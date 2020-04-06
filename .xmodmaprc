@@ -10,6 +10,9 @@ keycode 37 = Super_L
 add Control = Control_L
 add Control = Control_R
 
+!thinkpad w530: transform the key next to AltGr key (PrtSc) to Menu key
+keycode 107 = Menu
+
 !remove œ and put ² and ³ (with shift) on it
 keycode 49 = twosuperior threesuperior
 

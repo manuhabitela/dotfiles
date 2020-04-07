@@ -144,7 +144,7 @@
     icon_position = left
 
     # Paths to default icons.
-    icon_folders = /usr/share/icons/Faenza/16x16/status/:/usr/share/icons/Faenza/16x16/devices/:/usr/share/icons/Faenza/16x16/apps/
+    icon_folders = /usr/share/icons/Faenza/24x24/status/:/usr/share/icons/Faenza/24x24/devices/:/usr/share/icons/Faenza/24x24/apps/
 
 [frame]
     width = 0

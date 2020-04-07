@@ -1,0 +1,17 @@
+#!/bin/bash
+progress_bar() {
+	local value=$1
+	local value=${value%.*}
+	local bar_width=$2
+	local filled_count=$((value*bar_width/100))
+	local bar=""
+	for (( i = 0; i < $filled_count; i++ )); do
+		bar=$bar"●"
+	done
+	for (( i = $filled_count; i < $bar_width; i++ )); do
+		bar=$bar"·"
+	done
+	echo $bar
+}
+
+progress_bar $1 $2

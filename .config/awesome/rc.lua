@@ -15,6 +15,7 @@ helpers.screen = require("helpers.screen")
 helpers.clients = require("helpers.clients")
 helpers.main_menu = require("helpers.main_menu")
 helpers.string = require("helpers.string")
+helpers.date = require("helpers.date")
 helpers.wallpaper = require("helpers.wallpaper")
 helpers.tasklist_widget = require("helpers.tasklist_widget")
 

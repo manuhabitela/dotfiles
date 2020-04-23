@@ -2,10 +2,35 @@
 client.connect_signal("manage", function(c)
   helpers.wallpaper.update(c.screen)
 
+  -- keep everything not a terminal out of the terminal-specific tag
   if c.screen == main_screen and c.first_tag.name == terminal_tag and not gears.table.hasitem(terminal_tag_classes, c.class) then
-    c:move_to_tag(c.screen.tags[3], c)
-    c.screen.tags[3]:view_only()
+    helpers.clients.move_out_to(c, c.screen.tags[3])
   end
+
+  -- all those rules below are to put specific apps on specific tag only if
+  -- I dont have a window of this app already opened.
+  -- usually I'd have those apps opened on those specific tags,
+  -- and if I want a new window of it I want it to be opened on the current tag
+  if (c.class == "Sublime_text" or c.class == "Subl")
+    and helpers.clients.count_instances(c) == 1
+  then
+    helpers.clients.move_out_to(c, screen.primary.tags[2])
+  end
+
+  if c.class == "Google-chrome" and helpers.clients.count_instances(c) == 1 then
+    helpers.clients.move_out_to(c, screen.primary.tags[big_screen and 2 or 3])
+  end
+
+  if c.class == "git-cola" and helpers.clients.count_instances(c) == 1 then
+    helpers.clients.move_out_to(c, screen.primary.tags[4])
+  end
+
+  if gears.table.hasitem(terminal_tag_classes, c.class)
+    and not gears.table.hasitem(terminal_app_names, c.name)
+    and helpers.clients.count_instances(c) == 1 then
+    helpers.clients.move_out_to(c, screen.primary.tags[7])
+  end
+  -- end of app-specific rules
 
   if awesome.startup
     and not c.size_hints.user_position

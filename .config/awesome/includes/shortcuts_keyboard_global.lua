@@ -53,12 +53,12 @@ globalkeys = gears.table.join(
   -- this shortcut is to pop a terminal in the current tag instead of moving it to tag 7 because of rules
   awful.key({ modkey, sft       }, "t",       function() awful.spawn(terminal .. " -T Roxterm-temp") end),
 
-  awful.key({ modkey            }, "f",       function() helpers.launcher.ror("pcmanfm", "Pcmanfm") end),
+  awful.key({ modkey            }, "f",       function() helpers.launcher.ror("pcmanfm", { "Pcmanfm" }) end),
   awful.key({ modkey            }, "s",       function() helpers.launcher.ror("subl", { "Sublime_text", "Subl" }) end),
   awful.key({ modkey            }, "w",       function()
-    helpers.launcher.ror("google-chrome-stable", "Google-chrome")
+    helpers.launcher.ror("google-chrome-stable", { "Google-chrome" })
   end),
-  awful.key({ modkey            }, "g",       function() helpers.launcher.ror("git-cola", "git-cola") end),
+  awful.key({ modkey            }, "g",       function() helpers.launcher.ror("git-cola", { "git-cola" }) end),
 
   awful.key({ modkey            }, "space",   function()
     awful.spawn.with_shell(helpers.string.replace(rofi_cmd, '{mode}', 'run'))

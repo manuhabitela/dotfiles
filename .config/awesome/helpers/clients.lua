@@ -36,4 +36,21 @@ function clients.client_focus_global_byidx(i, c)
   end
 end
 
+function clients.count_instances(given_client, clients, compare)
+  local clients = clients or client.get()
+  local compare = compare or "class"
+  local count = 0;
+  for _, c in ipairs(clients) do
+    if given_client[compare] == c[compare] then
+      count = count + 1
+    end
+  end
+  return count
+end
+
+function clients.move_out_to(c, t)
+  c:move_to_tag(t)
+  t:view_only()
+end
+
 return clients

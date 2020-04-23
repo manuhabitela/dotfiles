@@ -38,21 +38,8 @@ awful.rules.rules = {
     rule_any = { name = { "spotify-tui" }, class = { "Spotify" } },
     properties = { tag = screen.primary.tags[1] }
   },
-  {
-    rule_any = { class = { "Sublime_text", "Subl" } },
-    properties = { tag = screen.primary.tags[2] }
-  },
-  {
-    rule_any = { class = { "Google-chrome" } },
-    properties = { tag = screen.primary.tags[big_screen and 2 or 3] }
-  },
-  {
-    rule_any = { class = { "git-cola" } },
-    properties = { tag = screen.primary.tags[4] }
-  },
-  {
-    rule_any = { class = terminal_tag_classes },
-    except_any = { name = terminal_app_names },
-    properties = { tag = screen.primary.tags[7] }
-  }
+
+  -- note: we have other kind of home-made rules directly in the client signal
+  -- the idea is to have a default opening tag for some apps, but only for the first time we
+  -- open them, and i didn't find after 5 minutes search if we could do that with the rules table
 }

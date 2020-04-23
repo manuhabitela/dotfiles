@@ -18,7 +18,7 @@ theme.colors = {
   blue_very_light = "#93a1a1",
   orange = "#b58900",
   orange_light = "#e6ac00",
-  white = "#dddddd",
+  white = "#eeeeee",
   gray = "#aaaaaa"
 }
 
@@ -51,8 +51,8 @@ theme.statusbar_current_layout_width = 29
 
 theme.menu_submenu_icon = "/usr/share/awesome/themes/zenburn/titlebar/maximized_focus_inactive.png"
 
-theme.clock_width = 35
-theme.date_width = 70
+theme.clock_width = 37
+theme.date_width = 74
 
 theme.taglist_bg_focus = theme.bg_normal
 theme.taglist_fg_focus = theme.fg_focus

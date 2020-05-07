@@ -2,7 +2,7 @@ local launcher = {}
 
 function launcher.ror(cmd, classes)
   local matcher = function(c)
-    return awful.rules.match_any(c, { class = classes })
+	return awful.rules.match_any(c, { class = classes })
   end
   -- i guess the raise_or_spawn should do the same as
   -- run_or_raise but i can't get it to work as is?
@@ -12,6 +12,12 @@ end
 
 function launcher.run_once(cmd)
   awful.spawn.with_shell("ps -ef | grep -v grep | grep '" .. cmd .. "' > /dev/null || (" .. cmd .. ")")
+end
+
+function launcher.run_on_tag(cmd, s, t)
+	local destination = s and screen[s] or screen.primary
+	destination.tags[t]:view_only()
+	awful.spawn.with_shell(cmd)
 end
 
 return launcher

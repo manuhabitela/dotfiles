@@ -1,6 +1,7 @@
 pcall(require, "luarocks.loader")
 gears = require("gears")
 awful = require("awful")
+require("awful.remote")
 require("awful.autofocus")
 common = require("awful.widget.common")
 wibox = require("wibox")

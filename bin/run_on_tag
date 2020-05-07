@@ -1,0 +1,17 @@
+#!/bin/bash
+
+placement=$1
+tag="3"
+screen="nil"
+# the `cd $(pwd);` here is to run the command from the correct folder
+# in the awesomewm runtime
+cmd="cd $(pwd); ${@:2}"
+
+if [[ $placement == *":"* ]]; then
+	screen=${placement:0:1}
+	tag=${placement:2:1}
+else
+	tag=$placement
+fi
+
+awesome-client "helpers.launcher.run_on_tag(\"$cmd\", $screen, $tag)"

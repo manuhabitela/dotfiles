@@ -1,0 +1,29 @@
+#!/bin/bash
+# script pour éviter que mon mini DAC usb, sur lequel sont branchées mes
+# enceintes de bureau, se mette en veille et mette plusieurs secondes à
+# sortir du son au démarrage d'une vidéo ou d'une musique
+#
+# ceci était le pire truc à résoudre
+# et ceci est une "résolution" cäcä
+# mais ça a le mérite de fonctionner uniquement dans le cas où
+# j'ai le DAC connecté, contrairement à d'autres solutions potentielles,
+# comme désactiver le "idle mode" audio, qui serait global tout le temps
+found_dac_string=$(LANG=en aplay -l | grep -E "XtremPro X1 USB DAC")
+# semblant de ternaire en bash
+[[ -n "$found_dac_string" ]] && is_dac_connected=true || is_dac_connected=false
+
+# on clean le potentiel son vide lancé par un lancement passé du script
+if [[ -f ".xtrempro-null-sound-pid" ]]; then
+	kill $(cat .xtrempro-null-sound-pid)
+	rm .xtrempro-null-sound-pid
+	echo "killed previous play process"
+fi
+
+# si le dac est connecté, on lance un son "vide" et on sauvegarde l'id
+# du process pour pouvoir le supprimer plus tard
+# le son "vide" tourne tt le temps et permet d'éviter que le dac passe en "idle"
+if [[ "$is_dac_connected" = true ]]; then
+	play -qn &
+	echo $! > .xtrempro-null-sound-pid
+	echo "started new null sound"
+fi

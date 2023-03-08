@@ -1,0 +1,4 @@
+#!/bin/bash
+if pgrep noip2; then pkill noip2; fi
+noip2 -c ~/.config/no-ip2.conf
+

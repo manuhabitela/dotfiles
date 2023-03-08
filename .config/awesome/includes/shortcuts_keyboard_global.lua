@@ -9,22 +9,28 @@ local volume_notification_cmd = "notify-send"
 globalkeys = gears.table.join(
   -- focus next or prev client - works accross all screens
   awful.key({ altkey, sft       }, "Tab",       function()
-    helpers.clients.client_focus_global_byidx(-1)
+    awful.client.focus.byidx(-1)
     if client.focus then client.focus:raise() end
   end),
   awful.key({ altkey,           }, "Tab",       function()
-    helpers.clients.client_focus_global_byidx(1)
+    awful.client.focus.byidx(1)
     if client.focus then client.focus:raise() end
   end),
-
-  -- focus next or prev client - works accross all screens
-  awful.key({ modkey, sft       }, "Tab",       function()
-    helpers.clients.client_focus_global_byidx(-1)
-    if client.focus then client.focus:raise() end
+  awful.key({ modkey, sft       }, "Tab",   function()
+    if screen:count() > 1 then
+      awful.screen.focus_relative(-1)
+    else
+      awful.client.focus.byidx(-1)
+      if client.focus then client.focus:raise() end
+    end
   end),
-  awful.key({ modkey,           }, "Tab",       function()
-    helpers.clients.client_focus_global_byidx(1)
-    if client.focus then client.focus:raise() end
+  awful.key({ modkey            }, "Tab",   function()
+    if screen:count() > 1 then
+      awful.screen.focus_relative(1)
+    else
+      awful.client.focus.byidx(1)
+      if client.focus then client.focus:raise() end
+    end
   end),
 
   -- jklm to resize windows

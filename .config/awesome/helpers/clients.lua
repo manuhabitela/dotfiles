@@ -52,4 +52,9 @@ function clients.move_out_to(c, t)
   t:view_only()
 end
 
+function clients.show_titlebar_and_resize(c)
+  awful.titlebar.show(c)
+  c:relative_move(0, 0, 0, beautiful.statusbar_height * -1)
+end
+
 return clients

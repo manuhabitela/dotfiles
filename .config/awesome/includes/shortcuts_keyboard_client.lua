@@ -4,9 +4,12 @@ clientkeys = gears.table.join(
   awful.key({ altkey            }, "F4",     function(c) c:kill() end),
   awful.key({ modkey            }, "u",      function(c)
     c.floating = not c.floating
-    if c.floating then awful.titlebar.show(c) else awful.titlebar.hide(c) end
+    if c.floating then helpers.clients.show_titlebar_and_resize(c) else awful.titlebar.hide(c) end
   end),
   awful.key({ modkey, sft       }, "u",      function(c)
+    c.sticky = not c.sticky
+  end),
+  awful.key({ modkey, sft, ctrl  }, "u",      function(c)
     c.ontop = not c.ontop
     c.sticky = c.ontop
     c.floating = c.ontop

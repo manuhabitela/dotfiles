@@ -2,7 +2,7 @@
 
 DOTFILES="/home/manu/dotfiles"
 
-FILES=( .icons bin .dircolors .gtkrc-2.0 .xmodmaprc .Xresources .zprofile .zshenv .zshrc .zshaliases )
+FILES=( .icons bin .dircolors .gtkrc-2.0 .xmodmaprc .xmodmaprc-dz60 .xmodmaprc-gh60 .Xresources .zprofile .zshenv .zshrc .zshaliases )
 
 for FILE in $FILES
 do

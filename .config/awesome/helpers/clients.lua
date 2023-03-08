@@ -1,11 +1,11 @@
 local clients = {}
 
-local function filter_visible_clients(current_screen, current_client)
-  local visible_clients = current_screen.clients
+local function filter_visible_clients(current_screen)
+  local visible_clients = current_screen:get_clients(false)
   -- Remove all non-normal clients
   local fcls = {}
   for idx, c in ipairs(visible_clients) do
-      if awful.client.focus.filter(c) or c == current_client then
+      if awful.client.focus.filter(c) then
           table.insert(fcls, c)
       end
   end
@@ -20,16 +20,15 @@ function clients.client_focus_global_byidx(i, c)
   local multiple_screens = screen.count() > 1
   local current_client = c or client.focus
   local current_screen = current_client and current_client.screen or mouse.screen
-  local visible_clients = filter_visible_clients(current_screen, current_client)
+  local visible_clients = filter_visible_clients(current_screen)
   local next_client = awful.client.next(i, current_client)
-
   if multiple_screens and current_client == visible_clients[1] and i == -1 then
-    awful.screen.focus_relative(-1)
-    local new_visible_clients = filter_visible_clients(client.focus.screen, client.focus)
+    awful.screen.focus_relative(1)
+    local new_visible_clients = filter_visible_clients(client.focus.screen)
     client.focus = new_visible_clients[#new_visible_clients]
   elseif multiple_screens and current_client == visible_clients[#visible_clients] and i == 1 then
-    awful.screen.focus_relative(1)
-    local new_visible_clients = filter_visible_clients(client.focus.screen, client.focus)
+    awful.screen.focus_relative(-1)
+    local new_visible_clients = filter_visible_clients(client.focus.screen)
     client.focus = new_visible_clients[1]
   elseif next_client then
     client.focus = next_client

@@ -154,10 +154,12 @@ globalkeys = gears.table.join(
 -- bind all key numbers to tags
 for i = 1, 9 do
   globalkeys = gears.table.join(globalkeys,
+    -- switch to tag
     awful.key({ modkey       }, "#" .. i + 9, function()
       local s = awful.screen.focused()
       helpers.tags.toggle_tag(s, i)
     end),
+	-- move focused client to tag
     awful.key({ modkey, sft  }, "#" .. i + 9, function()
       local s = client.focus.screen
       local tag = s.tags[i]
@@ -168,11 +170,13 @@ for i = 1, 9 do
         client.focus = c
       end
     end),
+	-- add focused client to tag
     awful.key({ modkey, ctrl }, "#" .. i + 9, function()
-      local s = awful.screen.focused()
-      local tag = s.tags[i]
-      if tag then
-        awful.tag.viewtoggle(tag)
+      if client.focus then
+        local tag = client.focus.screen.tags[i]
+        if tag then
+          client.focus:toggle_tag(tag)
+        end
       end
     end)
   )

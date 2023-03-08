@@ -43,6 +43,10 @@ code_editor_classes = { "Sublime_text", "Subl", "Code" }
 other_screen_classes = { "Slack", "discord", "Spotify" }
 main_screen = screen.primary
 big_screen = helpers.screen.is_big(main_screen)
+other_screen = nil
+if big_screen and screen:count() == 2 then
+  other_screen = screen[1] == main_screen and screen[2] or screen[1]
+end
 main_menu = helpers.main_menu.create()
 calendar_widget_cmd = terminal .. ' -g 65x9 -p Awesome -T calendar-widget -e \'bash -c "cal -3; read line"\''
 rofi_cmd = string.format(

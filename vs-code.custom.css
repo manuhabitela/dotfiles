@@ -1,0 +1,31 @@
+.linux {
+	font-family: Arial;
+	--monaco-monospace-font: "SF Mono",Monaco,Menlo,Courier,monospace;
+}
+
+/* barre de status en bas */
+.monaco-workbench .part.statusbar {
+	font-size: 10.5px;
+}
+
+/* taille de police d'un onglet */
+.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab .tab-label a,
+.monaco-workbench .part.editor>.content .editor-group-container>.title .title-label a {
+	font-size: 11px;
+}
+/* alignement vertical de l'icone d'un onglet (croix/rond) avec la police plus petite */
+.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab>.tab-actions {
+	padding-top: 1px;
+}
+
+/* padding gauche/droite d'un onglet */
+.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab {
+	padding-left: 7px;
+}
+.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab>.tab-actions .action-label {
+	margin-right: 5px;
+}
+
+.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-breadcrumbs .breadcrumbs-control .monaco-breadcrumb-item:before {
+	width: 76px; /* alignement du breadcrumb avec le gutter du code */
+}

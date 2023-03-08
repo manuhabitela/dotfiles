@@ -248,6 +248,22 @@ awful.screen.connect_for_each_screen(function(s)
     mysystray:fit({dpi = s.dpi })
 
     statusbar_layout_right:add(wibox.container.margin(awful.widget.watch('/home/manu/bin/echo-bat-cap', 20), beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
+
+    local dnd_button = wibox.widget.textbox('🔔')
+    local update_dnd_icon = function()
+        awful.spawn.easy_async('dunstctl is-paused', function(output)
+            dnd_button.text = string.find(output, 'false') and '🔔' or '🔕'
+        end)
+    end
+    update_dnd_icon()
+    dnd_button:buttons(awful.util.table.join(
+      awful.button({ }, 1, function()
+        awful.spawn.easy_async('dunstctl set-paused toggle', function()
+          update_dnd_icon()
+        end)
+      end)
+    ))
+    statusbar_layout_right:add(wibox.container.margin(dnd_button, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
     statusbar_layout_right:add(mysystray)
     statusbar_layout:set_right(statusbar_layout_right)
   end

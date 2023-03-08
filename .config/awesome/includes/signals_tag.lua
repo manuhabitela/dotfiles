@@ -7,7 +7,6 @@ awful.layout.layouts = {
 
 local tag_map = {
   tile = "tile",
-  dwindle = "dwin",
   tilebottom = "tileb",
   max = "max",
   floating = "float"
@@ -21,9 +20,12 @@ local function update_statusbar_tag(t)
 end
 
 tag.connect_signal("property::layout", function(t)
-  local toggle_titlebar = awful.layout.getname() == "floating" and awful.titlebar.show or awful.titlebar.hide
   for k, c in ipairs(t:clients()) do
-    toggle_titlebar(c)
+    if awful.layout.getname() == "floating" then
+      helpers.clients.show_titlebar_and_resize(c)
+    else
+      awful.titlebar.hide(c)
+    end
   end
   update_statusbar_tag(t)
 end)

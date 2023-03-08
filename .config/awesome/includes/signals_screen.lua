@@ -64,23 +64,23 @@ local tasklist_buttons = awful.util.table.join(
 )
 
 local names_mapping = {
-  ["sublime-text"] = "Subl",
-  ["roxterm"] = "Term",
-  ["Roxterm-temp"] = "Term",
-  ["google-chrome"] = "Chrome",
-  ["firefox"] = "Firefox",
-  ["spotify"] = "Spotify",
-  ["spotify-tui"] = "Spotify tui",
-  ["git-cola"] = "Git Cola",
-  ["pcmanfm"] = "Fichiers",
-  ["gimp-2.10"] = "Gimp",
-  ["eog"] = "Eog",
+  ["sublime-text"] = "subl",
+  ["roxterm"] = "term",
+  ["Roxterm-temp"] = "term",
+  ["google-chrome"] = "chrome",
+  ["firefox"] = "firefox",
+  ["spotify"] = "spotify",
+  ["spotify-tui"] = "spotify tui",
+  ["git-cola"] = "git cola",
+  ["pcmanfm"] = "fichiers",
+  ["gimp-2.10"] = "gimp",
+  ["eog"] = "eog",
   ["vlc"] = "VLC",
-  ["evince"] = "Evince",
-  ["file-roller"] = "Archive",
-  ["libreoffice"] = "LibreOffice",
-  ["libreoffice-writer"] = "LibreOffice",
-  ["libreoffice-calc"] = "LibreOffice"
+  ["evince"] = "evince",
+  ["file-roller"] = "archive",
+  ["libreoffice"] = "libreoffice",
+  ["libreoffice-writer"] = "libreoffice",
+  ["libreoffice-calc"] = "libreoffice"
 }
 local short_names_count = {}
 local function short_client_name(c)
@@ -168,10 +168,15 @@ awful.screen.connect_for_each_screen(function(s)
 
   -- the "7" tag, which is reserved for the terminal, is only on the main screen
   local screen_tags = { "1", "2", "3", "4", "5", "6" }
+  local tile_layout = awful.layout.layouts[1]
+  local float_layout = awful.layout.layouts[2]
+  local max_layout = awful.layout.layouts[3]
   if s == main_screen then
     table.insert(screen_tags, "7")
+    awful.tag(screen_tags, s, {float_layout, tile_layout, tile_layout, tile_layout, float_layout, float_layout, tile_layout})
+  else
+    awful.tag(screen_tags, s, {max_layout, float_layout, float_layout, float_layout, float_layout, float_layout, float_layout})
   end
-  awful.tag(screen_tags, s, awful.layout.layouts[1])
 
   local statusbar_widget = awful.wibar(awful.util.table.join(statusbar_options, { screen = s }))
 

@@ -11,24 +11,31 @@ client.connect_signal("manage", function(c)
   -- I dont have a window of this app already opened.
   -- usually I'd have those apps opened on those specific tags,
   -- and if I want a new window of it I want it to be opened on the current tag
-  if (c.class == "Sublime_text" or c.class == "Subl")
-    and helpers.clients.count_instances(c) == 1
-  then
+  if gears.table.hasitem(code_editor_classes, c.class) and helpers.clients.count_instances(c) == 1 then
     helpers.clients.move_out_to(c, screen.primary.tags[2])
   end
 
-  if c.class == "Google-chrome" and helpers.clients.count_instances(c) == 1 then
-    helpers.clients.move_out_to(c, screen.primary.tags[big_screen and 2 or 3])
+  if gears.table.hasitem(browser_classes, c.class) and helpers.clients.count_instances(c) == 1 then
+    -- helpers.clients.move_out_to(c, screen.primary.tags[big_screen and 2 or 3])
+    helpers.clients.move_out_to(c, screen.primary.tags[3])
   end
 
   if c.class == "git-cola" and helpers.clients.count_instances(c) == 1 then
     helpers.clients.move_out_to(c, screen.primary.tags[4])
   end
 
+  if gears.table.hasitem(other_screen_classes, c.class) and helpers.clients.count_instances(c) == 1 then
+    helpers.clients.move_out_to(c, (other_screen and other_screen or main_screen).tags[1] )
+  end
+
   if gears.table.hasitem(terminal_tag_classes, c.class)
     and not gears.table.hasitem(terminal_app_names, c.name)
     and helpers.clients.count_instances(c) == 1 then
     helpers.clients.move_out_to(c, screen.primary.tags[7])
+  end
+
+  if c.name:find('Android Emulator - ') then
+    c.floating = true
   end
   -- end of app-specific rules
 
@@ -94,4 +101,10 @@ end)
 
 client.connect_signal("property::minimized", function(c)
   helpers.wallpaper.update(c.screen)
+end)
+
+client.connect_signal("property::name", function(c)
+  if c.name:find('Android Emulator - ') then
+    c.floating = true
+  end
 end)

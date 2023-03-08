@@ -14,18 +14,18 @@ function dateutils.french_day(day)
 end
 
 local months_map = {
-  ["Jan"] = "janvier",
-  ["Feb"] = "février",
+  ["Jan"] = "janv.",
+  ["Feb"] = "févr.",
   ["Mar"] = "mars",
   ["Apr"] = "avril",
   ["May"] = "mai",
   ["Jun"] = "juin",
-  ["Jul"] = "juillet",
+  ["Jul"] = "juil.",
   ["Aug"] = "août",
-  ["Sep"] = "septembre",
-  ["Oct"] = "octobre",
-  ["Nov"] = "novembre",
-  ["Dec"] = "décembre"
+  ["Sep"] = "sept.",
+  ["Oct"] = "oct.",
+  ["Nov"] = "nov.",
+  ["Dec"] = "déc."
 }
 function dateutils.french_month(month)
   return months_map[month]

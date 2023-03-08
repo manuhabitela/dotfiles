@@ -17,7 +17,8 @@ function wallpaper.update(s)
     end
   end
 
-  local wall = tag_has_visible_clients and beautiful.wallpaper_blur or beautiful.wallpaper
+  -- local wall = tag_has_visible_clients and beautiful.wallpaper_blur or beautiful.wallpaper
+  local wall = beautiful.wallpaper
   if (last_update == wall) then
     return true
   end

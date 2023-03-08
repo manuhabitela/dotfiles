@@ -34,10 +34,6 @@ awful.rules.rules = {
       sticky = true,
     }
   },
-  {
-    rule_any = { name = { "spotify-tui" }, class = { "Spotify" } },
-    properties = { tag = screen.primary.tags[1] }
-  },
 
   -- note: we have other kind of home-made rules directly in the client signal
   -- the idea is to have a default opening tag for some apps, but only for the first time we

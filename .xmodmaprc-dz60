@@ -1,0 +1,8 @@
+!keycode key shift+key modeswitch+key modeswitch+shift+key altgr+key altgr+shift+key
+
+!put ² and ³ on altgr + esc:
+keycode  9 = Escape Escape Escape Escape twosuperior threesuperior
+
+!put < and > on altgr+w and altgr+x:
+keycode 52 = w W w W less guillemotleft
+keycode 53 = x X x X greater guillemotright

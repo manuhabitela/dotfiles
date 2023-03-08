@@ -1,0 +1,12 @@
+!keycode key shift+key modeswitch+key modeswitch+shift+key altgr+key altgr+shift+key
+
+!remove œ and put ² and ³ (with shift) on it
+keycode 49 = twosuperior threesuperior
+
+!put < and > on altgr+$ and altgr+*:
+keycode 35 = dollar sterling dollar sterling less ecircumflex ecircumflex ediaeresis dollar sterling ecircumflex ediaeresis dollar sterling ecircumflex ediaeresis
+keycode 51 = asterisk mu asterisk mu greater dead_macron dead_grave dead_macron asterisk mu dead_grave dead_macron asterisk mu dead_grave dead_macron
+keycode 134 = colon slash colon slash division U2215 division U2215 colon slash division U2215 colon slash division U2215
+
+keycode 52 = w W w W less greater guillemotleft leftdoublequotemark w W guillemotleft leftdoublequotemark w W guillemotleft leftdoublequotemark
+keycode 53 = x X x X greater guillemotright guillemotright rightdoublequotemark x X guillemotright rightdoublequotemark x X guillemotright rightdoublequotemark

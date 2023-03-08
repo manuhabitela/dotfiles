@@ -1,0 +1,10 @@
+#!/bin/bash
+# check si j'ai connecté mon GH60 et lance le bon
+# script xmodmap
+
+found_GH60_string=$(LANG=en lsusb -d 0xfeed:0x6060)
+found_DZ60_string=$(LANG=en lsusb -d 0x445a:0x2260)
+
+[[ -n "$found_GH60_string" ]] && xmodmap $HOME/.xmodmaprc-gh60
+[[ -n "$found_DZ60_string" ]] && xmodmap $HOME/.xmodmaprc-dz60
+[[ -z "$found_GH60_string" && -z "$found_DZ60_string" ]] && xmodmap $HOME/.xmodmaprc

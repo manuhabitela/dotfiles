@@ -1,0 +1,9 @@
+#/bin/bash
+
+cal -3;
+echo "";
+echo "Paris        " $(TZ=Europe/Paris date +"%a %H:%M (%:::z) %Z");
+echo "San Francisco" $(TZ=America/Los_Angeles date +"%a %H:%M (%:::z) %Z");
+echo "New York     " $(TZ=America/New_York date +"%a %H:%M (%:::z) %Z");
+echo "Shanghai     " $(TZ=Asia/Shanghai date +"%a %H:%M (%:::z) %Z");
+echo "Tahiti       " $(TZ=Pacific/Tahiti date +"%a %H:%M (%:::z) %Z");

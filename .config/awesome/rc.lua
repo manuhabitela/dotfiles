@@ -48,7 +48,7 @@ if big_screen and screen:count() == 2 then
   other_screen = screen[1] == main_screen and screen[2] or screen[1]
 end
 main_menu = helpers.main_menu.create()
-calendar_widget_cmd = terminal .. ' -g 65x9 -p Awesome -T calendar-widget -e \'bash -c "cal -3; read line"\''
+calendar_widget_cmd = terminal .. ' -g 65x15 -p Awesome -T calendar-widget -e \'bash -c "/home/manu/bin/bashcalendar; read line"\''
 rofi_cmd = string.format(
   "rofi -show {mode} -font '%s'"
   .. " -color-normal '%s,%s,%s,%s,%s'" -- bg, fg, bgalt, bg-focus, fg-focus

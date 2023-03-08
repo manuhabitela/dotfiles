@@ -11,7 +11,7 @@
     # <http://developer.gnome.org/pango/stable/PangoMarkupFormat.html>.
     # If markup is not allowed, those tags will be stripped out of the
     # message.
-    allow_markup = yes
+    markup = full
 
     # The format of the message.  Possible variables are:
     #   %a  appname
@@ -32,12 +32,6 @@
     # Alignment of message text.
     # Possible values are "left", "center" and "right".
     alignment = left
-
-    # The frequency with wich text that is longer than the notification
-    # window allows bounces back and forth.
-    # This option conflicts with "word_wrap".
-    # Set to 0 to disable.
-    bounce_freq = 0
 
     # Show age of message if message is older than show_age_threshold
     # seconds.
@@ -64,7 +58,10 @@
     # the top and down respectevly.
     # The width can be negative.  In this case the actual width is the
     # screen width minus the width defined in within the geometry option.
-    geometry = "400x7-100+100"
+	width = 400
+	notification_limit = 7
+	origin = top-right
+	offset = 100x100
 
     # Shrink window if it's smaller than the width.  Will be ignored if
     # width is 0.
@@ -96,7 +93,7 @@
     # will be ignored.
     follow = none
 
-    # Should a notification popped up from history be sticky or timeout
+    # Should a notification popped up from be sticky or timeout
     # as if it would normally do.
     sticky_history = yes
 
@@ -111,7 +108,7 @@
     # Draw a line of "separatpr_height" pixel height between two
     # notifications.
     # Set to 0 to disable.
-    separator_height = 2
+    separator_height = 8
 
     # Padding between text and separator.
     padding = 8
@@ -125,12 +122,7 @@
     #  * foreground: use the same color as the foreground;
     #  * frame: use the same color as the frame;
     #  * anything else will be interpreted as a X color.
-    separator_color = frame
-
-    # Print a notification on startup.
-    # This is mainly for error detection, since dbus (re-)starts dunst
-    # automatically after a crash.
-    startup_notification = true
+    separator_color = "#00000000"
 
     # dmenu path.
     dmenu = /usr/bin/dmenu -fn "Terminus (TTF)-12" -nf #93a1a1 -nb #001d24 -sf #b58900 -sb #001d24 -l 30 -i -z -p notification
@@ -144,39 +136,38 @@
     icon_position = left
 
     # Paths to default icons.
-    icon_folders = /usr/share/icons/Faenza/24x24/status/:/usr/share/icons/Faenza/24x24/devices/:/usr/share/icons/Faenza/24x24/apps/
+    icon_path = /usr/share/icons/Faenza/24x24/status/:/usr/share/icons/Faenza/24x24/devices/:/usr/share/icons/Faenza/24x24/apps/
 
-[frame]
-    width = 0
-    color = "#aaaaaa"
+    frame_width = 0
+    frame_color = "#aaaaaa"
 
-[shortcuts]
+; [shortcuts]
 
-    # Shortcuts are specified as [modifier+][modifier+]...key
-    # Available modifiers are "ctrl", "mod1" (the alt-key), "mod2",
-    # "mod3" and "mod4" (windows-key).
-    # Xev might be helpful to find names for keys.
+;     # Shortcuts are specified as [modifier+][modifier+]...key
+;     # Available modifiers are "ctrl", "mod1" (the alt-key), "mod2",
+;     # "mod3" and "mod4" (windows-key).
+;     # Xev might be helpful to find names for keys.
 
-    # Close notification.
-    close = mod4+shift+a
+;     # Close notification.
+;     close = mod4+shift+a
 
-    # Close all notifications.
-    close_all = ctrl+shift+space
+;     # Close all notifications.
+;     close_all = ctrl+shift+space
 
-    # Redisplay last message(s).
-    # On the US keyboard layout "grave" is normally above TAB and left
-    # of "1".
-    history = ctrl+grave
+;     # Redisplay last message(s).
+;     # On the US keyboard layout "grave" is normally above TAB and left
+;     # of "1".
+;     history = ctrl+grave
 
-    # Context menu.
-    context = mod4+a
+;     # Context menu.
+;     context = mod4+a
 
 [urgency_low]
     # IMPORTANT: colors have to be defined in quotation marks.
     # Otherwise the "#" and following would be interpreted as a comment.
     background = "#222222"
     foreground = "#dddddd"
-    timeout = 10
+    timeout = 5
 
 [urgency_normal]
     background = "#073642"

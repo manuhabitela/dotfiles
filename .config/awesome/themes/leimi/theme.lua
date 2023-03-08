@@ -10,6 +10,7 @@ theme.wallpaper_blur = "/home/manu/.config/awesome/themes/leimi/angers-fhd-blur.
 theme.fonts = { default = "San Francisco Display Semi-Bold 10" }
 theme.fonts.statusbar = theme.fonts.default
 theme.fonts.titlebar = theme.fonts.default
+theme.fonts.big = "San Francisco Display Semi-Bold 25"
 theme.fonts.monospace = "Terminus (TTF) 12"
 
 theme.colors = {
@@ -34,7 +35,7 @@ theme.bg_focus = theme.bg_normal
 theme.fg_focus = theme.colors.orange
 theme.border_focus = theme.colors.orange_light
 
-theme.font_rofi = theme.fonts.monospace
+theme.font_rofi = theme.fonts.big
 
 theme.statusbar_font = theme.fonts.statusbar
 theme.statusbar_bg_color = theme.colors.blue_very_dark
@@ -51,8 +52,8 @@ theme.statusbar_current_layout_width = 29
 
 theme.menu_submenu_icon = "/usr/share/awesome/themes/zenburn/titlebar/maximized_focus_inactive.png"
 
-theme.clock_width = 37
-theme.date_width = 74
+theme.clock_width = 38
+theme.date_width = 84
 
 theme.taglist_bg_focus = theme.bg_normal
 theme.taglist_fg_focus = theme.fg_focus

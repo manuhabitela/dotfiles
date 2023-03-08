@@ -8,6 +8,8 @@
 # mais ça a le mérite de fonctionner uniquement dans le cas où
 # j'ai le DAC connecté, contrairement à d'autres solutions potentielles,
 # comme désactiver le "idle mode" audio, qui serait global tout le temps
+
+cd $(dirname $(readlink -f $0))
 found_dac_string=$(LANG=en aplay -l | grep -E "XtremPro X1 USB DAC")
 # semblant de ternaire en bash
 [[ -n "$found_dac_string" ]] && is_dac_connected=true || is_dac_connected=false

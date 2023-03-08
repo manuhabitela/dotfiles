@@ -115,8 +115,8 @@ case "$cmd" in
         echo "external monitor xrandr name: $external_monitor"
         ;;
     all)
-        echo xrandr --output "$internal_monitor" --primary --auto --output "$external_monitor" --auto "--$position" "$internal_monitor"
-        xrandr --output "$internal_monitor" --primary --auto --output "$external_monitor" --auto "--$position" "$internal_monitor" > /dev/null &
+        echo xrandr --output "$internal_monitor" --auto --output "$external_monitor" --primary --auto "--$position" "$internal_monitor"
+        xrandr --output "$internal_monitor" --auto --output "$external_monitor" --primary --auto "--$position" "$internal_monitor" > /dev/null &
         ;;
     in)
         echo xrandr --output "$internal_monitor" --auto --output "$other_monitor" --off --output "$work_monitor" --off

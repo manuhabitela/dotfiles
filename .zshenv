@@ -18,7 +18,9 @@ if [[ -a $HOME/.gem/ruby/2.4.0/bin ]]; then
 fi
 if [[ -a $HOME/android/sdk ]]; then
 	export ANDROID_HOME="$HOME/android/sdk"
+	PATH="$PATH:$ANDROID_HOME/emulator"
 	PATH="$PATH:$ANDROID_HOME/tools"
+	PATH="$PATH:$ANDROID_HOME/tools/bin"
 	PATH="$PATH:$ANDROID_HOME/platform-tools"
 fi
 if [[ -a $HOME/.cargo/bin ]]; then

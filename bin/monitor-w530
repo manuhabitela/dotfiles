@@ -7,11 +7,18 @@ i="LVDS-1"
 w="DP-2"
 o="VGA-1"
 
+if [[ $1 == "school" ]]; then
+	echo "xrandr --output LVDS-1-1 --auto --primary --output VGA-1-1 --off --output DP-0 --auto --above LVDS-1-1"
+	xrandr --output LVDS-1-1 --auto --primary --output VGA-1-1 --off --output DP-0 --auto --above LVDS-1-1
+	exit 0
+fi
+
 # nvidia
 if [[ -n "$(xrandr | grep VGA-1-1)" ]]; then
 	i="LVDS-1-1"
-	w="DP-4"
+	w="DP-5"
 	o="VGA-1-1"
 fi
+
 
 INTERNAL_MONITOR=$i WORK_MONITOR=$w OTHER_MONITOR=$o POSITION=right-of /home/manu/bin/monitor "$@"

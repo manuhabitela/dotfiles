@@ -53,16 +53,40 @@ globalkeys = gears.table.join(
   awful.key({ modkey            }, "Return",  function()
     awful.layout.inc(1)
   end),
+  awful.key({ modkey, sft       }, "Return",  function()
+    awful.layout.inc(-1)
+  end),
+
+  awful.key({ modkey, sft       }, "y", function()
+    local s = awful.screen.focused()
+    local all_clients_have_titlebars = true
+    local clients = s.selected_tag:clients()
+    for k, c in ipairs(clients) do
+      if all_clients_have_titlebars == true then
+        local _, size = c.titlebar_top(c)
+        all_clients_have_titlebars = size ~= 0
+      end
+    end
+    for k, c in ipairs(clients) do
+      if all_clients_have_titlebars then
+        awful.titlebar.hide(c)
+      else
+        helpers.clients.show_titlebar_and_resize(c)
+      end
+    end
+  end),
 
   -- run or raise applications
   awful.key({ modkey            }, "t",       function() awful.spawn(terminal) end),
   -- this shortcut is to pop a terminal in the current tag instead of moving it to tag 7 because of rules
   awful.key({ modkey, sft       }, "t",       function() awful.spawn(terminal .. " -T Roxterm-temp") end),
 
-  awful.key({ modkey            }, "f",       function() helpers.launcher.ror("pcmanfm", { "Pcmanfm" }) end),
-  awful.key({ modkey            }, "s",       function() helpers.launcher.ror("subl", { "Sublime_text", "Subl" }) end),
+  awful.key({ modkey            }, "f",       function() helpers.launcher.ror("Thunar", { "Thunar" }) end),
+  awful.key({ modkey            }, "s",       function() helpers.launcher.ror("subl", { "Code", "Sublime_text", "Subl" }) end),
+  awful.key({ modkey, ctrl      }, "s",       function() helpers.launcher.ror("code", { "Code" }) end),
+  awful.key({ modkey, sft       }, "s",       function() helpers.launcher.ror("subl", { "Sublime_text", "Subl" }) end),
   awful.key({ modkey            }, "w",       function()
-    helpers.launcher.ror("google-chrome-stable", { "Google-chrome" })
+    helpers.launcher.ror("firefox", { "firefox" })
   end),
   awful.key({ modkey            }, "g",       function() helpers.launcher.ror("git-cola", { "git-cola" }) end),
 
@@ -79,6 +103,10 @@ globalkeys = gears.table.join(
   end),
 
   awful.key({ ctrl, altkey      }, "l",       function()
+    awful.spawn.with_shell("slock")
+  end),
+
+  awful.key({ modkey, ctrl      }, "l",       function()
     awful.spawn.with_shell("slock")
   end),
 
@@ -109,8 +137,10 @@ globalkeys = gears.table.join(
       .. " Luminosité \"$(/home/manu/bin/progress-bar $(brillo -G) 15) $(echo $(brillo -G)/1 | bc) %\""
   ) end),
 
-  awful.key({ modkey            }, "F7",      function() awful.spawn("mon switch") end),
-  awful.key({ modkey, ctrl      }, "m",       function() awful.spawn("mon switch") end),
+  awful.key({ modkey            }, "F7",      function() awful.spawn("/home/manu/bin/monitor-w530 switch") end),
+  awful.key({ modkey, sft       }, "F7",      function() awful.spawn("/home/manu/bin/monitor-w530 in") end),
+  awful.key({ modkey, ctrl      }, "F7",      function() awful.spawn("/home/manu/bin/monitor-w530 in") end),
+  awful.key({ modkey, ctrl, sft }, "F7",      function() awful.spawn("/home/manu/bin/monitor-w530 out") end),
 
   awful.key({ modkey, ctrl      }, "r",       awesome.restart),
   awful.key({ modkey, ctrl, sft }, "q",       awesome.quit),

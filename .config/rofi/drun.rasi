@@ -1,0 +1,156 @@
+/*
+ *
+ * Author : Aditya Shakya (adi1090x)
+ * Mail : adi1090x@gmail.com
+ * Github : @adi1090x
+ * Reddit : @adi1090x
+ *
+ */
+
+configuration {
+    font: "Open Sans 10";
+    show-icons: true;
+}
+
+/* -- Light -- */
+/** {
+    background: #e5e5e5ff;
+    background-alt: #e5e5e5ff;
+    background-ib: #ffffffff;
+    foreground: #000000a6;
+    border: #80808066;
+    border-sel: #1a73e9ff;
+    selected: #d7d7d7ff;
+    urgent: #da4453ff;
+}*/
+
+* {
+    background: #001d24;
+    background-alt: #073642;
+    background-ib: #eee8d5;
+    foreground: #93a1a1;
+    foreground-sel: #b58900;
+    foreground-ib: #001d24;
+    border: #80808066;
+    border-sel: #073642;
+    selected: #073642;
+    urgent: #da4453ff;
+    highlight: none;
+}
+
+window {
+    transparency: "real";
+    background-color: @background;
+    text-color: @foreground;
+    border: 0px;
+    border-radius: 25px;
+    border-color: @border;
+    height: 180px;
+    width: 40%;
+    location: center;
+    anchor: center;
+    x-offset: 0;
+    y-offset: 0;
+}
+
+prompt {
+    enabled: false;
+    padding: 0px 8px 0px 8px;
+    background-color: @background-ib;
+    text-color: @foreground;
+}
+
+inputbar {
+    background-color: @background-ib;
+    text-color: @foreground-ib;
+    expand: false;
+    border: 0px 0px 2px 0px;
+    border-radius: 30px;
+    border-color: @border;
+    margin: 10px 6% 0% 6%;
+    padding: 6px 6px 6px 6px;
+    position: center;
+}
+
+entry {
+    background-color: @background-ib;
+    text-color: @foreground-ib;
+    placeholder-color: @foreground-ib;
+    expand: true;
+    horizontal-align: 0.5;
+    padding: 3px 0px 3px 0px;
+    placeholder: "Rechercher";
+    blink: true;
+}
+
+case-indicator {
+    background-color: @background-ib;
+    text-color: @foreground;
+    spacing: 0;
+}
+
+listview {
+    background-color: @background;
+    spacing: 4px;
+    columns: 4;
+    cycle: false;
+    layout: vertical;
+}
+
+mainbox {
+    background-color: @background;
+    children: [ inputbar, listview ];
+    spacing: 10px;
+    padding: 5px 5px 5px 5px;
+}
+
+element {
+    background-color: @background;
+    text-color: @foreground;
+    orientation: vertical;
+    border-radius: 0px;
+    margin: 0px 5px 0px 5px;
+    padding: 10px 0px 10px 0px;
+}
+
+element-icon {
+    size: 48;
+    border: 0px;
+}
+
+element-text {
+    horizontal-align: 0.5;
+    vertical-align: 0.5;
+    margin: 5px 10px 0px 10px;
+}
+
+element normal.urgent,
+element alternate.urgent {
+    background-color: @urgent;
+    text-color: @foreground;
+    border-radius: 9px;
+}
+
+element normal.active,
+element alternate.active {
+    background-color: @background-alt;
+    text-color: @foreground;
+}
+
+element selected {
+    background-color: @selected;
+    text-color: @foreground-sel;
+    border: 0px 0px 3px 0px;
+    border-radius: 15px;
+    border-color: @border-sel;
+}
+
+element selected.urgent {
+    background-color: @urgent;
+    text-color: @foreground;
+}
+
+element selected.active {
+    background-color: @background-alt;
+    color: @foreground;
+}

@@ -57,10 +57,18 @@ rofi_cmd = string.format(
   .. " -terminal " .. terminal
   .. " -theme-str '"
   ..   "* { highlight: none; } "
-  ..   "inputbar { children:  [ entry, num-filtered-rows, textbox-num-sep, num-rows, case-indicator ]; }'",
-  beautiful.font_rofi,
+  ..   "entry { placeholder: none; } "
+  ..   "inputbar { children:  [ entry, case-indicator ]; }'",
+  beautiful.fonts.monospace,
   beautiful.bg_normal, beautiful.fg_normal, beautiful.bg_normal, beautiful.bg_focus, beautiful.fg_focus,
   beautiful.bg_normal, beautiful.bg_normal, beautiful.bg_normal
+)
+rofi_drun_cmd = string.format(
+  "rofi -show drun"
+  .. " -location 0 -width 35 -lines 5 -i -matching fuzzy"
+  .. " -terminal " .. terminal
+  .. " -show-icons"
+  .. " -theme drun"
 )
 dofile('/home/manu/.config/awesome/includes/autostart.lua')
 dofile('/home/manu/.config/awesome/includes/signals_tag.lua')

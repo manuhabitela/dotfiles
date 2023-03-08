@@ -3,33 +3,32 @@
 	"atomic_save": false,
 	"binary_file_patterns":
 	[
-		"*.jpg",
-		"*.jpeg",
-		"*.png",
-		"*.gif",
-		"*.ttf",
-		"*.tga",
 		"*.dds",
-		"*.ico",
 		"*.eot",
-		"*.pdf",
-		"*.swf",
+		"*.gif",
+		"*.ico",
 		"*.jar",
-		"*.zip",
+		"*.jpeg",
+		"*.jpg",
+		"*.pdf",
+		"*.png",
 		"*.scssc",
-		"node_modules/",
-		"var/cache/",
-		"bower_components/"
+		"*.swf",
+		"*.tga",
+		"*.ttf",
+		"*.zip",
+		"bower_components/**",
+		"node_modules/**",
+		"var/cache/**",
 	],
 	"color_scheme": "Packages/User/RailsCastsColorScheme.tmTheme",
 	"detect_slow_plugins": false,
 	"dictionary": "",
-	"draw_indent_guides": false,
+	"draw_indent_guides": true,
 	"draw_minimap_border": false,
 	"fallback_encoding": "Western (ISO 8859-1)",
 	"file_exclude_patterns":
 	[
-		"*.log",
 		"*.pyc",
 		"*.pyo",
 		"*.exe",
@@ -64,11 +63,12 @@
 	[
 		"no_italic"
 	],
-	"font_size": 10.5,
+	"font_size": 12.5,
 	"highlight_line": true,
 	"highlight_modified_tabs": true,
 	"ignored_packages":
 	[
+		"LSP-typescript",
 		"SHS-At-Rule",
 		"SHS-Bourbon",
 		"SHS-Bourbon-Neat",
@@ -76,10 +76,12 @@
 		"SHS-Compass-Variables",
 		"SHS-CSS-Properties",
 		"SHS-CSS-Property-Values",
+		"SublimeLinter",
+		"SublimeLinter-stylelint",
 		"Vintage",
-		"Vintageous"
+		"Vintageous",
 	],
-	"line_numbers": false,
+	"line_numbers": true,
 	"line_padding_bottom": 5,
 	"line_padding_top": 5,
 	"overlay_scroll_bars": "enabled",
@@ -89,5 +91,5 @@
 	"show_encoding": true,
 	"tab_completion": true,
 	"theme": "Cobalt2.sublime-theme",
-	"word_wrap": true
+	"word_wrap": true,
 }

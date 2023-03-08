@@ -6,6 +6,9 @@
 	"ignore_vcs_packages": true,
 	"in_process_packages":
 	[
+		"LSP-typescript",
+		"SublimeLinter",
+		"SublimeLinter-stylelint",
 	],
 	"installed_packages":
 	[
@@ -16,12 +19,16 @@
 		"ColorHelper",
 		"DocBlockr",
 		"Dockerfile Syntax Highlighting",
+		"DotENV",
 		"EasyMotion",
 		"EditorConfig",
 		"EJS 2",
 		"Emmet",
+		"JSCustom",
 		"Keymaps",
 		"knockdown",
+		"LSP",
+		"LSP-typescript",
 		"Missing Palette Commands",
 		"Modific",
 		"MultiFill",
@@ -36,11 +43,10 @@
 		"SublimeGit",
 		"SublimeLinter",
 		"SublimeLinter-contrib-php-cs-fixer",
-		"SublimeLinter-eslint",
 		"SublimeLinter-json",
 		"SublimeLinter-stylelint",
 		"TrailingSpaces",
 		"TypeScript Syntax",
-		"Xdebug Client"
-	]
+		"Xdebug Client",
+	],
 }

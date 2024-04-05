@@ -279,6 +279,15 @@ awful.screen.connect_for_each_screen(function(s)
       end)
     ))
     statusbar_layout_right:add(wibox.container.margin(dnd_button, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
+
+    local displayswitch_button = wibox.widget.imagebox('/usr/share/icons/Papirus-Dark/symbolic/devices/computer-symbolic.svg', true)
+    displayswitch_button.forced_width = 16
+    displayswitch_button.forced_height = 16
+    displayswitch_button:buttons(awful.util.table.join(
+        awful.button({ }, 1, function() awful.spawn.with_shell('xfce4-display-settings --minimal') end)
+    ))
+    statusbar_layout_right:add(wibox.container.margin(displayswitch_button, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin * 3, 3) )
+
     statusbar_layout_right:add(mysystray)
     statusbar_layout:set_right(statusbar_layout_right)
   end

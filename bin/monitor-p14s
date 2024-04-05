@@ -1,0 +1,14 @@
+#!/bin/bash
+
+i="eDP"
+w="HDMI-A-0"
+o="HDMI-A-0"
+
+if [[ $1 == "school" ]]; then
+	echo "xrandr --output eDP --auto --primary --output DisplayPort-0 --off --output DisplayPort-1 --off --output HDMI-A-0 --auto --above eDP"
+	xrandr --output eDP --auto --primary --output DisplayPort-0 --off --output DisplayPort-1 --off --output HDMI-A-0 --auto --above eDP
+	awesome-client "awesome.restart()"
+	exit 0
+fi
+
+INTERNAL_MONITOR=$i WORK_MONITOR=$w OTHER_MONITOR=$o POSITION=left-of /home/manu/bin/monitor "$@"

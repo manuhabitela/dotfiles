@@ -1,4 +1,5 @@
 #!/bin/bash
+# required : xrandr, grep, sed, awesome-client
 # see help section below for script description
 
 # change the four "constants" below to match your config
@@ -117,14 +118,17 @@ case "$cmd" in
     all)
         echo xrandr --output "$internal_monitor" --auto --output "$external_monitor" --primary --auto "--$position" "$internal_monitor"
         xrandr --output "$internal_monitor" --auto --output "$external_monitor" --primary --auto "--$position" "$internal_monitor" > /dev/null &
+		awesome-client "awesome.restart()"
         ;;
     in)
         echo xrandr --output "$internal_monitor" --auto --output "$other_monitor" --off --output "$work_monitor" --off
         xrandr --output "$internal_monitor" --auto --output "$other_monitor" --off --output "$work_monitor" --off > /dev/null &
+		awesome-client "awesome.restart()"
         ;;
     out)
         echo --output "$internal_monitor" --off --output "$external_monitor" --auto
         xrandr --output "$internal_monitor" --off --output "$external_monitor" --auto > /dev/null &
+		awesome-client "awesome.restart()"
         ;;
     switch)
         echo $0 $next_state $external_monitor $position

@@ -137,10 +137,11 @@ globalkeys = gears.table.join(
       .. " Luminosité \"$(/home/manu/bin/progress-bar $(brillo -G) 15) $(echo $(brillo -G)/1 | bc) %\""
   ) end),
 
-  awful.key({ modkey            }, "F7",      function() awful.spawn("/home/manu/bin/monitor-w530 switch") end),
-  awful.key({ modkey, sft       }, "F7",      function() awful.spawn("/home/manu/bin/monitor-w530 in") end),
-  awful.key({ modkey, ctrl      }, "F7",      function() awful.spawn("/home/manu/bin/monitor-w530 in") end),
-  awful.key({ modkey, ctrl, sft }, "F7",      function() awful.spawn("/home/manu/bin/monitor-w530 out") end),
+  awful.key({ modkey            }, "F7",      function() awful.spawn("/home/manu/bin/monitor-p14s switch") end),
+  awful.key({ modkey, sft       }, "F7",      function() awful.spawn("/home/manu/bin/monitor-p14s in") end),
+  awful.key({ modkey, ctrl      }, "F7",      function() awful.spawn("/home/manu/bin/monitor-p14s in") end),
+  awful.key({ modkey, ctrl, sft }, "F7",      function() awful.spawn("/home/manu/bin/monitor-p14s out") end),
+  awful.key({ modkey            }, "F12",     function() awful.spawn("/home/manu/bin/monitor-p14s in") end),
 
   awful.key({ modkey, ctrl      }, "r",       awesome.restart),
   awful.key({ modkey, ctrl, sft }, "q",       awesome.quit),

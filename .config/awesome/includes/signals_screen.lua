@@ -267,7 +267,8 @@ awful.screen.connect_for_each_screen(function(s)
     statusbar_layout_right:add(wibox.container.margin(power_profile_button, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
 
     local dnd_button = wibox.widget.textbox('🔔')
-    local update_dnd_icon = function()
+    -- this is a global function so that we can easily call it with awesome-client later
+    update_dnd_icon = function()
         awful.spawn.easy_async('dunstctl is-paused', function(output)
             dnd_button.text = string.find(output, 'false') and '🔔' or '🔕'
         end)

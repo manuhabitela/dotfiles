@@ -56,6 +56,7 @@ rofi_cmd = "rofi -show combi"
 dofile('/home/manu/.config/awesome/includes/autostart.lua')
 dofile('/home/manu/.config/awesome/includes/signals_tag.lua')
 dofile('/home/manu/.config/awesome/includes/signals_screen.lua')
+systray_hints = require("systray_hints")
 dofile('/home/manu/.config/awesome/includes/shortcuts_keyboard_client.lua')
 dofile('/home/manu/.config/awesome/includes/shortcuts_keyboard_global.lua')
 dofile('/home/manu/.config/awesome/includes/shortcuts_mouse_client.lua')

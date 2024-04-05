@@ -50,6 +50,11 @@ theme.statusbar_margin_bottom = 2
 theme.statusbar_items_margin = 6
 theme.statusbar_current_layout_width = 29
 
+theme.systray_hints_font = theme.fonts.default
+theme.systray_hints_bg = theme.colors.orange
+theme.systray_hints_fg = theme.colors.blue_dark
+theme.systray_hints_border = theme.colors.blue_dark
+
 theme.menu_submenu_icon = "/usr/share/awesome/themes/zenburn/titlebar/maximized_focus_inactive.png"
 
 theme.clock_width = 38

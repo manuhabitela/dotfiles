@@ -112,6 +112,10 @@ globalkeys = gears.table.join(
     awful.spawn.with_shell(calendar_widget_cmd)
   end),
 
+  awful.key({ modkey }, "e",	function ()
+    systray_hints.run()
+  end),
+
   awful.key({ ctrl, altkey      }, "l",       function()
     awful.spawn.with_shell("slock")
   end),

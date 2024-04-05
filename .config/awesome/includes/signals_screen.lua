@@ -179,7 +179,7 @@ awful.screen.connect_for_each_screen(function(s)
   end
 
   local statusbar_widget = awful.wibar(awful.util.table.join(statusbar_options, { screen = s }))
-
+  s.statusbar_widget = statusbar_widget
   local taglist_widget = awful.widget.taglist(s, function(t) return t.name ~= "7" end, taglist_buttons)
   local tasklist_widget = helpers.tasklist_widget({
     screen = s,
@@ -242,8 +242,9 @@ awful.screen.connect_for_each_screen(function(s)
 
   -- on main screen only, show the systray (it can't be shown on multiple screens)
   if s == screen.primary then
-    local statusbar_layout_right = wibox.layout.fixed.horizontal()
-    local mysystray = wibox.widget.systray()
+    statusbar_layout_right = wibox.layout.fixed.horizontal()
+    s.statusbar_layout_right = statusbar_layout_right
+    mysystray = wibox.widget.systray()
     mysystray:set_base_size(beautiful.statusbar_height - beautiful.statusbar_margin)
     mysystray:fit({dpi = s.dpi })
 
@@ -264,6 +265,7 @@ awful.screen.connect_for_each_screen(function(s)
       end)
     ))
     statusbar_layout_right:add(wibox.container.margin(power_profile_button, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
+
     local dnd_button = wibox.widget.textbox('🔔')
     local update_dnd_icon = function()
         awful.spawn.easy_async('dunstctl is-paused', function(output)
@@ -289,6 +291,7 @@ awful.screen.connect_for_each_screen(function(s)
     statusbar_layout_right:add(wibox.container.margin(displayswitch_button, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin * 3, 3) )
 
     statusbar_layout_right:add(mysystray)
+    s.systray = mysystray
     statusbar_layout:set_right(statusbar_layout_right)
   end
 

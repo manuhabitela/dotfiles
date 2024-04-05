@@ -6,6 +6,12 @@ local volume_notification_cmd = "notify-send"
   .. " -u low"
   .. " Volume \"$(/home/manu/bin/pactl-notif-utils text)\""
 
+local mic_notification_cmd = "notify-send"
+  .. " -i /home/manu/.config/awesome/themes/leimi/$(/home/manu/bin/pactl-notif-utils mic-icon)"
+  .. " -h string:x-canonical-private-synchronous:manu-volume"
+  .. " -u low"
+  .. " \"$(/home/manu/bin/pactl-notif-utils mic-text)\""
+
 globalkeys = gears.table.join(
   -- focus next or prev client - works accross all screens
   awful.key({ altkey, sft       }, "Tab",       function()
@@ -120,21 +126,30 @@ globalkeys = gears.table.join(
   awful.key({ }, "XF86AudioRaiseVolume",      function() awful.spawn.with_shell(
     "pactl set-sink-volume @DEFAULT_SINK@ +2% && " .. volume_notification_cmd
   ) end),
+--   mute/unmute audio is a weird trick because I couldn't make it work easily with default stuff for some reason:
+--   XF86AudioMicMute is usually mapped to a virtual F20 key. I used that on my qmk firmware without success
+--   so my keyboard uses a virtual F15 key, which is usually mapped to XF86Launch6
+--   but for some reason I couldn't map it in awesome
+--   go check sxhkdrc for the keybinding working on my dz60 keyboard
+-- the keybindings below are there when using keyboards that work…
   awful.key({ }, "XF86AudioMute",             function() awful.spawn.with_shell(
     "pactl set-sink-mute @DEFAULT_SINK@ toggle && sleep 0.1 && " .. volume_notification_cmd
   ) end),
+  awful.key({ }, "XF86AudioMicMute",   function() awful.spawn.with_shell(ll
+    "pactl set-source-mute @DEFAULT_SOURCE@ toggle && sleep 0.1 && " .. mic_notification_cmd
+  ) end),
 
   awful.key({ }, "XF86MonBrightnessUp",       function() awful.spawn.with_shell(
-    "brillo -u 100000 -A 5"
-    .. " && notify-send"
+    "brillo -u 100000 -A 5 && " ..
+    "notify-send"
       .. " -i /home/manu/.config/awesome/themes/leimi/brightness.png"
       .. " -h string:x-canonical-private-synchronous:manu-brightness"
       .. " -u low"
       .. " Luminosité \"$(/home/manu/bin/progress-bar $(brillo -G) 15) $(echo $(brillo -G)/1 | bc) %\""
   ) end),
   awful.key({ }, "XF86MonBrightnessDown",     function() awful.spawn.with_shell(
-    "brillo -u 100000 -U 5"
-    .. " && notify-send"
+    "brillo -u 100000 -U 5 && " ..
+    "notify-send"
       .. " -i /home/manu/.config/awesome/themes/leimi/brightness.png"
       .. " -h string:x-canonical-private-synchronous:manu-brightness"
       .. " -u low"
@@ -164,7 +179,7 @@ for i = 1, 9 do
       local s = awful.screen.focused()
       helpers.tags.toggle_tag(s, i)
     end),
-	-- move focused client to tag
+    -- move focused client to tag
     awful.key({ modkey, sft  }, "#" .. i + 9, function()
       local s = client.focus.screen
       local tag = s.tags[i]
@@ -175,7 +190,7 @@ for i = 1, 9 do
         client.focus = c
       end
     end),
-	-- add focused client to tag
+    -- add focused client to tag
     awful.key({ modkey, ctrl }, "#" .. i + 9, function()
       if client.focus then
         local tag = client.focus.screen.tags[i]

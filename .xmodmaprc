@@ -36,3 +36,6 @@ keycode  30 = u U u U Home Home downarrow uparrow u U downarrow uparrow u U down
 keycode  31 = i I i I Next Next rightarrow idotless i I rightarrow idotless i I rightarrow idotless
 keycode  32 = o O o O Prior Prior oslash Oslash o O oslash Oslash o O oslash Oslash
 keycode  33 = p P p P End End thorn THORN p P thorn THORN p P thorn THORN
+
+keycode 193 = XF86Launch6
+keycode 194 = XF86Launch7

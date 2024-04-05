@@ -10,3 +10,6 @@ keycode 134 = colon slash colon slash division U2215 division U2215 colon slash 
 
 keycode 52 = w W w W less greater guillemotleft leftdoublequotemark w W guillemotleft leftdoublequotemark w W guillemotleft leftdoublequotemark
 keycode 53 = x X x X greater guillemotright guillemotright rightdoublequotemark x X guillemotright rightdoublequotemark x X guillemotright rightdoublequotemark
+
+keycode 193 = XF86Launch6
+keycode 194 = XF86Launch7

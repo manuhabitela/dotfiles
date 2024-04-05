@@ -10,11 +10,15 @@ get_muted_state() {
 	LC_ALL=C pactl list sinks | awk '/Mute/ { print $2 }'
 }
 
+get_mic_muted_state() {
+	LC_ALL=C pactl list sources | awk '/Mute/ { print $2 }'
+}
+
 if [[ $wanted == "text" ]]; then
 	muted=$(get_muted_state)
 	current=$(get_current_volume)
 	bin_dir=$(dirname $BASH_SOURCE[0])
-	if [[ $muted == "yes" ]]; then
+	if [[ "${muted}" =~ "yes" ]]; then
 		echo $($bin_dir/progress-bar 0 15)"  "0 % "Sourdine"
 	else
 		echo $($bin_dir/progress-bar $current 15) $current %
@@ -23,7 +27,7 @@ fi
 
 if [[ $wanted == "icon" ]]; then
 	muted=$(get_muted_state)
-	if [[ $muted == "yes" ]]; then
+	if [[ "${muted}" =~ "yes" ]]; then
 		echo "volume-muted.png"
 	else
 		current=$(get_current_volume)
@@ -34,5 +38,23 @@ if [[ $wanted == "icon" ]]; then
 		else
 			echo "volume-low.png"
 		fi
+	fi
+fi
+
+if [[ $wanted == "mic-text" ]]; then
+	muted=$(get_mic_muted_state)
+	if [[ "${muted}" =~ "yes" ]]; then
+		echo "Micro coupé"
+	else
+		echo "Micro activé"
+	fi
+fi
+
+if [[ $wanted == "mic-icon" ]]; then
+	muted=$(get_mic_muted_state)
+	if [[ "${muted}" =~ "yes" ]]; then
+		echo "volume-muted.png"
+	else
+		echo "volume-high.png"
 	fi
 fi

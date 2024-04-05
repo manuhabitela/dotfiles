@@ -1,0 +1,15 @@
+XF86Launch6
+	pactl set-source-mute @DEFAULT_SOURCE@ toggle && \
+	sleep 0.1 && \
+	notify-send \
+		-i /home/manu/.config/awesome/themes/leimi/$(/home/manu/bin/pactl-notif-utils mic-icon) \
+		-h string:x-canonical-private-synchronous:manu-mic \
+		-u low $(/home/manu/bin/pactl-notif-utils mic-text)
+
+XF86Launch7
+	pactl set-sink-mute @DEFAULT_SINK@ toggle && \
+	sleep 0.1 && \
+	notify-send \
+		-i /home/manu/.config/awesome/themes/leimi/$(/home/manu/bin/pactl-notif-utils icon) \
+		-h string:x-canonical-private-synchronous:manu-volume \
+		-u low "Volume $(/home/manu/bin/pactl-notif-utils text)"

@@ -49,27 +49,10 @@ if big_screen and screen:count() == 2 then
 end
 main_menu = helpers.main_menu.create()
 calendar_widget_cmd = terminal .. ' -g 65x15 -p Awesome -T calendar-widget -e \'bash -c "/home/manu/bin/bashcalendar; read line"\''
-rofi_cmd = string.format(
-  "rofi -show {mode} -font '%s'"
-  .. " -color-normal '%s,%s,%s,%s,%s'" -- bg, fg, bgalt, bg-focus, fg-focus
-  .. " -color-window '%s,%s,%s'" -- bg, border, separator
-  .. " -location 1 -width 100 -lines 15 -i -matching fuzzy"
-  .. " -terminal " .. terminal
-  .. " -theme-str '"
-  ..   "* { highlight: none; } "
-  ..   "entry { placeholder: none; } "
-  ..   "inputbar { children:  [ entry, case-indicator ]; }'",
-  beautiful.fonts.monospace,
-  beautiful.bg_normal, beautiful.fg_normal, beautiful.bg_normal, beautiful.bg_focus, beautiful.fg_focus,
-  beautiful.bg_normal, beautiful.bg_normal, beautiful.bg_normal
-)
-rofi_drun_cmd = string.format(
-  "rofi -show drun"
-  .. " -location 0 -width 35 -lines 5 -i -matching fuzzy"
-  .. " -terminal " .. terminal
-  .. " -show-icons"
-  .. " -theme drun"
-)
+rofi_cmd = "rofi -show combi"
+  .. " -combi-modes \"window,run,ssh,clipboard:greenclip print,power:~/.config/rofi/power-menu \""
+  .. " -display-combi \"!w!r!s!c!p\""
+  .. " -modi combi,emoji,calc,translate"
 dofile('/home/manu/.config/awesome/includes/autostart.lua')
 dofile('/home/manu/.config/awesome/includes/signals_tag.lua')
 dofile('/home/manu/.config/awesome/includes/signals_screen.lua')

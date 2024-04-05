@@ -28,3 +28,5 @@ if [[ -a $HOME/.cargo/bin ]]; then
 fi
 
 export PATH="$PATH:$HOME/bin"
+export CM_LAUNCHER=rofi
+

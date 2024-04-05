@@ -98,7 +98,11 @@ globalkeys = gears.table.join(
     awful.spawn.with_shell(helpers.string.replace(rofi_cmd, '{mode}', 'ssh'))
   end),
 
-  awful.key({ modkey            }, "d",       function()
+  awful.key({ modkey       }, "d",       function()
+    awful.spawn.with_shell("rofi -modi emoji -show emoji -emoji-file /home/manu/.config/rofi/rofi-gitmoji/gitmoji_emojis.txt")
+  end),
+
+  awful.key({ modkey, sft }, "d",       function()
     awful.spawn.with_shell(calendar_widget_cmd)
   end),
 

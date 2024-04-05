@@ -1,16 +1,16 @@
 !keycode key shift+key modeswitch+key modeswitch+shift+key altgr+key altgr+shift+key
 
 !remove caps lock and put ctrl on it
-!remove ctrl and put delete on it
+!remove ctrl and put caps lock on it
 clear Lock
 remove Control = Control_L
 keycode 66 = Control_L
 keycode 105 = Control_R
-keycode 37 = Super_L
+keycode 37 = Caps_Lock
 add Control = Control_L
 add Control = Control_R
 
-!thinkpad w530: transform the key next to AltGr key (PrtSc) to Menu key
+!thinkpad: transform the key next to AltGr key (PrtSc) to Menu key
 keycode 107 = Menu
 
 !remove œ and put ² and ³ (with shift) on it

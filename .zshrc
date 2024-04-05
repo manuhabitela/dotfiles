@@ -18,7 +18,7 @@ zstyle ':completion::complete:make:*:targets' call-command true
 source $ZSH/oh-my-zsh.sh
 
 setopt auto_cd
-cdpath=($HOME $HOME/dev)
+cdpath=($HOME $HOME/dev $HOME/dev/dinum)
 HISTSIZE=10000000
 SAVEHIST=10000000
 
@@ -36,6 +36,24 @@ function omz_termsupport_precmd {
   title "%15<..<%~%<<" "%15<..<%~%<<"
 }
 
+#source /usr/share/fzf/key-bindings.zsh
+#source /usr/share/fzf/completion.zsh
 source $HOME/.zshaliases
 EDITOR=nano
-export REACT_EDITOR=subl
+export REACT_EDITOR=code
+
+
+# bun completions
+[ -s "/home/manu/.bun/_bun" ] && source "/home/manu/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+export NODE_EXTRA_CA_CERTS="$(mkcert -CAROOT)/rootCA.pem"
+eval "$(fnm env --use-on-cd)"
+
+
+PATH=~/.console-ninja/.bin:$PATH
+
+source ~/.zsh/completion/scalingo_complete.zsh
+

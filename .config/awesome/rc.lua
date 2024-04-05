@@ -30,7 +30,7 @@ altkey = "Mod1"
 ctrl = "Control"
 sft = "Shift"
 -- classes = xprop > WM_CLASS > second string
-floating_classes = { "MPlayer", "pinentry", "Gimp", "Yad"}
+floating_classes = { "MPlayer", "pinentry", "Gimp", "Yad", "ThinkFan UI", "Inkscape", "vysor"}
 -- instances = xprop > WM_CLASS > first string
 floating_instances = {"exe", "plugin-container", "shutter", "pavucontrol"}
 -- apps = client.name (= app "title")

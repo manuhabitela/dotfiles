@@ -1,15 +1,15 @@
 A few stuff I keep here to ease up configs across my machines:
 
 * awesome wm 4
+* rofi
 * oh my zsh with a home made theme
 * dunst
 * gtk 2 and gtk 3
 * roxterm/xresources colors
-* lxsession
+* ~lxsession~ not used anymore
 * lightdm
-* sublime text 3, with home made snippets
-* dmenu
-* xmodmap: using an azerty layout on a qwerty keyboard, moving ctrl on capslock
+* ~sublime text 3, with home made snippets~ not used anymore
+* xmodmap: using an azerty layout on a qwerty keyboard, moving a few keys on different keyboards
 * picom
 * common bash scripts: easily add things to the path, start a server, toggle my thinkpad touchpad.
 

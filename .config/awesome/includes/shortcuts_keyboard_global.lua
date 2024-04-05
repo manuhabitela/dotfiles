@@ -15,14 +15,6 @@ local mic_notification_cmd = "notify-send"
 globalkeys = gears.table.join(
   -- focus next or prev client - works accross all screens
   awful.key({ altkey, sft       }, "Tab",       function()
-    awful.client.focus.byidx(-1)
-    if client.focus then client.focus:raise() end
-  end),
-  awful.key({ altkey,           }, "Tab",       function()
-    awful.client.focus.byidx(1)
-    if client.focus then client.focus:raise() end
-  end),
-  awful.key({ modkey, sft       }, "Tab",   function()
     if screen:count() > 1 then
       awful.screen.focus_relative(-1)
     else
@@ -30,13 +22,21 @@ globalkeys = gears.table.join(
       if client.focus then client.focus:raise() end
     end
   end),
-  awful.key({ modkey            }, "Tab",   function()
+  awful.key({ altkey,           }, "Tab",       function()
     if screen:count() > 1 then
       awful.screen.focus_relative(1)
     else
       awful.client.focus.byidx(1)
       if client.focus then client.focus:raise() end
     end
+  end),
+  awful.key({ modkey, sft       }, "Tab",   function()
+    awful.client.focus.byidx(-1)
+    if client.focus then client.focus:raise() end
+  end),
+  awful.key({ modkey            }, "Tab",   function()
+    awful.client.focus.byidx(1)
+    if client.focus then client.focus:raise() end
   end),
 
   -- jklm to resize windows
@@ -88,8 +88,7 @@ globalkeys = gears.table.join(
   awful.key({ modkey, sft       }, "t",       function() awful.spawn(terminal .. " -T Roxterm-temp") end),
 
   awful.key({ modkey            }, "f",       function() helpers.launcher.ror("Thunar", { "Thunar" }) end),
-  awful.key({ modkey            }, "s",       function() helpers.launcher.ror("subl", { "Code", "Sublime_text", "Subl" }) end),
-  awful.key({ modkey, ctrl      }, "s",       function() helpers.launcher.ror("code", { "Code" }) end),
+  awful.key({ modkey,           }, "s",       function() helpers.launcher.ror("code", { "Code" }) end),
   awful.key({ modkey, sft       }, "s",       function() helpers.launcher.ror("subl", { "Sublime_text", "Subl" }) end),
   awful.key({ modkey            }, "w",       function()
     helpers.launcher.ror("firefox", { "firefox" })

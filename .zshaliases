@@ -31,7 +31,8 @@ alias gmp="gm -G \"\.(php|inc)$\"" #php file + php files for a project i maintai
 alias gmpi="gm -G .inc$" #php file + php files for a project i maintain
 
 alias dk="docker"
-alias dkc="docker-compose"
+alias dkc="docker compose"
+alias dkr="docker compose"
 
 alias dockerps="docker ps --format \"table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}\""
 
@@ -96,3 +97,5 @@ transfer() {
 # needed for some build stuff looking for jsl instead of jslint
 alias jsl="jslint"
 alias teensy_loader_cli="teensy-loader-cli"
+
+alias awslocal="AWS_ACCESS_KEY_ID=test AWS_SECRET_ACCESS_KEY=test AWS_DEFAULT_REGION=${DEFAULT_REGION:-$AWS_DEFAULT_REGION} aws --endpoint-url=http://${LOCALSTACK_HOST:-localhost}:4566"

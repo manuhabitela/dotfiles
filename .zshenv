@@ -10,6 +10,7 @@ PATH="$PATH:/usr/lib/lightdm/lightdm"
 PATH="$PATH:/usr/bin/core_perl/"
 PATH="$PATH:/usr/local/go/bin"
 PATH="$PATH:$HOME/.composer/vendor/bin"
+PATH="$PATH:$HOME/.local/bin"
 if [[ -a $HOME/.gem/ruby/2.3.0/bin ]]; then
 	PATH="$PATH:$HOME/.gem/ruby/2.3.0/bin"
 fi

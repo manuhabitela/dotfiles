@@ -17,7 +17,7 @@ clientkeys = gears.table.join(
   awful.key({ modkey,           }, "n",      function(c)
     c.minimized = true
   end),
-  awful.key({ modkey,           }, "F12", function(c)
+  awful.key({ modkey,           }, "F11", function(c)
     c.maximized = not c.maximized
   end),
   awful.key({ modkey            }, "y", function(c)

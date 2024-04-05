@@ -11,7 +11,10 @@ theme.fonts = { default = "San Francisco Display Semi-Bold 10" }
 theme.fonts.statusbar = theme.fonts.default
 theme.fonts.titlebar = theme.fonts.default
 theme.fonts.big = "San Francisco Display Semi-Bold 25"
-theme.fonts.monospace = "Terminus (TTF) 12"
+theme.fonts.monospace = "Terminus (TTF) 14"
+theme.fonts.monospace_big = "Input 13"
+theme.systray_hints_font = theme.fonts.monospace
+theme.icon_theme = "Papirus"
 
 theme.colors = {
   blue_dark = "#073642",
@@ -27,7 +30,7 @@ theme.font = theme.fonts.default
 theme.bg_normal = theme.colors.blue_very_dark
 theme.fg_normal = theme.colors.blue_very_light
 theme.border_normal = theme.bg_normal
-theme.border_width = 3
+theme.border_width = 2
 theme.useless_gap = 2.5
 theme.gap_single_client = false
 
@@ -70,6 +73,7 @@ theme.tasklist_font = theme.fonts.statusbar
 theme.tasklist_plain_task_name = false
 
 theme.titlebar_size = 24
+theme.titlebar_bg = theme.colors.blue_very_dark
 theme.titlebar_fg = theme.colors.gray
 theme.titlebar_fg_focus = theme.colors.white
 theme.titlebar_font = theme.fonts.titlebar

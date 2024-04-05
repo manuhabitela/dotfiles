@@ -63,23 +63,12 @@
 	[
 		"no_italic"
 	],
-	"font_size": 12.5,
+	"font_size": 11.5,
 	"highlight_line": true,
 	"highlight_modified_tabs": true,
 	"ignored_packages":
 	[
-		"LSP-typescript",
-		"SHS-At-Rule",
-		"SHS-Bourbon",
-		"SHS-Bourbon-Neat",
-		"SHS-Compass-Mixins",
-		"SHS-Compass-Variables",
-		"SHS-CSS-Properties",
-		"SHS-CSS-Property-Values",
-		"SublimeLinter",
-		"SublimeLinter-stylelint",
 		"Vintage",
-		"Vintageous",
 	],
 	"line_numbers": true,
 	"line_padding_bottom": 5,
@@ -92,4 +81,5 @@
 	"tab_completion": true,
 	"theme": "Cobalt2.sublime-theme",
 	"word_wrap": true,
+	"index_files": true,
 }

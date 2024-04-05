@@ -6,9 +6,6 @@
 	"ignore_vcs_packages": true,
 	"in_process_packages":
 	[
-		"LSP-typescript",
-		"SublimeLinter",
-		"SublimeLinter-stylelint",
 	],
 	"installed_packages":
 	[

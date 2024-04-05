@@ -1,0 +1,23 @@
+#!/bin/bash
+
+cmd="${1}"
+
+current_profile=$(sudo tlp-stat | grep "Mode           = ")
+if [[ "$current_profile" == *"battery"* ]]; then
+	current_profile="bat"
+else
+	current_profile="ac"
+fi
+
+if [[ "$cmd" == "toggle" ]]; then
+	next_profile="bat"
+	if [[ "$current_profile" == "bat" ]]; then
+		next_profile="ac"
+	fi
+	sudo tlp $next_profile > /dev/null
+	echo $next_profile
+fi
+
+if [[ "$cmd" == "status" ]]; then
+	echo $current_profile
+fi

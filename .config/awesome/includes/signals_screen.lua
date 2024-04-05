@@ -247,8 +247,23 @@ awful.screen.connect_for_each_screen(function(s)
     mysystray:set_base_size(beautiful.statusbar_height - beautiful.statusbar_margin)
     mysystray:fit({dpi = s.dpi })
 
+    statusbar_layout_right:add(wibox.container.margin(awful.widget.watch('/home/manu/bin/echo-temp', 5), beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
+
     statusbar_layout_right:add(wibox.container.margin(awful.widget.watch('/home/manu/bin/echo-bat-cap', 20), beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
 
+    local power_profile_button = wibox.widget.textbox('loading…')
+    awful.spawn.easy_async('/home/manu/bin/acpi_profile status', function(output)
+        power_profile_button.text = output
+    end)
+    power_profile_button:buttons(awful.util.table.join(
+      awful.button({ }, 1, function()
+        power_profile_button.text = 'loading…'
+        awful.spawn.easy_async('/home/manu/bin/acpi_profile toggle', function(output)
+            power_profile_button.text = output
+        end)
+      end)
+    ))
+    statusbar_layout_right:add(wibox.container.margin(power_profile_button, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
     local dnd_button = wibox.widget.textbox('🔔')
     local update_dnd_icon = function()
         awful.spawn.easy_async('dunstctl is-paused', function(output)

@@ -171,13 +171,14 @@ awful.screen.connect_for_each_screen(function(s)
   -- the "7" tag, which is reserved for the terminal, is only on the main screen
   local screen_tags = { "1", "2", "3", "4", "5", "6" }
   local tile_layout = awful.layout.layouts[1]
-  local float_layout = awful.layout.layouts[2]
-  local max_layout = awful.layout.layouts[3]
+  local max_layout = awful.layout.layouts[2]
+  local cascade_layout = awful.layout.layouts[3]
+  local float_layout = awful.layout.layouts[4]
   if s == main_screen then
     table.insert(screen_tags, "7")
-    awful.tag(screen_tags, s, {float_layout, tile_layout, tile_layout, tile_layout, float_layout, float_layout, tile_layout})
+    awful.tag(screen_tags, s, {cascade_layout, big_screen and tile_layout or cascade_layout, big_screen and tile_layout or cascade_layout, tile_layout, float_layout, float_layout, tile_layout})
   else
-    awful.tag(screen_tags, s, {max_layout, float_layout, float_layout, float_layout, float_layout, float_layout, float_layout})
+    awful.tag(screen_tags, s, {cascade_layout, cascade_layout, cascade_layout, cascade_layout, cascade_layout, cascade_layout, cascade_layout})
   end
 
   local statusbar_widget = awful.wibar(awful.util.table.join(statusbar_options, {

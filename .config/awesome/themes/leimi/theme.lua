@@ -32,7 +32,7 @@ theme.fg_normal = theme.colors.blue_very_light
 theme.border_normal = theme.bg_normal
 theme.border_width = 1
 theme.useless_gap = 2.5
-theme.gap_single_client = false
+theme.gap_single_client = true
 
 theme.bg_focus = theme.bg_normal
 theme.fg_focus = theme.colors.orange

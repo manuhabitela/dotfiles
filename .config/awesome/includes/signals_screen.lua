@@ -3,20 +3,22 @@ statusbar_items_separator:set_font("Noto Sans 9")
 statusbar_items_separator:set_valign("center")
 statusbar_items_separator:set_markup('<span foreground="'..beautiful.statusbar_separator_color..'">|</span>')
 local statusbar_options = {
+  type="dock",
+  ontop = true,
+  visible = false,
   position = "bottom",
   bg = beautiful.statusbar_bg_color,
   border_width = beautiful.statusbar_border_width,
   border_color = beautiful.statusbar_border_color,
-  align = "right",
   height = 26
 }
 local statusbar_systray_options = {
   bg = "#00000000",
   height = 28,
   border_width = 0,
-  width = 300
+  width = 100
 }
-local statusbar_systray = wibox(awful.util.table.join(statusbar_options, statusbar_systray_options))
+local statusbar_systray = wibox(statusbar_systray_options)
 
 local taglist_buttons = awful.util.table.join(
   awful.button({ }, 1, function(t) t:view_only() end),
@@ -178,8 +180,13 @@ awful.screen.connect_for_each_screen(function(s)
     awful.tag(screen_tags, s, {max_layout, float_layout, float_layout, float_layout, float_layout, float_layout, float_layout})
   end
 
-  local statusbar_widget = awful.wibar(awful.util.table.join(statusbar_options, { screen = s }))
+  local statusbar_widget = awful.wibar(awful.util.table.join(statusbar_options, {
+    screen = s,
+    -- width = s.geometry.width,
+    -- y = s.geometry.height - beautiful.statusbar_height
+  }))
   s.statusbar_widget = statusbar_widget
+  beautiful.gap_single_client = not s.statusbar_widget.visible
   local taglist_widget = awful.widget.taglist(s, function(t) return t.name ~= "7" end, taglist_buttons)
   local tasklist_widget = helpers.tasklist_widget({
     screen = s,
@@ -239,7 +246,7 @@ awful.screen.connect_for_each_screen(function(s)
     statusbar_layout_right = wibox.layout.fixed.horizontal()
     s.statusbar_layout_right = statusbar_layout_right
     mysystray = wibox.widget.systray()
-    mysystray:set_base_size(beautiful.statusbar_height - beautiful.statusbar_margin)
+    -- mysystray:set_base_size(beautiful.statusbar_height - beautiful.statusbar_margin)
     mysystray:fit({dpi = s.dpi })
 
     statusbar_layout_right:add(wibox.container.margin(awful.widget.watch('/home/manu/bin/echo-temp', 5), beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
@@ -275,7 +282,7 @@ awful.screen.connect_for_each_screen(function(s)
         end)
       end)
     ))
-    statusbar_layout_right:add(wibox.container.margin(dnd_button, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
+    statusbar_layout_right:add(wibox.container.margin(dnd_button, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin, 2) )
 
     local displayswitch_button = wibox.widget.imagebox('/usr/share/icons/Papirus-Dark/symbolic/devices/computer-symbolic.svg', true)
     displayswitch_button.forced_width = 16

@@ -100,6 +100,12 @@ globalkeys = gears.table.join(
     awful.spawn.with_shell(calendar_widget_cmd)
   end),
 
+  awful.key({ modkey       }, "b",       function()
+  local s = awful.screen.focused()
+  s.statusbar_widget.visible = not s.statusbar_widget.visible
+  beautiful.gap_single_client = not s.statusbar_widget.visible
+  end),
+
   awful.key({ modkey }, "e",	function ()
     systray_hints.run()
   end),

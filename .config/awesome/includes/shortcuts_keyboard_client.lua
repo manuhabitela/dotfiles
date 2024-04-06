@@ -9,7 +9,10 @@ clientkeys = gears.table.join(
   awful.key({ modkey, sft       }, "u",      function(c)
     c.sticky = not c.sticky
   end),
-  awful.key({ modkey, sft, ctrl  }, "u",      function(c)
+  awful.key({ modkey, ctrl      }, "u",      function(c)
+    c.ontop = not c.ontop
+  end),
+  awful.key({ modkey, sft, ctrl }, "u",      function(c)
     c.ontop = not c.ontop
     c.sticky = c.ontop
     c.floating = c.ontop

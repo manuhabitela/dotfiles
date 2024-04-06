@@ -76,6 +76,9 @@ client.connect_signal("request::titlebars", function(c)
   local layout = wibox.layout.align.horizontal()
   layout:set_left(left_layout)
   layout:set_right(right_layout)
+--   local clientbg= get_dominant_color(c)
+--   local textcolor = is_contrast_acceptable(beautiful.colors.white, clientbg) and beautiful.colors.white or "#222"
+--   awful.titlebar(c, { size = beautiful.titlebar_size, bg_focus = clientbg, bg_normal = clientbg, fg_focus = textcolor, fg_normal = textcolor }):set_widget(layout)
   awful.titlebar(c, { size = beautiful.titlebar_size }):set_widget(layout)
 end)
 

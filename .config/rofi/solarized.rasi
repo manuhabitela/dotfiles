@@ -65,7 +65,7 @@ listview {
     spacing:      2px ;
     scrollbar:    true;
     padding:      2px 0px 0px ;
-	lines: 15;
+	lines: 25;
 }
 element {
     border:  0;

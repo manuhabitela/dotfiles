@@ -30,7 +30,7 @@ theme.font = theme.fonts.default
 theme.bg_normal = theme.colors.blue_very_dark
 theme.fg_normal = theme.colors.blue_very_light
 theme.border_normal = theme.bg_normal
-theme.border_width = 2
+theme.border_width = 1
 theme.useless_gap = 2.5
 theme.gap_single_client = false
 

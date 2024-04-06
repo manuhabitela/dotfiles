@@ -23,6 +23,7 @@ helpers.tasklist_widget = require("helpers.tasklist_widget")
 dofile('/home/manu/.config/awesome/includes/errors.lua')
 
 beautiful.init("/home/manu/.config/awesome/themes/leimi/theme.lua")
+-- require('nice')
 terminal = "roxterm"
 winkey = "Mod4"
 modkey = winkey

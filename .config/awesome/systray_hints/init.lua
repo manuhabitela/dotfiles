@@ -173,7 +173,7 @@ local function show_popup(x, y, w, h)
         background.bg                 = systray_hints.bgcolor
         background.forced_width       = hint_width
         background.shape              = widget_shape
-        background.shape_border_width = 1
+        background.shape_border_width = 0
         background.shape_border_color = systray_hints.bordercolor
 
         table.insert(margins, background)

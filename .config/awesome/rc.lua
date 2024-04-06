@@ -53,7 +53,7 @@ calendar_widget_cmd = terminal .. ' -g 65x15 -p Awesome -T calendar-widget -e \'
 rofi_cmd = "rofi -show combi"
   .. " -combi-modes \"window,run,ssh,clipboard:greenclip print,power:~/.config/rofi/power-menu \""
   .. " -display-combi \"!w!r!s!c!p\""
-  .. " -modi combi,emoji,calc,translate"
+  .. " -modi combi,emoji,calc,translate,file-browser-extended"
 dofile('/home/manu/.config/awesome/includes/autostart.lua')
 dofile('/home/manu/.config/awesome/includes/signals_tag.lua')
 dofile('/home/manu/.config/awesome/includes/signals_screen.lua')

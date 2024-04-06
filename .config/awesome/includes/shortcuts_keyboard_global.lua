@@ -85,11 +85,13 @@ globalkeys = gears.table.join(
   awful.key({ modkey            }, "g",       function() helpers.launcher.ror("git-cola", { "git-cola" }) end),
 
   awful.key({ modkey            }, "space",   function()
-    awful.spawn.with_shell(helpers.string.replace(rofi_cmd, '{mode}', 'run'))
+    awful.spawn.with_shell(rofi_cmd)
   end),
-
-  awful.key({ modkey, altkey    }, "space",   function()
-    awful.spawn.with_shell(helpers.string.replace(rofi_cmd, '{mode}', 'ssh'))
+  awful.key({ modkey            }, "²",   function()
+    awful.spawn.with_shell(rofi_cmd)
+  end),
+  awful.key({ modkey            }, "Escape",   function()
+    awful.spawn.with_shell(rofi_cmd)
   end),
 
   awful.key({ modkey       }, "d",       function()

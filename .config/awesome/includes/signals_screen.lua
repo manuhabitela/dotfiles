@@ -201,12 +201,6 @@ awful.screen.connect_for_each_screen(function(s)
   s.statusbar_current_layout_name.align = 'center'
   s.statusbar_current_layout_name.forced_width = beautiful.statusbar_current_layout_width
 
-  local menutext = wibox.widget.textbox('menu')
-  menutext:set_font(beautiful.statusbar_font)
-  menutext:buttons(awful.button({ }, 1, function() main_menu:toggle() end))
-  statusbar_layout_left:add( wibox.container.margin(menutext, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
-  statusbar_layout_left:add( statusbar_items_separator )
-
   local clock = wibox.widget.textclock("%H:%M", 10)
   clock:set_font(beautiful.statusbar_font)
   clock.align = 'center'
@@ -293,6 +287,15 @@ awful.screen.connect_for_each_screen(function(s)
 
     statusbar_layout_right:add(mysystray)
     s.systray = mysystray
+
+    local logout_button = wibox.widget.imagebox('/usr/share/icons/Papirus-Dark/symbolic/actions/system-shutdown-symbolic.svg', true)
+    logout_button.forced_width = 16
+    logout_button.forced_height = 16
+    logout_button:buttons(awful.util.table.join(
+        awful.button({ }, 1, function() awful.spawn('xfce4-session-logout') end)
+    ))
+    statusbar_layout_right:add(wibox.container.margin(logout_button, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin, 3) )
+
     statusbar_layout:set_right(statusbar_layout_right)
   end
 

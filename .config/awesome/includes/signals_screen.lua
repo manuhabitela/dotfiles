@@ -267,11 +267,14 @@ awful.screen.connect_for_each_screen(function(s)
     ))
     statusbar_layout_right:add(wibox.container.margin(power_profile_button, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
 
-    local dnd_button = wibox.widget.textbox('🔔')
+    local dnd_icons_folder = '/usr/share/icons/Papirus-Dark/symbolic/status/'
+    local dnd_button = wibox.widget.imagebox(dnd_icons_folder .. 'notification-symbolic.svg', true)
+    dnd_button.forced_width = 16
+    dnd_button.forced_height = 16
     -- this is a global function so that we can easily call it with awesome-client later
     update_dnd_icon = function()
         awful.spawn.easy_async('dunstctl is-paused', function(output)
-            dnd_button.text = string.find(output, 'false') and '🔔' or '🔕'
+            dnd_button.image = dnd_icons_folder .. (string.find(output, 'false') and 'notification' or 'process-error') .. '-symbolic.svg'
         end)
     end
     update_dnd_icon()
@@ -290,7 +293,7 @@ awful.screen.connect_for_each_screen(function(s)
     displayswitch_button:buttons(awful.util.table.join(
         awful.button({ }, 1, function() awful.spawn.with_shell('xfce4-display-settings --minimal') end)
     ))
-    statusbar_layout_right:add(wibox.container.margin(displayswitch_button, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin * 3, 3) )
+    statusbar_layout_right:add(wibox.container.margin(displayswitch_button, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin, 3) )
 
     statusbar_layout_right:add(mysystray)
     s.systray = mysystray

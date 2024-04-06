@@ -50,8 +50,8 @@ local function do_cascade(p, tiling)
         -- get a much better user experience.
         local how_many = (#cls >= num_c and #cls) or num_c
 
-        local current_offset_x = cascade.offset_x * (how_many - 1)
-        local current_offset_y = cascade.offset_y * (how_many - 1)
+        local current_offset_x = (#cls > 1) and (cascade.offset_x * (how_many - 1)) or 5
+        local current_offset_y = (#cls > 1) and (cascade.offset_y * (how_many - 1)) or 5
 
         -- Iterate.
         for i = 1,#cls,1 do

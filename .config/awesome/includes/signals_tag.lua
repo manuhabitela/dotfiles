@@ -1,8 +1,8 @@
 local cascade = require('../lain/cascade')
 
-cascade.offset_x = 64
+cascade.offset_x = 48
 cascade.offset_y = 32
-cascade.nmaster = 3
+cascade.nmaster = 2
 
 awful.layout.layouts = {
   awful.layout.suit.tile,

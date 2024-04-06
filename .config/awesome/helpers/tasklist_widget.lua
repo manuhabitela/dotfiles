@@ -430,11 +430,11 @@ local function tasklist_label(c, args, tb)
     local shape_border_color = args.shape_border_color or theme.tasklist_shape_border_color
 
     -- symbol to use to indicate certain client properties
-    local sticky = args.sticky or theme.tasklist_sticky or "▪"
-    local ontop = args.ontop or theme.tasklist_ontop or '⌃'
+    local sticky = args.sticky or theme.tasklist_sticky or "∗"
+    local ontop = args.ontop or theme.tasklist_ontop or '<b>^</b>'
     local above = args.above or theme.tasklist_above or '▴'
     local below = args.below or theme.tasklist_below or '▾'
-    local floating = args.floating or theme.tasklist_floating or '✈'
+    local floating = args.floating or theme.tasklist_floating or '∾'
     local maximized = args.maximized or theme.tasklist_maximized or '<b>+</b>'
     local maximized_horizontal = args.maximized_horizontal or theme.tasklist_maximized_horizontal or '⬌'
     local maximized_vertical = args.maximized_vertical or theme.tasklist_maximized_vertical or '⬍'
@@ -446,10 +446,6 @@ local function tasklist_label(c, args, tb)
     if not theme.tasklist_plain_task_name then
         if c.sticky then name = name .. sticky end
 
-        if c.ontop then name = name .. ontop
-        elseif c.above then name = name .. above
-        elseif c.below then name = name .. below end
-
         if c.maximized then
             name = name .. maximized
         else
@@ -457,6 +453,10 @@ local function tasklist_label(c, args, tb)
             if c.maximized_vertical then name = name .. maximized_vertical end
             if c.floating then name = name .. floating end
         end
+
+        if c.ontop then name = name .. ontop
+        elseif c.above then name = name .. above
+        elseif c.below then name = name .. below end
     end
 
     if not disable_task_name then

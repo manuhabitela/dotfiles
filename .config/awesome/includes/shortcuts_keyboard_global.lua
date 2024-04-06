@@ -39,17 +39,6 @@ globalkeys = gears.table.join(
     if client.focus then client.focus:raise() end
   end),
 
-  -- jklm to resize windows
-  awful.key({ modkey,           }, "j",       function() awful.tag.incmwfact(-0.05) end),
-  awful.key({ modkey,           }, "k",       function() awful.client.incwfact(-0.1) end),
-  awful.key({ modkey,           }, "l",       function() awful.client.incwfact( 0.1) end),
-  awful.key({ modkey,           }, "m",       function() awful.tag.incmwfact( 0.05) end),
-
-  -- shift + jklm to move windows
-  awful.key({ modkey, sft       }, "j",       function() awful.client.swap.global_bydirection("left") end),
-  awful.key({ modkey, sft       }, "k",       function() awful.client.swap.global_bydirection("down") end),
-  awful.key({ modkey, sft       }, "l",       function() awful.client.swap.global_bydirection("up") end),
-  awful.key({ modkey, sft       }, "m",       function() awful.client.swap.global_bydirection("right") end),
 
   -- add or remove focused client to the master side
   awful.key({ modkey,           }, "h",       function() awful.tag.incnmaster( 1) end),

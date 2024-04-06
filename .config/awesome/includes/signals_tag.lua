@@ -1,8 +1,14 @@
+local cascade = require('../lain/cascade')
+
+cascade.offset_x = 64
+cascade.offset_y = 32
+cascade.nmaster = 3
+
 awful.layout.layouts = {
   awful.layout.suit.tile,
-  awful.layout.suit.floating,
   awful.layout.suit.max,
-  awful.layout.suit.tile.bottom
+  cascade,
+  awful.layout.suit.floating,
 }
 
 local tag_map = {

@@ -22,5 +22,65 @@ clientkeys = gears.table.join(
   end),
   awful.key({ modkey            }, "y", function(c)
     awful.titlebar.toggle(c)
+  end),
+
+  -- jklm to resize windows
+  awful.key({ modkey,           }, "j", function(c)
+    if helpers.screen.is_floating_layout() then
+		c:relative_move(0, 0, -60, 0)
+    else
+      awful.tag.incmwfact(-0.05)
+    end
+  end),
+  awful.key({ modkey,           }, "k", function(c)
+    if helpers.screen.is_floating_layout() then
+		c:relative_move(0, 0, 0, -30)
+    else
+      awful.client.incwfact(-0.1)
+    end
+  end),
+  awful.key({ modkey,           }, "l", function(c)
+    if helpers.screen.is_floating_layout() then
+		c:relative_move(0, 0, 0, 30)
+    else
+      awful.client.incwfact( 0.1)
+    end
+  end),
+  awful.key({ modkey,           }, "m", function(c)
+    if helpers.screen.is_floating_layout() then
+		c:relative_move(0, 0, 60, 0)
+    else
+      awful.tag.incmwfact( 0.05)
+    end
+  end),
+
+  -- shift + jklm to move windows
+  awful.key({ modkey, sft       }, "j", function(c)
+    if helpers.screen.is_floating_layout() then
+		c:relative_move(-60, 0, 0, 0)
+	else
+    	awful.client.swap.global_bydirection("left")
+	end
+  end),
+  awful.key({ modkey, sft       }, "k", function(c)
+    if helpers.screen.is_floating_layout() then
+		c:relative_move(0, 30, 0, 0)
+	else
+    	awful.client.swap.global_bydirection("down")
+	end
+  end),
+  awful.key({ modkey, sft       }, "l", function(c)
+    if helpers.screen.is_floating_layout() then
+		c:relative_move(0, -30, 0, 0)
+	else
+    	awful.client.swap.global_bydirection("up")
+	end
+  end),
+  awful.key({ modkey, sft       }, "m", function(c)
+    if helpers.screen.is_floating_layout() then
+		c:relative_move(60, 0, 0, 0)
+	else
+    	awful.client.swap.global_bydirection("right")
+	end
   end)
 )

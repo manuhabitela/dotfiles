@@ -1,0 +1,23 @@
+# https://github.com/protesilaos/tempus-themes/blob/master/roxterm/Tempus%20Past
+[roxterm colour scheme]
+palette_size=16
+0=#53545b
+1=#c00c50
+2=#0a7040
+3=#a6403a
+4=#1763aa
+5=#b02874
+6=#096a83
+7=#eae2de
+8=#80565d
+9=#bd3133
+10=#337243
+11=#8d554a
+12=#5559bb
+13=#b022a7
+14=#07707a
+15=#f3f2f4
+background=#f3f2f4
+foreground=#53545b
+cursor=#53545b
+cursorfg=#f3f2f4

@@ -39,7 +39,7 @@ window {
     border:           1;
     padding:          5;
 	width: 100%;
-	font: "Terminus 14";
+	font: "Noto Sans Mono 14";
 	// anchor:     south;
     // location:   south;
 	// y-offset: -28;

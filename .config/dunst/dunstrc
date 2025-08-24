@@ -61,7 +61,7 @@
 	width = 400
 	notification_limit = 7
 	origin = top-right
-	offset = 100x100
+	offset = (100, 100)
 
     # Shrink window if it's smaller than the width.  Will be ignored if
     # width is 0.
@@ -70,7 +70,9 @@
     # The transparency of the window.  Range: [0; 100].
     # This option will only work if a compositing windowmanager is
     # present (e.g. xcompmgr, compiz, etc.).
-    transparency = 5
+    transparency = 0
+
+    corner_radius = 8
 
     # Don't remove messages, if the user is idle (no mouse or keyboard input)
     # for longer than idle_threshold seconds.
@@ -108,7 +110,8 @@
     # Draw a line of "separatpr_height" pixel height between two
     # notifications.
     # Set to 0 to disable.
-    separator_height = 8
+    # separator_height = 8
+    gap_size = 8
 
     # Padding between text and separator.
     padding = 8
@@ -138,8 +141,8 @@
     # Paths to default icons.
     icon_path = /usr/share/icons/Faenza/24x24/status/:/usr/share/icons/Faenza/24x24/devices/:/usr/share/icons/Faenza/24x24/apps/
 
-    frame_width = 0
-    frame_color = "#aaaaaa"
+    frame_width = 1
+    frame_color = "#ffc600e6"
 
 ; [shortcuts]
 
@@ -165,20 +168,25 @@
 [urgency_low]
     # IMPORTANT: colors have to be defined in quotation marks.
     # Otherwise the "#" and following would be interpreted as a comment.
-    background = "#222222"
+    background = "#222222e6"
     foreground = "#dddddd"
     timeout = 5
+    override_pause_level = 25
+    frame_color = "#454545e5"
 
 [urgency_normal]
-    background = "#073642"
+    background = "#073642e6"
     foreground = "#ffffff"
     timeout = 10
+    override_pause_level = 50
+    frame_color = "#032e38"
 
 [urgency_critical]
     background = "#900000"
     foreground = "#ffffff"
     timeout = 0
-
+    override_pause_level = 75
+    frame_color = "#6b0000"
 
 # Every section that isn't one of the above is interpreted as a rules to
 # override settings for certain messages.

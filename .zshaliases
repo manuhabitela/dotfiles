@@ -1,19 +1,21 @@
 #!/bin/zsh
 
-alias l="LC_COLLATE=C ls -lah --group-directories-first"
-alias lk="LC_COLLATE=C ls -lh --group-directories-first"
-alias ll="LC_COLLATE=C ls -1ah --group-directories-first"
+alias cat="bat"
+
+alias l="LC_COLLATE=C eza -la --group-directories-first"
+#alias lk="LC_COLLATE=C eza -l --group-directories-first"
+alias ll="LC_COLLATE=C eza -1a --group-directories-first"
+
+alias mkdir="mkdir -p"
 
 # git enhanced graph log
 alias glo="git log --graph --pretty=format:'%C(bold red)%h%Creset%C(yellow)%d%Creset %s %Cgreen%cr (%cd) %C(cyan)%an%Creset' --abbrev-commit --date=\"format:%a %d %b\""
 
 # git diff with difftastic
-alias gdt="GIT_EXTERNAL_DIFF=difft git diff"
+alias gdt="GIT_EXTERNAL_DIFF='difft --display=inline' git diff"
 
-# gimme file with ack!
-alias gmf="ack --ignore-case"
-
-# gimme file with ag!
+# gimme file with ripgrep
+alias gmm="rg --no-messages --colors 'line:fg:yellow' --colors 'match:style:nobold' --colors 'match:fg:green' --colors 'path:fg:255,94,94'"
 alias gm="ag --color-line-number=\"0;33\" --color-match=\"0;32\" --color-path=\"0;91\""
 alias gmh="gm -G \"\.html$\""
 alias gms="gm -G \"\.scss$\""
@@ -40,15 +42,36 @@ alias -g andn="&& notify-send -i /usr/share/icons/Faenza/apps/16/terminal.png 'C
 
 alias mon="/home/manu/bin/monitor-p14s"
 
+alias lstn="sudo lsof -i -P -n | grep LISTEN"
+
 #alias android-studio="_JAVA_OPTIONS=-Djava.io.tmpdir=/var/tmp /home/manu/opt/android-studio/bin/studio.sh"
 
 gpo() {
+	# check if $1 is passed, if it is, replace "origin" with $1
 	current_branch=$(git rev-parse --abbrev-ref HEAD)
-	git push -u origin $current_branch
+	if [ -n "$1" ]; then
+		git push -u $1 $current_branch
+	else
+		git push -u origin $current_branch
+	fi
 }
 
 gcob() {
 	git checkout -b $1 origin/$1
+}
+
+unalias gco
+# git checkout alias that supports passing branch names from GitHub UI containing repo prefixes
+# ie. `gco manuhabitela:issue-366-new-record-button` will checkout `issue-366-new-record-button`
+gco() {
+	if [ $# -eq 1 ] && [[ "$1" == *:* ]]; then
+		# If there's only one argument and it contains a colon
+		branch="${1#*:}"  # Strip everything before the colon
+		git checkout $branch
+	else
+		# Otherwise, pass all arguments to git checkout
+		git checkout "$@"
+	fi
 }
 
 switch_file() {
@@ -57,6 +80,15 @@ switch_file() {
 	mv $first_file $first_file.$$
 	mv $second_file $first_file
 	mv $first_file.$$ $second_file
+}
+
+stopwatch() {
+    start=$(date +%s)
+    while true; do
+        time="$(( $(date +%s) - $start))"
+        printf '%s\r' "$(date -u -d "@$time" +%H:%M:%S)"
+        sleep 0.1
+    done
 }
 
 extract() {

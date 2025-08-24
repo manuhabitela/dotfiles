@@ -5,17 +5,22 @@ cascade.offset_y = 32
 cascade.nmaster = 2
 
 awful.layout.layouts = {
-  awful.layout.suit.tile,
   awful.layout.suit.max,
+  awful.layout.suit.tile.bottom,
+  awful.layout.suit.tile,
   cascade,
+  cascade.rcrd,
   awful.layout.suit.floating,
+  cascade.tile,
 }
 
 local tag_map = {
   tile = "tile",
   tilebottom = "tileb",
   max = "max",
-  floating = "float"
+  floating = "float",
+  cascade = "casc",
+  cascade_rcrd = "rcrd",
 }
 
 local function update_statusbar_tag(t)

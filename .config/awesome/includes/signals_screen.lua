@@ -5,20 +5,13 @@ statusbar_items_separator:set_markup('<span foreground="'..beautiful.statusbar_s
 local statusbar_options = {
   type="dock",
   ontop = true,
-  visible = false,
+  visible = true,
   position = "bottom",
   bg = beautiful.statusbar_bg_color,
   border_width = beautiful.statusbar_border_width,
   border_color = beautiful.statusbar_border_color,
-  height = 26
+  height = beautiful.statusbar_height
 }
-local statusbar_systray_options = {
-  bg = "#00000000",
-  height = 28,
-  border_width = 0,
-  width = 100
-}
-local statusbar_systray = wibox(statusbar_systray_options)
 
 local taglist_buttons = awful.util.table.join(
   awful.button({ }, 1, function(t) t:view_only() end),
@@ -112,6 +105,15 @@ local function tasklist_client_name(c, all_clients)
     return "-" .. name
   end
 
+  local tag = c.first_tag.index
+  if tag == 1 then name = name .. ' ⑴' end
+  if tag == 2 then name = name .. ' ⑵' end
+  if tag == 3 then name = name .. ' ⑶' end
+  if tag == 4 then name = name .. ' ⑷' end
+  if tag == 5 then name = name .. ' ⑸' end
+  if tag == 6 then name = name .. ' ⑹' end
+  if tag == 7 then name = name .. ' ⑺' end
+
   return gears.string.xml_escape(name)
 end
 
@@ -170,13 +172,13 @@ awful.screen.connect_for_each_screen(function(s)
 
   -- the "7" tag, which is reserved for the terminal, is only on the main screen
   local screen_tags = { "1", "2", "3", "4", "5", "6" }
-  local tile_layout = awful.layout.layouts[1]
-  local max_layout = awful.layout.layouts[2]
-  local cascade_layout = awful.layout.layouts[3]
-  local float_layout = awful.layout.layouts[4]
+  local tile_layout = awful.layout.layouts[3]
+  local max_layout = awful.layout.layouts[1]
+  local cascade_layout = awful.layout.layouts[4]
+  local float_layout = awful.layout.layouts[5]
   if s == main_screen then
     table.insert(screen_tags, "7")
-    awful.tag(screen_tags, s, {cascade_layout, big_screen and tile_layout or cascade_layout, big_screen and tile_layout or cascade_layout, tile_layout, float_layout, float_layout, tile_layout})
+    awful.tag(screen_tags, s, {cascade_layout, tile_layout, tile_layout, tile_layout, float_layout, float_layout, tile_layout})
   else
     awful.tag(screen_tags, s, {cascade_layout, cascade_layout, cascade_layout, cascade_layout, cascade_layout, cascade_layout, cascade_layout})
   end
@@ -186,8 +188,28 @@ awful.screen.connect_for_each_screen(function(s)
     -- width = s.geometry.width,
     -- y = s.geometry.height - beautiful.statusbar_height
   }))
+
+  local hidden_statusbar_widget = wibox({
+    type = "dock",
+    ontop = true,
+    visible = false,
+    height = 10,
+    width = 300,
+    y = s.geometry.height - 10,
+    x = 0,
+    bg = beautiful.colors.blue_very_dark_transparent,
+    fg = "white"
+  })
+  local hidden_statusbar_layout = wibox.layout.fixed.horizontal()
+  local hidden_statusbar_text = s.selected_tag.index
+  local hidden_statusbar_text_widget = wibox.widget.textbox(hidden_statusbar_text)
+  hidden_statusbar_text_widget:set_font(beautiful.fonts.small)
+  hidden_statusbar_layout:add(hidden_statusbar_text_widget)
+  hidden_statusbar_widget:set_widget(wibox.container.margin(hidden_statusbar_layout, 40, 2, 0, 1))
+
   s.statusbar_widget = statusbar_widget
-  beautiful.gap_single_client = not s.statusbar_widget.visible
+  s.hidden_statusbar_widget = hidden_statusbar_widget
+--  beautiful.gap_single_client = not s.statusbar_widget.visible
   local taglist_widget = awful.widget.taglist(s, function(t) return t.name ~= "7" end, taglist_buttons)
   local tasklist_widget = helpers.tasklist_widget({
     screen = s,
@@ -247,12 +269,13 @@ awful.screen.connect_for_each_screen(function(s)
     statusbar_layout_right = wibox.layout.fixed.horizontal()
     s.statusbar_layout_right = statusbar_layout_right
     mysystray = wibox.widget.systray()
-    -- mysystray:set_base_size(beautiful.statusbar_height - beautiful.statusbar_margin)
+    mysystray:set_base_size(28)
     mysystray:fit({dpi = s.dpi })
+    mysystray.forced_height = beautiful.statusbar_height
 
-    statusbar_layout_right:add(wibox.container.margin(awful.widget.watch('/home/manu/bin/echo-temp', 5), beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
+    statusbar_layout_right:add(wibox.container.margin(awful.widget.watch('/home/manu/bin/echo-temp', 5), beautiful.statusbar_items_margin, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
 
-    statusbar_layout_right:add(wibox.container.margin(awful.widget.watch('/home/manu/bin/echo-bat-cap', 20), beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
+    statusbar_layout_right:add(wibox.container.margin(awful.widget.watch('/home/manu/bin/echo-bat-cap', 20), beautiful.statusbar_items_margin, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
 
     local power_profile_button = wibox.widget.textbox('loading…')
     awful.spawn.easy_async('/home/manu/bin/acpi_profile status', function(output)
@@ -266,46 +289,76 @@ awful.screen.connect_for_each_screen(function(s)
         end)
       end)
     ))
-    statusbar_layout_right:add(wibox.container.margin(power_profile_button, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
+    statusbar_layout_right:add(wibox.container.margin(power_profile_button, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
 
-    local dnd_icons_folder = '/usr/share/icons/Papirus-Dark/symbolic/status/'
-    local dnd_button = wibox.widget.imagebox(dnd_icons_folder .. 'notification-symbolic.svg', true)
+    local icons_folder = '/usr/share/icons/Papirus-Dark/32x32/symbolic/status/'
+
+    local mic_button = wibox.widget.imagebox(icons_folder .. 'audio-volume-muted-symbolic.svg', true)
+    mic_button.forced_width = 16
+    mic_button.forced_height = 16
+    -- this is a global function so that we can easily call it with awesome-client later
+    update_mic_icon = function()
+        awful.spawn.easy_async('/home/manu/bin/pactl-notif-utils mic-muted-state', function(output)
+            mic_button.image = icons_folder .. 'audio-input-microphone-' .. (string.find(output, 'muted') and 'muted' or 'high') .. '-symbolic.svg'
+        end)
+    end
+    update_mic_icon()
+    mic_button:buttons(awful.util.table.join(
+      awful.button({ }, 1, function()
+        awful.spawn.with_shell("/home/manu/bin/mic-toggle")
+      end),
+      awful.button({ }, 3, function()
+        awful.spawn.with_shell(
+          "rofi -show rofi-sound -modi \"rofi-sound:rofi-sound-output-chooser\""
+        )
+      end)
+    ))
+    local mic_tooltip = awful.tooltip { }
+    mic_tooltip:add_to_object(mic_button)
+    mic_button:connect_signal('mouse::enter', function()
+      awful.spawn.easy_async('/home/manu/bin/pactl-notif-utils mic-name', function(output)
+          -- remove newlines
+          mic_tooltip.text = string.gsub(output, '\n', '')
+      end)
+    end)
+    statusbar_layout_right:add(wibox.container.margin(mic_button, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin_top) )
+
+    local dnd_button = wibox.widget.imagebox(icons_folder .. 'notification-symbolic.svg', true)
     dnd_button.forced_width = 16
     dnd_button.forced_height = 16
     -- this is a global function so that we can easily call it with awesome-client later
     update_dnd_icon = function()
         awful.spawn.easy_async('dunstctl is-paused', function(output)
-            dnd_button.image = dnd_icons_folder .. (string.find(output, 'false') and 'notification' or 'process-error') .. '-symbolic.svg'
+            dnd_button.image = icons_folder .. (string.find(output, 'false') and 'notification' or 'process-error') .. '-symbolic.svg'
         end)
     end
     update_dnd_icon()
     dnd_button:buttons(awful.util.table.join(
       awful.button({ }, 1, function()
-        awful.spawn.easy_async('dunstctl set-paused toggle', function()
-          update_dnd_icon()
-        end)
+        -- if i just span directly, the cursor transforms to a loading one and stays like that? using async to avoid that
+        awful.spawn.easy_async('/home/manu/bin/dnd', function() end)
       end)
     ))
-    statusbar_layout_right:add(wibox.container.margin(dnd_button, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin, 2) )
+    statusbar_layout_right:add(wibox.container.margin(dnd_button, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin_top) )
 
-    local displayswitch_button = wibox.widget.imagebox('/usr/share/icons/Papirus-Dark/symbolic/devices/computer-symbolic.svg', true)
+    local displayswitch_button = wibox.widget.imagebox('/home/manu/.config/awesome/themes/leimi/video-joined-displays-symbolic.svg', true)
     displayswitch_button.forced_width = 16
     displayswitch_button.forced_height = 16
     displayswitch_button:buttons(awful.util.table.join(
         awful.button({ }, 1, function() awful.spawn.with_shell('xfce4-display-settings --minimal') end)
     ))
-    statusbar_layout_right:add(wibox.container.margin(displayswitch_button, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin, 3) )
+    statusbar_layout_right:add(wibox.container.margin(displayswitch_button, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin * 4, beautiful.statusbar_items_margin_top) )
 
     statusbar_layout_right:add(mysystray)
     s.systray = mysystray
 
-    local logout_button = wibox.widget.imagebox('/usr/share/icons/Papirus-Dark/symbolic/actions/system-shutdown-symbolic.svg', true)
+    local logout_button = wibox.widget.imagebox('/home/manu/.config/awesome/themes/leimi/system-shutdown-symbolic.svg', true)
     logout_button.forced_width = 16
     logout_button.forced_height = 16
     logout_button:buttons(awful.util.table.join(
         awful.button({ }, 1, function() awful.spawn('xfce4-session-logout') end)
     ))
-    statusbar_layout_right:add(wibox.container.margin(logout_button, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin, 3) )
+    statusbar_layout_right:add(wibox.container.margin(logout_button, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin_top) )
 
     statusbar_layout:set_right(statusbar_layout_right)
   end

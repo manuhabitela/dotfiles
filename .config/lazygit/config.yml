@@ -1,0 +1,22 @@
+gui:
+    sidePanelWidth: 0.333
+    expandFocusedSidePanel: true
+    showCommandLog: false
+    theme:
+        selectedLineBgColor:
+            - reverse
+        activeBorderColor:
+            - green
+            - bold
+        inactiveBorderColor:
+            - '#928374'
+
+git:
+    autoFetch: false
+    parseEmoji: true
+    paging:
+        colorArg: always
+        pager: delta --paging=never --line-numbers --hunk-header-style="omit"
+    log:
+        showGraph: never
+notARepository: skip

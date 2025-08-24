@@ -444,8 +444,6 @@ local function tasklist_label(c, args, tb)
     end
 
     if not theme.tasklist_plain_task_name then
-        if c.sticky then name = name .. sticky end
-
         if c.maximized then
             name = name .. maximized
         else
@@ -457,6 +455,8 @@ local function tasklist_label(c, args, tb)
         if c.ontop then name = name .. ontop
         elseif c.above then name = name .. above
         elseif c.below then name = name .. below end
+
+        if c.sticky then name = name .. sticky end
     end
 
     if not disable_task_name then

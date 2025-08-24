@@ -1,3 +1,8 @@
 #!/bin/bash
-dunstctl set-paused toggle
+is_paused=$(dunstctl is-paused)
+if [ "$is_paused" = "true" ]; then
+    dunstctl set-paused false
+else
+    dunstctl set-pause-level 70
+fi
 awesome-client 'update_dnd_icon()'

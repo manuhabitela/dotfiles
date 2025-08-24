@@ -1,10 +1,8 @@
 XF86Launch6
-	pactl set-source-mute @DEFAULT_SOURCE@ toggle && \
-	sleep 0.1 && \
-	notify-send \
-		-i /home/manu/.config/awesome/themes/leimi/$(/home/manu/bin/pactl-notif-utils mic-icon) \
-		-h string:x-canonical-private-synchronous:manu-mic \
-		-u low $(/home/manu/bin/pactl-notif-utils mic-text)
+	/home/manu/bin/mic-toggle
+
+super + XF86Launch6
+	rofi -show rofi-sound -modi "rofi-sound:rofi-sound-output-chooser"
 
 XF86Launch7
 	pactl set-sink-mute @DEFAULT_SINK@ toggle && \
@@ -13,3 +11,9 @@ XF86Launch7
 		-i /home/manu/.config/awesome/themes/leimi/$(/home/manu/bin/pactl-notif-utils icon) \
 		-h string:x-canonical-private-synchronous:manu-volume \
 		-u low "Volume $(/home/manu/bin/pactl-notif-utils text)"
+
+#button8
+#	xte "key Left"
+
+#button9
+#	xte "key Right"

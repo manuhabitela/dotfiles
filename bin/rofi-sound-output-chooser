@@ -1,0 +1,135 @@
+#!/usr/bin/env bash
+
+# based on https://github.com/kellya/rofi-sound/tree/main,
+# customized output to show current default,
+# added input selection. this is not that great because we can select unplugged stuff and it breaks stuff… but it'll do
+
+LANG="en_US.utf8"
+# Outputs have spaces in them, so let's make \n the IFS
+IFS=$'\n'
+
+
+# Make script independent on particular implementation of send client
+if command -v notify-send > /dev/null 2>&1; then
+    SEND="notify-send"
+elif command -v dunstify > /dev/null 2>&1; then
+    SEND="dunstify"
+else
+    SEND="/bin/false"
+fi
+
+# An option was passed, so let's check it
+if [ "$@" ]
+then
+    # the output from the selection is the device description prepended with "input: " or "output: ", with an optional "*" indicating current default device. Strip all that
+    raw_selection="$*"
+    if [[ $raw_selection == " " ]]
+    then
+        $SEND -t 2000 -r 2 -u low "No device selected"
+        exit 1
+    fi
+
+    is_output=true
+    device_description=""
+    if [[ $raw_selection == output:* ]]
+    then
+        device_description=$(echo $raw_selection|cut -d: -f2|xargs)
+    elif [[ $raw_selection == input:* ]]
+    then
+        is_output=false
+        device_description=$(echo $raw_selection|cut -d: -f2|xargs)
+    else
+        $SEND -t 2000 -r 2 -u critical "Device not found: $raw_selection"
+        exit 1
+    fi
+
+    # if it's the default device, remove that marker
+    if [[ $device_description == *"* "* ]]
+    then
+        device_description=$(echo $device_description|cut -d" " -f2-)
+    fi
+
+    sink_or_source="sink"
+    input_or_output="output"
+    if [ "$is_output" = false ]
+    then
+        sink_or_source="source"
+        input_or_output="input"
+    fi
+
+    # Figure out what the device name is based on the description passed by checking list of sinks or sources
+    device=$(pactl list ${sink_or_source}s|grep -C2 -F "Description: $device_description"|grep Name|cut -d: -f2|xargs)
+    # Try to set the default to the device chosen
+    if pactl set-default-${sink_or_source} "$device"
+    then
+        $SEND -t 2000 -r 2 -u low "New default $input_or_output: $device_description"
+    else
+        $SEND -t 2000 -r 2 -u critical "Error with $input_or_output \"$device_description\"" "pactl set-default-${sink_or_source} \"$device\""
+    fi
+else
+    echo -en "\x00prompt\x1fSelect input or output device to use\n"
+
+    # list outputs
+    default_device_id=$(pactl get-default-sink|xargs)
+    device_names_list=$(pactl list sinks | grep -ie "description:" | cut -d: -f2)
+    device_names=( )
+    i=0
+    for name in $device_names_list
+    do
+        device_names[$i]=$(echo $name|xargs)
+        i=$i+1
+    done
+    device_ids_list=$(pactl list sinks | grep -ie "node.name = " | cut -d= -f2)
+    device_ids=( )
+    i=0
+    for id in $device_ids_list
+    do
+        device_ids[$i]=$(echo $id|xargs)
+        i=$i+1
+    done
+
+    for i in "${!device_names[@]}"
+    do
+        if [ "${device_ids[$i]}" == "$default_device_id" ]
+        then
+            echo "output: * ""${device_names[$i]}"
+        else
+            echo "output:   ${device_names[$i]}"
+        fi
+    done
+
+    echo " "
+
+    # list inputs
+    default_device_id=$(pactl get-default-source|xargs)
+    device_names_list=$(pactl list sources | grep -ie "description:" | cut -d: -f2)
+    device_names=( )
+    i=0
+    for name in $device_names_list
+    do
+        device_names[$i]=$(echo $name|xargs)
+        i=$((i+1))
+    done
+    device_ids_list=$(pactl list sources | grep -ie "node.name = " | cut -d= -f2)
+    device_ids=( )
+    i=0
+    for id in $device_ids_list
+    do
+        device_ids[$i]=$(echo $id|xargs)
+        i=$((i+1))
+    done
+    i=0
+    for i in "${!device_names[@]}"
+    do
+        # show only things that are not "Monitor of"
+        if [[ ! "${device_names[$i]}" == Monitor* ]]
+        then
+            if [ "${device_ids[$i]}" == "$default_device_id" ]
+            then
+                echo "input: * ""${device_names[$i]}"
+            else
+                echo "input:   ${device_names[$i]}"
+            fi
+        fi
+    done
+fi

@@ -10,8 +10,24 @@ get_muted_state() {
 	LC_ALL=C pactl list sinks | awk '/Mute/ { print $2 }'
 }
 
+get_mic_info() {
+	default_mic_id=$(LC_ALL=C pactl get-default-source)
+	LC_ALL=C pactl --format=json list sources | jq --arg mic_id "$default_mic_id" '.[] | select(.name == $mic_id)'
+}
+
 get_mic_muted_state() {
-	LC_ALL=C pactl list sources | awk '/Mute/ { print $2 }'
+	mic_info=$(get_mic_info)
+	echo $mic_info | jq '.mute'
+}
+
+get_mic_name() {
+	mic_info=$(get_mic_info)
+	echo $mic_info | jq -r '.description'
+}
+
+get_mic_volume() {
+	mic_info=$(get_mic_info)
+	echo $mic_info | jq -r '.volume | to_entries | .[0].value.value_percent'
 }
 
 if [[ $wanted == "text" ]]; then
@@ -41,20 +57,37 @@ if [[ $wanted == "icon" ]]; then
 	fi
 fi
 
-if [[ $wanted == "mic-text" ]]; then
+if [[ $wanted == "mic-muted-state" ]]; then
 	muted=$(get_mic_muted_state)
-	if [[ "${muted}" =~ "yes" ]]; then
-		echo "Micro coupé"
+	if [[ "${muted}" =~ "true" ]]; then
+		echo 'muted'
 	else
-		echo "Micro activé"
+		echo 'active'
 	fi
+fi
+
+if [[ $wanted == "mic-notif-title" ]]; then
+	muted=$(get_mic_muted_state)
+	if [[ "${muted}" =~ "true" ]]; then
+		echo 'Micro coupé'
+	else
+		echo 'Micro activé'
+	fi
+fi
+
+if [[ $wanted == "mic-name" ]]; then
+	get_mic_name
+fi
+
+if [[ $wanted == "mic-notif-description" ]]; then
+	echo "$(get_mic_name) ($(get_mic_volume))"
 fi
 
 if [[ $wanted == "mic-icon" ]]; then
 	muted=$(get_mic_muted_state)
-	if [[ "${muted}" =~ "yes" ]]; then
-		echo "volume-muted.png"
+	if [[ "${muted}" =~ "true" ]]; then
+		echo "mic-muted.svg"
 	else
-		echo "volume-high.png"
+		echo "mic-high.svg"
 	fi
 fi

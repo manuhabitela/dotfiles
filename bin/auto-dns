@@ -1,0 +1,23 @@
+#!/bin/bash
+# I just suck at handling my dns correctly, so I always have issues with public networks having connection portals
+# run this with arg "on" or "off".
+# "on" will get the current network dns and apply it in resolv.conf.
+# "off" will remove the dns from resolv.conf.
+wifiinterface="wlp3s0"
+
+get_dns_ip() {
+    local nmap_output
+    nmap_output=$(nmap --script broadcast-dhcp-discover -e $wifiinterface)
+    dns_ip=$(echo "$nmap_output" | grep "Domain Name Server" | awk -F: '{gsub (" ", "", $0); print $2}')
+}
+
+line=$(grep -n '# start ~/bin/auto-dns' /etc/resolv.conf | tail -1 | cut -d: -f1)
+line=$((line+1))
+
+if [ "$1" = "on" ]; then
+    get_dns_ip
+    escaped_dns_ip=$(echo "$dns_ip" | sed 's/[\/&]/\\&/g')
+    sed -i "${line}s/.*/nameserver $escaped_dns_ip/" /etc/resolv.conf
+elif [ "$1" = "off" ]; then
+    sed -i "${line}s/^/#/" /etc/resolv.conf
+fi

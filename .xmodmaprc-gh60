@@ -13,3 +13,5 @@ keycode 53 = x X x X greater guillemotright guillemotright rightdoublequotemark 
 
 keycode 193 = XF86Launch6
 keycode 194 = XF86Launch7
+
+pointer = default

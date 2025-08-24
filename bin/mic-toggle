@@ -1,0 +1,9 @@
+#!/bin/bash
+
+pactl set-source-mute @DEFAULT_SOURCE@ toggle
+sleep 0.1
+awesome-client 'update_mic_icon()'
+notify-send \
+    -i /home/manu/.config/awesome/themes/leimi/$(/home/manu/bin/pactl-notif-utils mic-icon) \
+    -h string:x-canonical-private-synchronous:manu-mic \
+    -u low "$(/home/manu/bin/pactl-notif-utils mic-notif-title)" "$(/home/manu/bin/pactl-notif-utils mic-notif-description)"

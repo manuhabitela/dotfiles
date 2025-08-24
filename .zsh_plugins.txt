@@ -1,0 +1,11 @@
+romkatv/zsh-bench kind:path
+mattmc3/zephyr path:plugins/color
+zsh-users/zsh-completions
+$HOME/.config/zsh/prezto-editor
+mattmc3/zephyr path:plugins/directory
+$HOME/.config/zsh/completions
+Aloxaf/fzf-tab
+ohmyzsh/ohmyzsh path:plugins/git
+olets/zsh-window-title
+romkatv/powerlevel10k
+zsh-users/zsh-autosuggestions

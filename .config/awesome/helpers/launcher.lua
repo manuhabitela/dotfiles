@@ -1,8 +1,12 @@
 local launcher = {}
 
-function launcher.ror(cmd, classes)
+function launcher.ror(cmd, classes, idType)
   local matcher = function(c)
-	return awful.rules.match_any(c, { class = classes })
+    if idType and idType == 'name' then
+      return awful.rules.match_any(c, { name = classes })
+    else
+      return awful.rules.match_any(c, { class = classes })
+    end
   end
   -- i guess the raise_or_spawn should do the same as
   -- run_or_raise but i can't get it to work as is?

@@ -3,3 +3,9 @@ vte-terminal {
 	-VteTerminal-inner-border: 20px;
 	padding: 20px;
 }
+
+VteTerminal.roxterm-Minimal,
+vte-terminal.roxterm-Minimal {
+	-VteTerminal-inner-border: 2px;
+	padding: 2px;
+}

@@ -1,0 +1,20 @@
+[roxterm profile]
+font=SFMono Nerd Font Mono Semi-Bold 12
+full_screen=0
+maximise=0
+width=80
+audible_bell=0
+login_shell=1
+scroll_on_keystroke=1
+always_show_tabs=0
+show_add_tab_btn=0
+hide_menubar=1
+browser=google-chrome-stable
+height=24
+saturation=1,000000
+term=xterm-256color
+colour_scheme=Leimi
+colour_scheme_light=Leimi lzg
+colour_scheme_dark=Leimi lzg
+vspacing=0
+bold_is_bright=0

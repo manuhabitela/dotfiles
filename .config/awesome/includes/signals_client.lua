@@ -24,6 +24,14 @@ client.connect_signal("manage", function(c)
     helpers.clients.move_out_to(c, screen.primary.tags[4])
   end
 
+  if c.name == "lazygit" and helpers.clients.count_instances(c, client.get(), 'name') == 1 then
+    helpers.clients.move_out_to(c, screen.primary.tags[4])
+  end
+
+  if c.class == "audacity" then
+    c.maximized = false
+  end
+
   if gears.table.hasitem(other_screen_classes, c.class) and helpers.clients.count_instances(c) == 1 then
     helpers.clients.move_out_to(c, (other_screen and other_screen or main_screen).tags[1] )
   end
@@ -34,8 +42,16 @@ client.connect_signal("manage", function(c)
     helpers.clients.move_out_to(c, screen.primary.tags[7])
   end
 
-  if c.name:find('Android Emulator - ') then
+  if c and c.name and c.name:find('Android Emulator - ') then
     c.floating = true
+  end
+
+  if c and c.name and c.name:find('Google Chrome for Testing') then
+    c.floating = true
+    local screen_width = c.screen.workarea.width
+    local screen_height = c.screen.workarea.height
+    c.width = screen_width > 1500 and 1800 or screen_width * 0.8
+    c.height = screen_height > 1000 and 900 or screen_height * 0.8
   end
   -- end of app-specific rules
 
@@ -60,9 +76,9 @@ client.connect_signal("request::titlebars", function(c)
   )
 
   local left_layout = wibox.layout.fixed.horizontal()
-  local titlewidget = awful.titlebar.widget.titlewidget(c)
+  local titlewidget = helpers.clients.titlebar_widget(c)
   titlewidget:set_font(beautiful.titlebar_font)
-  left_layout:add(wibox.container.margin(titlewidget, 10, 0, 0, 1))
+  left_layout:add(wibox.container.margin(titlewidget, 10, 0, 0, 2))
   left_layout:buttons(buttons)
   local right_layout = wibox.layout.fixed.horizontal()
   local title_buttons = {
@@ -75,7 +91,7 @@ client.connect_signal("request::titlebars", function(c)
   end
   local layout = wibox.layout.align.horizontal()
   layout:set_left(left_layout)
-  layout:set_right(right_layout)
+  layout:set_right(wibox.container.margin(right_layout, 0, 16, 0, 1))
 --   local clientbg= get_dominant_color(c)
 --   local textcolor = is_contrast_acceptable(beautiful.colors.white, clientbg) and beautiful.colors.white or "#222"
 --   awful.titlebar(c, { size = beautiful.titlebar_size, bg_focus = clientbg, bg_normal = clientbg, fg_focus = textcolor, fg_normal = textcolor }):set_widget(layout)

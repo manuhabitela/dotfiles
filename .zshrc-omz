@@ -9,7 +9,7 @@ COMPLETION_WAITING_DOTS="true"
 # Plugins: ~/.oh-my-zsh/plugins/
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git ssh-agent colored-man-pages)
+plugins=(git ssh-agent colored-man-pages fzf-tab)
 
 zstyle :omz:plugins:ssh-agent agent-forwarding on
 
@@ -25,10 +25,12 @@ SAVEHIST=10000000
 setopt EXTENDED_HISTORY
 setopt SHARE_HISTORY
 
-TMOUT=1
-TRAPALRM() {
-  zle reset-prompt
-}
+# TMOUT=1
+# TRAPALRM() {
+#   if [[ $WIDGET != "complete-word" && $WIDGET != "fzf-tab-complete"  && $WIDGET != "fzf-completion" ]]; then
+#     zle reset-prompt
+#   fi
+# }
 
 function omz_termsupport_precmd {
   [[ "$DISABLE_AUTO_TITLE" == true ]] && return
@@ -38,8 +40,9 @@ function omz_termsupport_precmd {
 
 #source /usr/share/fzf/key-bindings.zsh
 #source /usr/share/fzf/completion.zsh
+eval "$(fzf --zsh)"
 source $HOME/.zshaliases
-EDITOR=nano
+export EDITOR=nano
 export REACT_EDITOR=code
 
 
@@ -56,4 +59,5 @@ eval "$(fnm env --use-on-cd)"
 PATH=~/.console-ninja/.bin:$PATH
 
 source ~/.zsh/completion/scalingo_complete.zsh
+export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix'
 

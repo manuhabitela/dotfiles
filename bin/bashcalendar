@@ -1,8 +1,19 @@
 #!/usr/bin/env bash
 
-cal -m -3;
-echo "";
-echo "Paris        " $(TZ=Europe/Paris date +"%a %H:%M (%:::z) %Z");
-echo "San Francisco" $(TZ=America/Los_Angeles date +"%a %H:%M (%:::z) %Z");
-echo "New York     " $(TZ=America/New_York date +"%a %H:%M (%:::z) %Z");
-echo "Shanghai     " $(TZ=Asia/Shanghai date +"%a %H:%M (%:::z) %Z");
+if [ "$1" = "light" ]; then
+    echo $(TZ=Europe/Paris date +"%a %H:%M (%:::z) %Z");
+    echo "San Francisco" $(TZ=America/Los_Angeles date +"%a %H:%M (%:::z) %Z");
+    echo "New York" $(TZ=America/New_York date +"%a %H:%M (%:::z) %Z");
+    echo "Shanghai" $(TZ=Asia/Shanghai date +"%a %H:%M (%:::z) %Z");
+    echo ""
+    cal -m -3;
+    echo "";
+else
+    echo -n $(TZ=Europe/Paris date +"%a %H:%M (%:::z) %Z");
+    echo -n "  🕑 San Francisco" $(TZ=America/Los_Angeles date +"%a %H:%M (%:::z) %Z");
+    echo -n "  🕑 New York" $(TZ=America/New_York date +"%a %H:%M (%:::z) %Z");
+    echo "  🕑 Shanghai" $(TZ=Asia/Shanghai date +"%a %H:%M (%:::z) %Z");
+    echo ""
+    vdirsyncer sync > /dev/null 2>&1;
+    LANG="fr_FR.utf8" && khal --color calendar today 7d;
+fi

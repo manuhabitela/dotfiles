@@ -1,0 +1,41 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+if [[ "$ZPROF" = true ]]; then
+  zmodload zsh/zprof
+fi
+
+source $HOME/.config/zsh/antidote.zsh
+source $HOME/.zsh/completion/scalingo_complete.zsh
+
+bindkey '^ ' autosuggest-accept
+
+eval "$(fzf --zsh)"
+source $HOME/.zshaliases
+source $HOME/.config/zsh/history.zsh
+source $HOME/.config/zsh/auto-cd.zsh
+[ -s "/home/manu/.bun/_bun" ] && source "/home/manu/.bun/_bun"
+source $HOME/.config/zsh/p10k.zsh
+#source $HOME/.config/zsh/prompt.zsh
+unset ZSH_AUTOSUGGEST_USE_ASYNC
+
+profzsh() {
+  shell=${1-$SHELL}
+  ZPROF=true $shell -i -c exit
+}
+if [[ "$ZPROF" = true ]]; then
+  zprof
+fi
+
+
+# pnpm
+export PNPM_HOME="/home/manu/.local/share/pnpm"
+export PATH="$PNPM_HOME:$PATH"
+# pnpm end
+eval "$(/home/manu/.local/bin/mise activate zsh)"
+
+PATH=~/.console-ninja/.bin:$PATH

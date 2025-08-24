@@ -1,31 +1,47 @@
 .linux {
-	font-family: Arial;
-	--monaco-monospace-font: "SF Mono",Monaco,Menlo,Courier,monospace;
+	font-family: Inter;
+}
+
+.tabs {
+	--editor-group-tab-height: 30px !important;
 }
 
 /* barre de status en bas */
 .monaco-workbench .part.statusbar {
-	font-size: 10.5px;
+	/* font-size: 12px; */
 }
 
 /* taille de police d'un onglet */
+.monaco-workbench .part>.content .tabs,
 .monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab .tab-label a,
 .monaco-workbench .part.editor>.content .editor-group-container>.title .title-label a {
-	font-size: 11px;
-}
-/* alignement vertical de l'icone d'un onglet (croix/rond) avec la police plus petite */
-.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab>.tab-actions {
-	padding-top: 1px;
+	font-size: 12px;
 }
 
+.breadcrumbs-below-tabs {
+	font-size: 11px;
+}
+
+.cursorHintLineWidget {
+	padding-top: 0.25em !important;
+    padding-right: 26px !important;
+    text-align: right !important;
+}
+
+/* alignement vertical de l'icone d'un onglet (croix/rond) avec la police plus petite */
+/* .monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab>.tab-actions {
+	padding-top: 1px;
+} */
+
 /* padding gauche/droite d'un onglet */
-.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab {
+/* .monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab {
 	padding-left: 7px;
 }
 .monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab>.tab-actions .action-label {
 	margin-right: 5px;
-}
+} */
 
-.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-breadcrumbs .breadcrumbs-control .monaco-breadcrumb-item:before {
-	width: 76px; /* alignement du breadcrumb avec le gutter du code */
-}
+/* alignement du breadcrumb avec le gutter du code */
+/* .monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-breadcrumbs .breadcrumbs-control .monaco-breadcrumb-item:before {
+	width: 76px;
+} */

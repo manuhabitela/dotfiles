@@ -4,13 +4,22 @@
 
 theme = {}
 
-theme.wallpaper = "/home/manu/.config/awesome/themes/leimi/angers-fhd.png"
+-- theme.wallpaper = "/home/manu/.config/awesome/themes/leimi/angers-fhd.png"
+
+-- theme.wallpaper = "/home/manu/.config/awesome/themes/leimi/manuhabitela2k.png"
+-- theme.wallpaper = "/home/manu/.config/awesome/themes/leimi/greenscreen.png"
+theme.wallpaper = "/home/manu/.config/awesome/themes/leimi/1080p-record-wall.png"
 theme.wallpaper_blur = "/home/manu/.config/awesome/themes/leimi/angers-fhd-blur.png"
 
-theme.fonts = { default = "San Francisco Display Semi-Bold 10" }
+theme.wallpaper_27inch = "/home/manu/.config/awesome/themes/leimi/1080p-record-fondu.png"
+theme.wallpaper_27inch = "/home/manu/.config/awesome/themes/leimi/1440p-record-fondu.png"
+theme.wallpaper_laptop = "/home/manu/.config/awesome/themes/leimi/1080p-record-wall-laptop.png"
+
+theme.fonts = { default = "San Francisco Display Medium 12" }
 theme.fonts.statusbar = theme.fonts.default
 theme.fonts.titlebar = theme.fonts.default
-theme.fonts.big = "San Francisco Display Semi-Bold 25"
+theme.fonts.big = "San Francisco Display Medium 25"
+theme.fonts.small = "Input 7"
 theme.fonts.monospace = "Terminus (TTF) 14"
 theme.fonts.monospace_big = "Input 13"
 theme.systray_hints_font = theme.fonts.monospace
@@ -19,6 +28,7 @@ theme.icon_theme = "Papirus"
 theme.colors = {
   blue_dark = "#073642",
   blue_very_dark = "#001d24",
+  blue_very_dark_transparent = "#001d2478",
   blue_very_light = "#93a1a1",
   orange = "#b58900",
   orange_light = "#e6ac00",
@@ -30,7 +40,7 @@ theme.font = theme.fonts.default
 theme.bg_normal = theme.colors.blue_very_dark
 theme.fg_normal = theme.colors.blue_very_light
 theme.border_normal = theme.bg_normal
-theme.border_width = 1
+theme.border_width = 2
 theme.useless_gap = 2.5
 theme.gap_single_client = true
 
@@ -51,17 +61,19 @@ theme.statusbar_margin_horizontal = 2
 theme.statusbar_margin_top = 2
 theme.statusbar_margin_bottom = 2
 theme.statusbar_items_margin = 6
-theme.statusbar_current_layout_width = 29
+theme.statusbar_items_margin_top = 4
+theme.statusbar_current_layout_width = 38
 
 theme.systray_hints_font = theme.fonts.default
 theme.systray_hints_bg = theme.colors.orange
 theme.systray_hints_fg = theme.colors.blue_dark
 theme.systray_hints_border = theme.colors.blue_dark
+theme.systray_icon_spacing = 0
 
 theme.menu_submenu_icon = "/usr/share/awesome/themes/zenburn/titlebar/maximized_focus_inactive.png"
 
-theme.clock_width = 38
-theme.date_width = 84
+theme.clock_width = 42
+theme.date_width = 90
 
 theme.taglist_bg_focus = theme.bg_normal
 theme.taglist_fg_focus = theme.fg_focus

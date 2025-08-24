@@ -21,7 +21,7 @@ if s == nil then return nil end
 
 local tooltip_y = s.geometry.height - 42
 local systray_y = s.geometry.height - 20
-local systray_icon_width = 22
+local systray_icon_width = 24
 
 local systray_hints = {
 
@@ -60,12 +60,12 @@ local function execute(choice, mouse_button)
     saved = mouse.coords({x = x, y = y})
     if choice == 1 then factor = 0 else factor = choice - 1 end
     target = icons_x + ( icon_width * factor )
-    mouse.coords { x = target , y = systray_y }
+    mouse.coords { x = target + 1 , y = systray_y + 3 }
 
     if mouse_button ~= 2 then
         root.fake_input("button_press" , tostring(mouse_button))
         root.fake_input("button_release", tostring(mouse_button))
-        delay(0.05, function () mouse.coords({x = saved.x, y = saved.y}, true) end)
+        -- delay(0.05, function () mouse.coordsr({x = saved.x, y = saved.y}, true) end)
     end
 
     if systray_hints.popup then systray_hints.popup.visible = false end

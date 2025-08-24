@@ -6,11 +6,6 @@ local volume_notification_cmd = "notify-send"
   .. " -u low"
   .. " Volume \"$(/home/manu/bin/pactl-notif-utils text)\""
 
-local mic_notification_cmd = "notify-send"
-  .. " -i /home/manu/.config/awesome/themes/leimi/$(/home/manu/bin/pactl-notif-utils mic-icon)"
-  .. " -h string:x-canonical-private-synchronous:manu-volume"
-  .. " -u low"
-  .. " \"$(/home/manu/bin/pactl-notif-utils mic-text)\""
 
 globalkeys = gears.table.join(
   -- focus next or prev client - works accross all screens
@@ -18,7 +13,7 @@ globalkeys = gears.table.join(
     if screen:count() > 1 then
       awful.screen.focus_relative(-1)
     else
-      awful.client.focus.byidx(-1)
+      helpers.clients.focus_filtered_byidx(-1)
       if client.focus then client.focus:raise() end
     end
   end),
@@ -26,16 +21,16 @@ globalkeys = gears.table.join(
     if screen:count() > 1 then
       awful.screen.focus_relative(1)
     else
-      awful.client.focus.byidx(1)
+      helpers.clients.focus_filtered_byidx(1)
       if client.focus then client.focus:raise() end
     end
   end),
   awful.key({ modkey, sft       }, "Tab",   function()
-    awful.client.focus.byidx(-1)
+    helpers.clients.focus_filtered_byidx(-1)
     if client.focus then client.focus:raise() end
   end),
   awful.key({ modkey            }, "Tab",   function()
-    awful.client.focus.byidx(1)
+    helpers.clients.focus_filtered_byidx(1)
     if client.focus then client.focus:raise() end
   end),
 
@@ -77,12 +72,16 @@ globalkeys = gears.table.join(
   awful.key({ modkey, sft       }, "t",       function() awful.spawn(terminal .. " -T Roxterm-temp") end),
 
   awful.key({ modkey            }, "f",       function() helpers.launcher.ror("Thunar", { "Thunar" }) end),
-  awful.key({ modkey,           }, "s",       function() helpers.launcher.ror("code", { "Code" }) end),
-  awful.key({ modkey, sft       }, "s",       function() helpers.launcher.ror("subl", { "Sublime_text", "Subl" }) end),
+  awful.key({ modkey, sft       }, "s",       function() helpers.launcher.ror("code", { "Code" }) end),
+  awful.key({ modkey,           }, "s",       function() helpers.launcher.ror("cursor", { "Cursor" }) end),
+  awful.key({ modkey, sft, ctrl }, "s",       function() helpers.launcher.ror("subl", { "Sublime_text", "Subl" }) end),
   awful.key({ modkey            }, "w",       function()
     helpers.launcher.ror("firefox", { "firefox" })
   end),
-  awful.key({ modkey            }, "g",       function() helpers.launcher.ror("git-cola", { "git-cola" }) end),
+  awful.key({ modkey            }, "g",       function() helpers.launcher.ror("lzg", { "lazygit" }, 'name') end),
+
+  awful.key({ modkey            }, "p",       function() awful.spawn.with_shell("pick") end),
+  awful.key({ modkey, sft       }, "p",       function() awful.spawn("rofi-rbw") end),
 
   awful.key({ modkey            }, "space",   function()
     awful.spawn.with_shell(rofi_cmd)
@@ -98,22 +97,26 @@ globalkeys = gears.table.join(
     awful.spawn.with_shell("rofi -modi emoji -show emoji -emoji-file /home/manu/.config/rofi/rofi-gitmoji/gitmoji_emojis.txt")
   end),
 
-  awful.key({ modkey, sft }, "d",       function()
+  awful.key({ modkey, sft, ctrl }, "d",       function()
     awful.spawn.with_shell(calendar_widget_cmd)
+  end),
+  awful.key({ modkey, sft }, "d",       function()
+    awful.spawn.with_shell(light_calendar_widget_cmd)
   end),
 
   awful.key({ modkey       }, "b",       function()
-  local s = awful.screen.focused()
-  s.statusbar_widget.visible = not s.statusbar_widget.visible
-  beautiful.gap_single_client = not s.statusbar_widget.visible
+    local s = awful.screen.focused()
+    s.statusbar_widget.visible = not s.statusbar_widget.visible
+    -- local is_visible = s.statusbar_widget.visible
+    -- for s in screen do
+    --   s.statusbar_widget.visible = not is_visible
+    --   -- beautiful.gap_single_client = is_visible
+    --   -- s.hidden_statusbar_widget.visible = is_visible
+    -- end
   end),
 
   awful.key({ modkey }, "e",	function ()
     systray_hints.run()
-  end),
-
-  awful.key({ ctrl, altkey      }, "l",       function()
-    awful.spawn.with_shell("slock")
   end),
 
   awful.key({ modkey, ctrl      }, "l",       function()
@@ -135,9 +138,11 @@ globalkeys = gears.table.join(
   awful.key({ }, "XF86AudioMute",             function() awful.spawn.with_shell(
     "pactl set-sink-mute @DEFAULT_SINK@ toggle && sleep 0.1 && " .. volume_notification_cmd
   ) end),
-  awful.key({ }, "XF86AudioMicMute",   function() awful.spawn.with_shell(ll
-    "pactl set-source-mute @DEFAULT_SOURCE@ toggle && sleep 0.1 && " .. mic_notification_cmd
-  ) end),
+  awful.key({ }, "XF86AudioMicMute",   function() awful.spawn.with_shell("/home/manu/bin/mic-toggle") end),
+  awful.key({ modkey }, "XF86AudioMicMute",   function() awful.spawn.with_shell(
+    "rofi -show rofi-sound -modi \"rofi-sound:rofi-sound-output-chooser\"")
+  end),
+  awful.key({ modkey }, "x",   function() awful.spawn.with_shell("/home/manu/bin/mic-toggle") end),
 
   awful.key({ }, "XF86MonBrightnessUp",       function() awful.spawn.with_shell(
     "brillo -u 100000 -A 5 && " ..

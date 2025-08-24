@@ -1,3 +1,4 @@
 #!/bin/bash
-xcolor -s
-
+# xcolor -s has trouble with firefox. Just handle the clipboard ourselves.
+color=$(xcolor)
+echo -n "$color" | xclip -selection clipboard

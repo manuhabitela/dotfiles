@@ -175,7 +175,7 @@ awful.screen.connect_for_each_screen(function(s)
   local tile_layout = awful.layout.layouts[3]
   local max_layout = awful.layout.layouts[1]
   local cascade_layout = awful.layout.layouts[4]
-  local float_layout = awful.layout.layouts[5]
+  local float_layout = awful.layout.layouts[6]
   if s == main_screen then
     table.insert(screen_tags, "7")
     awful.tag(screen_tags, s, {cascade_layout, tile_layout, tile_layout, tile_layout, float_layout, float_layout, tile_layout})
@@ -273,6 +273,34 @@ awful.screen.connect_for_each_screen(function(s)
     mysystray:fit({dpi = s.dpi })
     mysystray.forced_height = beautiful.statusbar_height
 
+    -- QMK keyboard layer indicator: the .cache/qmk-layer is updated with current qmk kb layer
+    -- anytime it changes. We want to show in the statusbar when its nav-lock
+    local qmk_layer_file = os.getenv("HOME") .. "/.cache/qmk-layer"
+    local qmk_layer_widget = wibox.widget.textbox("")
+    qmk_layer_widget:set_font(beautiful.statusbar_font)
+    qmk_layer_widget.align = 'center'
+    -- Read initial value
+    local function update_qmk_layer()
+      qmk_layer_widget.text = ""
+      local f = io.open(qmk_layer_file, "r")
+      if f then
+        local content = f:read("*all")
+        f:close()
+        if content == "nav-lock" then
+          qmk_layer_widget.text = content
+        end
+      end
+    end
+    update_qmk_layer()
+    -- Watch file for changes using inotifywatch
+    --local qmk_layer_watch = helpers.inotifywatch(qmk_layer_file, function(event)
+    --  update_qmk_layer()
+    --end, { 'IN_MODIFY', 'IN_ATTRIB' }, 0.1)
+    --qmk_layer_watch:start()
+    statusbar_layout_right:add( wibox.container.margin(qmk_layer_widget, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
+    statusbar_layout_right:add( statusbar_items_separator )
+    -- end QMK widget
+
     statusbar_layout_right:add(wibox.container.margin(awful.widget.watch('/home/manu/bin/echo-temp', 5), beautiful.statusbar_items_margin, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
 
     statusbar_layout_right:add(wibox.container.margin(awful.widget.watch('/home/manu/bin/echo-bat-cap', 20), beautiful.statusbar_items_margin, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin) )
@@ -307,6 +335,9 @@ awful.screen.connect_for_each_screen(function(s)
       awful.button({ }, 1, function()
         awful.spawn.with_shell("/home/manu/bin/mic-toggle")
       end),
+      awful.button({ }, 2, function()
+        awful.spawn("rofi-bluetooth")
+      end),
       awful.button({ }, 3, function()
         awful.spawn.with_shell(
           "rofi -show rofi-sound -modi \"rofi-sound:rofi-sound-output-chooser\""
@@ -316,7 +347,7 @@ awful.screen.connect_for_each_screen(function(s)
     local mic_tooltip = awful.tooltip { }
     mic_tooltip:add_to_object(mic_button)
     mic_button:connect_signal('mouse::enter', function()
-      awful.spawn.easy_async('/home/manu/bin/pactl-notif-utils mic-name', function(output)
+      awful.spawn.easy_async('/home/manu/bin/pactl-notif-utils mic-speaker-name', function(output)
           -- remove newlines
           mic_tooltip.text = string.gsub(output, '\n', '')
       end)
@@ -345,7 +376,15 @@ awful.screen.connect_for_each_screen(function(s)
     displayswitch_button.forced_width = 16
     displayswitch_button.forced_height = 16
     displayswitch_button:buttons(awful.util.table.join(
-        awful.button({ }, 1, function() awful.spawn.with_shell('xfce4-display-settings --minimal') end)
+        awful.button({ }, 1, function() awful.spawn.with_shell('xfce4-display-settings --minimal') end),
+        awful.button({ }, 2, function()
+          awful.spawn("arandr")
+        end),
+        awful.button({ }, 3, function()
+          awful.spawn.with_shell(
+            "rofi -show rofi-screenlayout -modi \"rofi-screenlayout:rofi-screenlayout-chooser\""
+          )
+        end)
     ))
     statusbar_layout_right:add(wibox.container.margin(displayswitch_button, beautiful.statusbar_items_margin, beautiful.statusbar_items_margin * 4, beautiful.statusbar_items_margin_top) )
 

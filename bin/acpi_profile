@@ -2,22 +2,40 @@
 
 cmd="${1}"
 
-current_profile=$(sudo tlp-stat | grep "Mode           = ")
-if [[ "$current_profile" == *"battery"* ]]; then
-	current_profile="bat"
+current_mode=$(sudo tlp-stat | grep "(manual)")
+next_mode=""
+next_command=""
+if [[ "$current_mode" == "" ]]; then
+	current_mode="auto"
+	next_mode="bat"
+	next_command="bat"
 else
-	current_profile="ac"
+# tlp-stat outputs a line like this: "Power profile  = performance/AC (manual)"
+# I want to retrieve the part after the "profile = "
+	current_mode=$(sudo tlp-stat | grep "Power profile  = " | cut -d " " -f 5)
+	# if current_mode is empty…
+	if [[ "$current_mode" == "" ]]; then
+		current_mode=$(sudo tlp-stat | grep "TLP profile    = " | cut -d " " -f 7)
+	fi
+fi
+
+if [[ "$current_mode" == *"balanced/BAT"* ]]; then
+	current_mode="bat"
+	next_mode="ac"
+	next_command="ac"
+fi
+
+if [[ "$current_mode" == *"performance/AC"* ]]; then
+	current_mode="ac"
+	next_mode="auto"
+	next_command="start"
 fi
 
 if [[ "$cmd" == "toggle" ]]; then
-	next_profile="bat"
-	if [[ "$current_profile" == "bat" ]]; then
-		next_profile="ac"
-	fi
-	sudo tlp $next_profile > /dev/null
-	echo $next_profile
+	sudo tlp $next_command > /dev/null
+	echo $next_mode
 fi
 
 if [[ "$cmd" == "status" ]]; then
-	echo $current_profile
+	echo $current_mode
 fi

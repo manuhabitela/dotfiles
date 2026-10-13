@@ -1,0 +1,21 @@
+#!/bin/bash
+# using with p1g5
+
+if [ "$1" == "4k" ]; then
+    xrandr --output eDP-1 --mode 1920x1200 --primary --pos 0x2160 --output HDMI-1 --mode 1920x1080 --scale-from 3840x2160 --pos 0x0
+    xfconf-query -c xsettings -p /Gdk/WindowScalingFactor -s 2
+    xfconf-query -c xsettings -p /Gtk/CursorThemeName -s macOS
+    xfconf-query -c xsettings -p /Gtk/CursorThemeSize -s 64
+fi
+if [ "$1" == "1440p" ]; then
+    xrandr --output eDP-1 --mode 1920x1200 --primary --pos 0x1440 --output HDMI-1 --mode 2560x1440 --scale-from 2560x1440 --pos 0x0
+    xfconf-query -c xsettings -p /Gdk/WindowScalingFactor -s 1
+    xfconf-query -c xsettings -p /Gtk/CursorThemeName -s macOS
+    xfconf-query -c xsettings -p /Gtk/CursorThemeSize -s 36
+fi
+if [ "$1" == "reset" ]; then
+    xrandr --output eDP-1 --mode 1920x1200 --primary --pos 0x1440 --output HDMI-1 --mode 2560x1440 --scale-from 2560x1440 --pos 0x0
+    xfconf-query -c xsettings -p /Gdk/WindowScalingFactor -s 1
+    xfconf-query -c xsettings -p /Gtk/CursorThemeName -s macOS
+    xfconf-query -c xsettings -p /Gtk/CursorThemeSize -s 24
+fi

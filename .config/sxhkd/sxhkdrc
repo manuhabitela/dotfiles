@@ -1,19 +1,28 @@
 XF86Launch6
 	/home/manu/bin/mic-toggle
 
-super + XF86Launch6
+shift + XF86Launch6
 	rofi -show rofi-sound -modi "rofi-sound:rofi-sound-output-chooser"
 
+control + XF86Launch6
+	/home/manu/dev/aytt/tools/stt/mark-transcript.sh
+
+shift + control + XF86Launch6
+	rofi -show rofi-screenlayout -modi "rofi-screenlayout:rofi-screenlayout-chooser"
+
+control + shift + super + XF86Launch6
+	rofi-bluetooth
+
+# soya device second key
 XF86Launch7
-	pactl set-sink-mute @DEFAULT_SINK@ toggle && \
-	sleep 0.1 && \
-	notify-send \
-		-i /home/manu/.config/awesome/themes/leimi/$(/home/manu/bin/pactl-notif-utils icon) \
-		-h string:x-canonical-private-synchronous:manu-volume \
-		-u low "Volume $(/home/manu/bin/pactl-notif-utils text)"
+  /home/manu/dev/aytt/tools/stt/mark-transcript.sh && /home/manu/dev/aytt/tools/guides.sh mark
 
 #button8
 #	xte "key Left"
 
 #button9
 #	xte "key Right"
+
+
+super + a
+	xdotool click 1

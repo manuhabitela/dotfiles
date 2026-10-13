@@ -71,16 +71,26 @@ globalkeys = gears.table.join(
   -- this shortcut is to pop a terminal in the current tag instead of moving it to tag 7 because of rules
   awful.key({ modkey, sft       }, "t",       function() awful.spawn(terminal .. " -T Roxterm-temp") end),
 
+  awful.key({ modkey            }, "z",       function() helpers.launcher.run_or_kill("zooc") end),
   awful.key({ modkey            }, "f",       function() helpers.launcher.ror("Thunar", { "Thunar" }) end),
+  awful.key({ modkey, ctrl      }, "f",       function()
+    awful.spawn.with_shell("warpd --oneshot --hint2 --click 1")
+  end),
+  awful.key({ modkey, sft       }, "f",       function()
+    awful.spawn.with_shell("warpd --oneshot --hint2 --click 3")
+  end),
+  awful.key({ modkey, ctrl, sft }, "f",       function()
+    awful.spawn.with_shell("warpd --oneshot --hint2 --click 2")
+  end),
   awful.key({ modkey, sft       }, "s",       function() helpers.launcher.ror("code", { "Code" }) end),
-  awful.key({ modkey,           }, "s",       function() helpers.launcher.ror("cursor", { "Cursor" }) end),
+  awful.key({ modkey,           }, "s",       function() helpers.launcher.ror("cursor", { "cursor" }) end),
   awful.key({ modkey, sft, ctrl }, "s",       function() helpers.launcher.ror("subl", { "Sublime_text", "Subl" }) end),
   awful.key({ modkey            }, "w",       function()
     helpers.launcher.ror("firefox", { "firefox" })
   end),
   awful.key({ modkey            }, "g",       function() helpers.launcher.ror("lzg", { "lazygit" }, 'name') end),
 
-  awful.key({ modkey            }, "p",       function() awful.spawn.with_shell("pick") end),
+  awful.key({ modkey            }, "c",       function() awful.spawn.with_shell("pick") end),
   awful.key({ modkey, sft       }, "p",       function() awful.spawn("rofi-rbw") end),
 
   awful.key({ modkey            }, "space",   function()
@@ -139,8 +149,14 @@ globalkeys = gears.table.join(
     "pactl set-sink-mute @DEFAULT_SINK@ toggle && sleep 0.1 && " .. volume_notification_cmd
   ) end),
   awful.key({ }, "XF86AudioMicMute",   function() awful.spawn.with_shell("/home/manu/bin/mic-toggle") end),
-  awful.key({ modkey }, "XF86AudioMicMute",   function() awful.spawn.with_shell(
+  awful.key({ sft }, "XF86AudioMicMute",   function() awful.spawn.with_shell(
     "rofi -show rofi-sound -modi \"rofi-sound:rofi-sound-output-chooser\"")
+  end),
+  awful.key({ sft, ctrl }, "XF86AudioMicMute",   function() awful.spawn.with_shell(
+    "rofi -show rofi-screenlayout -modi \"rofi-screenlayout:rofi-screenlayout-chooser\"")
+  end),
+  awful.key({ modkey, sft, ctrl }, "XF86AudioMicMute",   function() awful.spawn.with_shell(
+    "rofi-bluetooth")
   end),
   awful.key({ modkey }, "x",   function() awful.spawn.with_shell("/home/manu/bin/mic-toggle") end),
 
@@ -161,16 +177,16 @@ globalkeys = gears.table.join(
       .. " Luminosité \"$(/home/manu/bin/progress-bar $(brillo -G) 15) $(echo $(brillo -G)/1 | bc) %\""
   ) end),
 
-  awful.key({ modkey            }, "F7",      function() awful.spawn("/home/manu/bin/monitor-p14s switch") end),
-  awful.key({ modkey, sft       }, "F7",      function() awful.spawn("/home/manu/bin/monitor-p14s in") end),
-  awful.key({ modkey, ctrl      }, "F7",      function() awful.spawn("/home/manu/bin/monitor-p14s in") end),
-  awful.key({ modkey, ctrl, sft }, "F7",      function() awful.spawn("/home/manu/bin/monitor-p14s out") end),
-  awful.key({ modkey            }, "F12",     function() awful.spawn("/home/manu/bin/monitor-p14s in") end),
+  awful.key({ modkey            }, "F12",     function() awful.spawn("/home/manu/bin/auto-screenlayout in") end),
+  awful.key({ modkey, sft       }, "F12",     function() awful.spawn("/home/manu/bin/auto-screenlayout change --force") end),
 
   awful.key({ modkey, ctrl      }, "r",       awesome.restart),
   awful.key({ modkey, ctrl, sft }, "q",       awesome.quit),
 
   awful.key({ altkey,           }, "space",   function()
+    helpers.tags.toggle_tag(main_screen, 7);
+  end),
+  awful.key({ altkey,           }, "BackSpace",   function()
     helpers.tags.toggle_tag(main_screen, 7);
   end)
 )

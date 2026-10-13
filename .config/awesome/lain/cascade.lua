@@ -22,6 +22,12 @@ local cascade = {
       offset_x = 32,
       offset_y = 8,
     },
+    rcrd_1080p = {
+      name     = "cascade_rcrd_1080p",
+      nmaster  = 0,
+      offset_x = 32,
+      offset_y = 8,
+    },
     tile = {
         name          = "cascadetile",
         nmaster       = 0,
@@ -33,7 +39,7 @@ local cascade = {
     }
 }
 
-local function do_cascade(p, tiling, wa_forced_width, wa_forced_height)
+local function do_cascade(p, tiling, wa_forced_width, wa_forced_height, offset_x)
     local t = p.tag or screen[p.screen].selected_tag
     local wa = p.workarea
     local cls = p.clients
@@ -43,6 +49,9 @@ local function do_cascade(p, tiling, wa_forced_width, wa_forced_height)
     -- Use custom dimensions if provided, otherwise use workarea dimensions
     local area_width = wa_forced_width or wa.width
     local area_height = wa_forced_height or wa.height
+    
+    -- Use custom offset if provided, otherwise default to 0
+    local x_offset = offset_x or 0
 
     if not tiling then
         -- Cascade windows.
@@ -73,7 +82,7 @@ local function do_cascade(p, tiling, wa_forced_width, wa_forced_height)
             local c = cls[i]
             local g = {}
 
-            g.x      = wa.x + gap + (i - 1) * cascade.offset_x
+            g.x      = wa.x + x_offset + gap + (i - 1) * cascade.offset_x
             g.y      = wa.y + gap + (i - 1) * cascade.offset_y
             g.width  = available_width - current_offset_x
             g.height = available_height - current_offset_y
@@ -159,7 +168,7 @@ local function do_cascade(p, tiling, wa_forced_width, wa_forced_height)
         end
 
         g.height = area_height
-        g.x = wa.x
+        g.x = wa.x + x_offset
         g.y = wa.y
 
         if g.width < 1  then g.width  = 1 end
@@ -178,7 +187,7 @@ local function do_cascade(p, tiling, wa_forced_width, wa_forced_height)
 
             -- g.x = wa.x + mainwid + (how_many - (i - 1)) * cascade.tile.offset_x
             -- Manu's override: change stacking order
-            g.x = wa.x + mainwid + (cascade.tile.offset_x * (how_many - 1)) + (-1 * (how_many - (i - 1)) * cascade.tile.offset_x)
+            g.x = wa.x + x_offset + mainwid + (cascade.tile.offset_x * (how_many - 1)) + (-1 * (how_many - (i - 1)) * cascade.tile.offset_x)
             g.y = wa.y + (i - 2) * cascade.tile.offset_y
 
             -- Ensure windows stay within the specified area
@@ -206,13 +215,19 @@ function cascade.arrange(p)
 end
 
 function cascade.rcrd.arrange(p)
-    if is_4k_screen then
-        return do_cascade(p, false, 2880, 2160)
-    elseif big_screen then
-        return do_cascade(p, false, 1920, 1440)
+    local is_1440p = helpers.screen.is_big(screen[p.screen])
+    local is_4k = helpers.screen.is_4k(screen[p.screen])
+    if is_4k then
+        return do_cascade(p, false, 2880, 2160, 960)
+    elseif is_1440p then
+        return do_cascade(p, false, 1920, 1440, 640)
     else
         return do_cascade(p, false, 1920, 1080)
     end
+end
+
+function cascade.rcrd_1080p.arrange(p)
+    return do_cascade(p, false, 1920, 1080)
 end
 
 return cascade

@@ -1,0 +1,142 @@
+#!/usr/bin/env bash
+
+# Rofi utility to select and run screenlayout scripts. Lists only the applicable layouts for current monitor(s) setup.
+
+# Make script independent on particular implementation of send client
+if command -v notify-send > /dev/null 2>&1; then
+    SEND="notify-send"
+elif command -v dunstify > /dev/null 2>&1; then
+    SEND="dunstify"
+else
+    SEND="/bin/false"
+fi
+
+SCREENLAYOUT_DIR="$HOME/.screenlayout"
+
+# Print output names that must currently be connected for this layout to apply.
+# Any --output block that is not solely --off requires that output.
+required_outputs_for_script() {
+    awk '
+        /^#/ { next }
+        {
+            line = $0
+            while (line ~ /\\$/) {
+                sub(/\\$/, "", line)
+                if (getline extra <= 0) break
+                line = line extra
+            }
+            full = full " " line
+        }
+        END {
+            gsub(/^[[:space:]]+|[[:space:]]+$/, "", full)
+            # Note: do not use \b here; in awk it is backspace, not a word boundary.
+            n = split(full, segs, /xrandr[[:space:]]+/)
+            for (i = 2; i <= n; i++) {
+                s = segs[i]
+                sub(/;.*/, "", s)
+                n2 = split(s, parts, /--output[[:space:]]+/)
+                for (j = 2; j <= n2; j++) {
+                    seg = parts[j]
+                    sub(/^[[:space:]]+/, "", seg)
+                    name = seg
+                    sub(/[[:space:]].*/, "", name)
+                    if (name == "") continue
+                    block = substr(seg, length(name) + 1)
+                    sub(/^[[:space:]]+/, "", block)
+                    if (block !~ /^--off[[:space:]]*$/)
+                        print name
+                }
+            }
+        }
+    ' "$1" 2>/dev/null
+}
+
+# Space-padded list of connected output names from xrandr (for substring match).
+# Exits 1 when xrandr fails or there are no connected outputs (caller lists all layouts).
+connected_outputs_padded() {
+    xrandr --query 2>/dev/null | awk '
+        / connected / { printf " %s ", $1; found = 1 }
+        END {
+            print ""
+            exit(found ? 0 : 1)
+        }
+    '
+}
+
+layout_is_applicable() {
+    local script_path="$1"
+    local padded req out
+
+    if [[ -n "${ROFI_SCREENLAYOUT_SHOW_ALL:-}" ]]; then
+        return 0
+    fi
+
+    if ! padded=$(connected_outputs_padded); then
+        return 0
+    fi
+
+    while IFS= read -r out; do
+        [[ -z "$out" ]] && continue
+        case "$padded" in *" $out "*) ;;
+            *) return 1 ;;
+        esac
+    done < <(required_outputs_for_script "$script_path")
+
+    return 0
+}
+
+# An option was passed, so let's execute it
+if [ "$@" ]
+then
+    selected_script="$*"
+
+    # Build the full path to the script
+    script_path="$SCREENLAYOUT_DIR/$selected_script"
+
+    # If the script doesn't exist, try adding .sh extension
+    if [ ! -f "$script_path" ]; then
+        script_path="$SCREENLAYOUT_DIR/$selected_script.sh"
+    fi
+
+    # Check if the script exists and is executable
+    if [ -f "$script_path" ]; then
+        # Check if it's executable
+        if [ ! -x "$script_path" ]; then
+            $SEND -t 2000 -r 2 -u critical "Cannot execute: $selected_script (not executable)"
+            exit 1
+        fi
+
+        # Execute the script
+        if "$script_path"; then
+		        awesome-client "awesome.restart()"
+            $SEND -t 2000 -r 2 -u low "Applied layout: $selected_script"
+        else
+            $SEND -t 2000 -r 2 -u critical "Error applying layout: $selected_script"
+        fi
+    else
+        $SEND -t 2000 -r 2 -u critical "Script not found: $selected_script"
+        exit 1
+    fi
+else
+    # No option passed, list available scripts
+    echo -en "\x00prompt\x1fSelect screen layout\n"
+
+    # Check if the screenlayout directory exists
+    if [ ! -d "$SCREENLAYOUT_DIR" ]; then
+        echo "No screenlayout directory found"
+        exit 1
+    fi
+
+    # List files in the screenlayout directory that can apply to current outputs
+    for script in "$SCREENLAYOUT_DIR"/*; do
+        # Check if there are any files
+        if [ -e "$script" ]; then
+            if ! layout_is_applicable "$script"; then
+                continue
+            fi
+            # Get the basename and strip .sh extension if present
+            filename=$(basename "$script")
+            echo "${filename%.sh}"
+        fi
+    done
+fi

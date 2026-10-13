@@ -1,0 +1,5 @@
+#!/bin/bash
+cd
+cd opt/browserstack
+./BrowserStackLocal --key f5k8xASVKDuqp9kqCmW8
+

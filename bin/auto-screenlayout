@@ -1,0 +1,246 @@
+#!/usr/bin/env bash
+# Called by udev on monitor hotplug;
+#
+# udev rule triggering this:
+# ACTION=="change", SUBSYSTEM=="drm", ENV{HOTPLUG}=="1", RUN+="/usr/bin/su - manu -c 'AUTO_SCREENLAYOUT_DEBUG=1 DISPLAY=:0 XAUTHORITY=/home/manu/.Xauthority HOME=/home/manu XDG_RUNTIME_DIR=/run/user/1000 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus /home/manu/bin/auto-screenlayout change --delay'"
+#
+# use "in" instead of "change" to force the laptop layout.
+# use "change --force" to force the first matching layout to be applied, even if a known layout is already applied.
+# use "change --delay" to delay the application of the layout by 1 second.
+
+: "${DISPLAY:=:0}"
+
+declare -A layouts
+
+bureau_1_state="$(cat <<'EOF'
+Monitors: 1
+ 0: +*DisplayPort-1 2560/597x1440/336+0+0  DisplayPort-1
+EOF
+)"
+
+bureau_2_state="$(cat <<'EOF'
+Monitors: 2
+ 0: +*DisplayPort-1 2560/597x1440/336+0+0  DisplayPort-1
+ 1: +eDP 1920/309x1080/173+2560+360  eDP
+EOF
+)"
+
+appart_1_state="$(cat <<'EOF'
+Monitors: 1
+ 0: +*HDMI-A-0 2560/597x1440/336+0+0  HDMI-A-0
+EOF
+)"
+
+appart_2_state="$(cat <<'EOF'
+Monitors: 2
+ 0: +*HDMI-A-0 2560/597x1440/336+0+0  HDMI-A-0
+ 1: +eDP 1920/309x1080/173+2560+360  eDP
+EOF
+)"
+
+laptop_state="$(cat <<'EOF'
+Monitors: 1
+ 0: +*eDP 1920/309x1080/173+0+0  eDP
+EOF
+)"
+
+layouts["bureau-1"]="$bureau_1_state"
+layouts["bureau-2"]="$bureau_2_state"
+layouts["appart-1"]="$appart_1_state"
+layouts["appart-2"]="$appart_2_state"
+layouts["laptop"]="$laptop_state"
+
+# Iteration order for trying layouts (associative arrays are unordered).
+layout_order=(
+  "bureau-1"
+  "bureau-2"
+  "appart-1"
+  "appart-2"
+  "laptop"
+)
+
+
+
+
+
+
+
+LOG_FILE="/home/manu/bin/.auto-screenlayout-logs"
+CONNECTOR_CACHE="/tmp/auto-screenlayout-connectors"
+
+log() {
+  printf '%s\n' "[$(date '+%Y-%m-%d %H:%M:%S')] $*" >>"$LOG_FILE"
+}
+
+dbg() {
+  log "$*"
+  [[ -n "${AUTO_SCREENLAYOUT_DEBUG:-}" ]] || return 0
+  printf '%s\n' "[auto-screenlayout] $*" >&2
+}
+
+# Extract connected/disconnected state per output from xrandr --query.
+# This reflects physical cable presence and updates reliably on plug/unplug.
+# Enabling/disabling an output via xrandr does not change these states.
+snapshot_connectors() {
+  xrandr --query 2>/dev/null \
+    | awk '$2 == "connected" || $2 == "disconnected" {print $1, $2}' \
+    | sort
+}
+
+# Normalise monitor list output for string comparison (trim trailing space per line).
+normalize_monitors() {
+  sed 's/[[:space:]]*$//' <<<"$1" | sed '/^$/d'
+}
+
+# Output names are the last field on each " N: ..." line from xrandr --listactivemonitors.
+outputs_for_layout() {
+  awk '/^[[:space:]]+[0-9]+:/{print $NF}' <<<"$1"
+}
+
+# True if every output referenced by the layout appears as connected in xrandr --query.
+layout_applicable_for_query() {
+  local layout_ref=$1
+  local query=$2
+  local o
+  while read -r o; do
+    [[ -z "$o" ]] && continue
+    dbg "  checking output '$o' is connected in xrandr --query"
+    # awk runs END after exit from the main program; END { exit 1 } was overwriting
+    # a successful exit 0 and made every output look "missing".
+    if ! awk -v out="$o" '
+      BEGIN { code = 1 }
+      $1 == out {
+        code = ($2 == "connected" ? 0 : 2)
+        exit
+      }
+      END { exit code }
+    ' <<<"$query"; then
+      dbg "  output '$o' missing or not connected"
+      return 1
+    fi
+  done < <(outputs_for_layout "$layout_ref")
+  return 0
+}
+
+main() {
+  log "--- invocation: $0 $* ---"
+
+  local force=0
+  local delay=0
+  local mode=""
+  local arg
+  for arg in "$@"; do
+    case "$arg" in
+      --force)
+        force=1
+        ;;
+      --delay)
+        delay=1
+        ;;
+      in|change)
+        # Keep first recognized mode; ignore duplicates.
+        [[ -z "$mode" ]] && mode="$arg"
+        ;;
+      *)
+        dbg "ignoring unknown argument: $arg"
+        ;;
+    esac
+  done
+
+  # if mode is "in"
+  if [[ "$mode" == "in" ]]; then
+    ~/.screenlayout/laptop.sh
+    /usr/bin/awesome-client "awesome.restart()"
+    exit 0
+  fi
+
+  if [[ "$mode" != "change" ]]; then
+    dbg "ignoring invocation (mode is '${mode:-<unset>}', expected 'change')"
+    exit 0
+  fi
+
+  if [[ "$delay" -eq 1 ]]; then
+    sleep 1
+  fi
+
+  local connectors
+  connectors="$(snapshot_connectors)"
+  dbg "connector states:"$'\n'"$connectors"
+
+  if [[ "$force" -eq 0 ]] && [[ -f "$CONNECTOR_CACHE" ]] \
+      && [[ "$connectors" == "$(< "$CONNECTOR_CACHE")" ]]; then
+    dbg "connector states unchanged — ignoring software-triggered event"
+    exit 0
+  fi
+  printf '%s\n' "$connectors" > "$CONNECTOR_CACHE"
+
+  dbg "start DISPLAY=${DISPLAY:-?} XAUTHORITY=${XAUTHORITY:-<unset>} HOME=${HOME:-?}"
+
+  if ! command -v xrandr >/dev/null 2>&1; then
+    dbg "xrandr not found in PATH"
+    exit 1
+  fi
+
+  local current raw_current
+  raw_current="$(xrandr --listactivemonitors 2>/dev/null)" || {
+    dbg "xrandr --listactivemonitors failed (no X session?)"
+    exit 0
+  }
+  dbg "raw xrandr --listactivemonitors:"$'\n'"$raw_current"
+  current="$(normalize_monitors "$raw_current")"
+  dbg "normalized active monitors:"$'\n'"$current"
+
+  local name expected norm_expected
+  for name in "${layout_order[@]}"; do
+    expected="${layouts[$name]-}"
+    [[ -z "$expected" ]] && continue
+    norm_expected="$(normalize_monitors "$expected")"
+    dbg "comparing with layout '$name' (expected normalized):"
+    dbg "$norm_expected"
+    if [[ "$current" == "$norm_expected" ]]; then
+      if [[ "$force" -eq 1 ]]; then
+        dbg "matches layout '$name' but --force is set; continuing"
+        continue
+      fi
+      dbg "matches layout '$name' — already applied, nothing to do"
+      exit 0
+    fi
+  done
+
+  dbg "no layout matched current active monitors; fetching xrandr --query"
+
+  local raw_query
+  raw_query="$(xrandr --query 2>/dev/null)" || {
+    dbg "xrandr --query failed"
+    exit 0
+  }
+  dbg "xrandr --query (first 30 lines):"$'\n'"$(printf '%s\n' "$raw_query" | head -n 30)"
+
+  local script
+  for name in "${layout_order[@]}"; do
+    expected="${layouts[$name]-}"
+    [[ -z "$expected" ]] && continue
+    dbg "trying layout '$name' for applicability"
+    if layout_applicable_for_query "$expected" "$raw_query"; then
+      dbg "layout '$name' is applicable"
+      script="${HOME}/.screenlayout/${name}.sh"
+      if [[ -x "$script" ]]; then
+        dbg "running executable: $script"
+        if "$script"; then
+          dbg "layout script succeeded; restarting awesome"
+          /usr/bin/awesome-client "awesome.restart()"
+          exit 0
+        fi
+        dbg "layout script failed: $script"
+      fi
+      dbg "layout '$name' applicable but script missing: $script"
+    else
+      dbg "layout '$name' not applicable (outputs not all connected)"
+    fi
+  done
+
+  dbg "done: no matching preset and no applicable layout script run"
+  exit 0
+}
+
+main "$@"

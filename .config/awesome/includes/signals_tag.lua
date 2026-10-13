@@ -10,6 +10,7 @@ awful.layout.layouts = {
   awful.layout.suit.tile,
   cascade,
   cascade.rcrd,
+  cascade.rcrd_1080p,
   awful.layout.suit.floating,
   cascade.tile,
 }
@@ -21,6 +22,7 @@ local tag_map = {
   floating = "float",
   cascade = "casc",
   cascade_rcrd = "rcrd",
+  cascade_rcrd_1080p = "rcrhd",
 }
 
 local function update_statusbar_tag(t)

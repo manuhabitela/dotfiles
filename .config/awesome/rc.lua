@@ -19,6 +19,7 @@ helpers.string = require("helpers.string")
 helpers.date = require("helpers.date")
 helpers.wallpaper = require("helpers.wallpaper")
 helpers.tasklist_widget = require("helpers.tasklist_widget")
+-- helpers.inotifywatch = require("helpers.inotifywatch")
 
 dofile('/home/manu/.config/awesome/includes/errors.lua')
 
@@ -32,11 +33,11 @@ sft = "Shift"
 -- classes = xprop > WM_CLASS > second string
 floating_classes = { "MPlayer", "pinentry", "Yad", "ThinkFan UI", "vysor", "Screenkey", "zoom", "chromium"}
 -- instances = xprop > WM_CLASS > first string
-floating_instances = {"exe", "plugin-container", "shutter", "pavucontrol", "blueman-manager", "scrcpy", "chromium"}
+floating_instances = {"exe", "plugin-container", "shutter", "pavucontrol", "blueman-manager", "scrcpy", "chromium", "VirtualBox Machine"}
 -- apps = client.name (= app "title")
 terminal_app_names = {"spotify-tui", "calendar-widget", "pcmanfm-term", "Roxterm-temp", "lazygit"}
 -- the tag 7 is exclusively for the terminal
-alt_tab_ignored_instances = {"hu.irl.cameractrls", "ffplay"}
+alt_tab_ignored_instances = {"hu.irl.cameractrls", "ffplay", "screenkey"}
 alt_tab_ignored_names = {"Windowed Projector (Preview)"}
 terminal_tag = "7"
 terminal_tag_classes = { "Roxterm", "Roxterm-config", "kitty", "Google-chrome-beta" }
@@ -57,7 +58,7 @@ rofi_cmd = "rofi -show combi"
   .. " -combi-modes \"window,run,ssh,clipboard:greenclip print,power:~/.config/rofi/power-menu \""
   .. " -display-combi \"!w!r!s!c!p\""
   .. " -modi combi,emoji,calc,translate"
-  -- .. " -modi combi,emoji,calc"
+  .. " -run-shell-command '{terminal} -e zsh -ic \"{cmd} && read\"'"
   .. " -emoji-file /home/manu/.config/rofi/emojis_and_unicode_chars.txt"
 dofile('/home/manu/.config/awesome/includes/autostart.lua')
 dofile('/home/manu/.config/awesome/includes/signals_tag.lua')

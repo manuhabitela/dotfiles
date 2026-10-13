@@ -15,6 +15,11 @@ get_mic_info() {
 	LC_ALL=C pactl --format=json list sources | jq --arg mic_id "$default_mic_id" '.[] | select(.name == $mic_id)'
 }
 
+get_speaker_info() {
+	default_speaker_id=$(LC_ALL=C pactl get-default-sink)
+	LC_ALL=C pactl --format=json list sinks | jq --arg speaker_id "$default_speaker_id" '.[] | select(.name == $speaker_id)'
+}
+
 get_mic_muted_state() {
 	mic_info=$(get_mic_info)
 	echo $mic_info | jq '.mute'
@@ -23,6 +28,11 @@ get_mic_muted_state() {
 get_mic_name() {
 	mic_info=$(get_mic_info)
 	echo $mic_info | jq -r '.description'
+}
+
+get_speaker_name() {
+	speaker_info=$(get_speaker_info)
+	echo $speaker_info | jq -r '.description'
 }
 
 get_mic_volume() {
@@ -77,6 +87,14 @@ fi
 
 if [[ $wanted == "mic-name" ]]; then
 	get_mic_name
+fi
+
+if [[ $wanted == "speaker-name" ]]; then
+	get_speaker_name
+fi
+
+if [[ $wanted == "mic-speaker-name" ]]; then
+	echo "$(get_mic_name) / $(get_speaker_name)"
 fi
 
 if [[ $wanted == "mic-notif-description" ]]; then

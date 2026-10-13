@@ -17,7 +17,7 @@ function wallpaper.update(s)
   --   end
   -- end
   -- local wall = tag_has_visible_clients and beautiful.wallpaper_blur or beautiful.wallpaper
-  local wall = helpers.screen.is_big(s) and beautiful.wallpaper_27inch or beautiful.wallpaper_laptop
+  local wall = helpers.screen.is_4k(s) and beautiful.wallpaper_4k or (helpers.screen.is_big(s) and beautiful.wallpaper_27inch or beautiful.wallpaper_laptop)
   -- if (last_update == wall) then
   --   return true
   -- end

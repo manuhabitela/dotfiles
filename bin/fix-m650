@@ -1,6 +1,11 @@
 #!/usr/bin/expect -f
 
-set device "D1:84:81:ED:0E:95"
+# Use first argument as device ID, or default to M650 device
+if {$argc > 0} {
+    set device [lindex $argv 0]
+} else {
+    set device "D1:84:81:ED:0E:95"
+}
 set timeout 60
 
 spawn bluetoothctl
@@ -8,6 +13,7 @@ expect "Agent registered"
 send -- "scan on\r"
 expect "Discovery started"
 send -- "remove $device\r"
+sleep 6
 send -- "trust $device\r"
 expect "Changing $device trust succeeded"
 send -- "pair $device\r"

@@ -1,0 +1,92 @@
+<roxterm_session id='Default'>
+  <window geometry='153x36+1285+26'
+      title_template='%s' font='Terminus 12'
+      title_template_locked='0'
+      title='chromedriver/linux64' role='(null)'
+      shortcut_scheme='Default' show_menubar='0'
+      always_show_tabs='0' tab_pos='2'
+      show_add_tab_btn='0'
+      disable_menu_shortcuts='0' disable_tab_shortcuts='0'
+      maximised='0' fullscreen='0' borderless='0' zoom='1.000000'>
+    <tab profile='Default'
+        /home/manu/.cache/selenium/chromedriver/linux64cwd=''
+        title_template='%t. %s' window_title='chromedriver/linux64'
+        title_template_locked='0' current='1'>
+      <command argc='1'>
+        <arg s='/usr/bin/zsh' />
+      </command>
+    </tab>
+  </window>
+  <window geometry='154x43+1285+679'
+      title_template='%s' font='Terminus 12'
+      title_template_locked='0'
+      title='dinum/grist-core' role='(null)'
+      shortcut_scheme='Default' show_menubar='0'
+      always_show_tabs='0' tab_pos='2'
+      show_add_tab_btn='0'
+      disable_menu_shortcuts='0' disable_tab_shortcuts='0'
+      maximised='0' fullscreen='0' borderless='0' zoom='1.000000'>
+    <tab profile='Default'
+        /home/manu/dev/dinum/grist-corecwd=''
+        title_template='%t. %s' window_title='dinum/grist-core'
+        title_template_locked='0' current='1'>
+      <command argc='1'>
+        <arg s='/usr/bin/zsh' />
+      </command>
+    </tab>
+  </window>
+  <window geometry='154x43+2+680'
+      title_template='%s' font='Terminus 12'
+      title_template_locked='0'
+      title='dev/chromium' role='(null)'
+      shortcut_scheme='Default' show_menubar='0'
+      always_show_tabs='0' tab_pos='2'
+      show_add_tab_btn='0'
+      disable_menu_shortcuts='0' disable_tab_shortcuts='0'
+      maximised='0' fullscreen='0' borderless='0' zoom='1.000000'>
+    <tab profile='Default'
+        /home/manu/dev/chromiumcwd=''
+        title_template='%t. %s' window_title='dev/chromium'
+        title_template_locked='0' current='1'>
+      <command argc='1'>
+        <arg s='/usr/bin/zsh' />
+      </command>
+    </tab>
+  </window>
+  <window geometry='154x39+2+2'
+      title_template='%s' font='Terminus 12'
+      title_template_locked='0'
+      title='dinum/grist-core - yarn' role='(null)'
+      shortcut_scheme='Default' show_menubar='0'
+      always_show_tabs='0' tab_pos='2'
+      show_add_tab_btn='0'
+      disable_menu_shortcuts='0' disable_tab_shortcuts='0'
+      maximised='0' fullscreen='0' borderless='0' zoom='1.000000'>
+    <tab profile='Default'
+        /home/manu/dev/dinum/grist-corecwd=''
+        title_template='%t. %s' window_title='dinum/grist-core - yarn'
+        title_template_locked='0' current='1'>
+      <command argc='1'>
+        <arg s='/usr/bin/zsh' />
+      </command>
+    </tab>
+  </window>
+  <window geometry='80x24+0+0'
+      title_template='%s' font='Terminus 12'
+      title_template_locked='0'
+      title='dev/chromium' role='(null)'
+      shortcut_scheme='Default' show_menubar='0'
+      always_show_tabs='0' tab_pos='2'
+      show_add_tab_btn='0'
+      disable_menu_shortcuts='0' disable_tab_shortcuts='0'
+      maximised='0' fullscreen='0' borderless='0' zoom='1.000000'>
+    <tab profile='Default'
+        /home/manu/dev/chromiumcwd=''
+        title_template='%t. %s' window_title='dev/chromium'
+        title_template_locked='0' current='1'>
+      <command argc='1'>
+        <arg s='/usr/bin/zsh' />
+      </command>
+    </tab>
+  </window>
+</roxterm_session>

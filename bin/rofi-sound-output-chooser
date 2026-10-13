@@ -1,13 +1,111 @@
 #!/usr/bin/env bash
 
 # based on https://github.com/kellya/rofi-sound/tree/main,
-# customized output to show current default,
-# added input selection. this is not that great because we can select unplugged stuff and it breaks stuff… but it'll do
+# customized output to show current default, add input select, show devices "nicks", filter out unplugged devices
 
 LANG="en_US.utf8"
 # Outputs have spaces in them, so let's make \n the IFS
 IFS=$'\n'
 
+# Prints one line per device: node.name<TAB>Description<TAB>node.nick (nick may be empty).
+# For sinks/sources: omit devices whose Ports: section only lists ports as "not available"
+# (typical unplugged HDMI/DP). ROFI_SOUND_SHOW_ALL_SINKS=1 / ROFI_SOUND_SHOW_ALL_SOURCES=1
+# disables filtering for that kind.
+pactl_parse_node_blocks() {
+	local list_kind="$1"
+	local default_for_filter="${2:-}"
+	local hdr='^Sink #'
+	[[ "$list_kind" == "sources" ]] && hdr='^Source #'
+	local filter_sinks=0
+	local filter_sources=0
+	[[ "$list_kind" == "sinks" && -z "${ROFI_SOUND_SHOW_ALL_SINKS:-}" ]] && filter_sinks=1
+	[[ "$list_kind" == "sources" && -z "${ROFI_SOUND_SHOW_ALL_SOURCES:-}" ]] && filter_sources=1
+	pactl list "$list_kind" | awk -v hdr="$hdr" -v filter_sinks="$filter_sinks" -v filter_sources="$filter_sources" -v default_device="$default_for_filter" '
+		function reset_port_state() {
+			in_ports = 0
+			had_ports = 0
+			port_ok = 0
+			saw_not_available = 0
+		}
+		function omit_device() {
+			if (default_device != "" && node_name == default_device) {
+				return 0
+			}
+			return ((filter_sinks || filter_sources) && had_ports && saw_not_available && !port_ok)
+		}
+		function flush() {
+			if (node_name != "") {
+				if (!omit_device()) {
+					print node_name "\t" desc "\t" node_nick
+				}
+			}
+			node_name = ""
+			desc = ""
+			node_nick = ""
+			reset_port_state()
+		}
+		$0 ~ hdr { flush(); next }
+		/^[[:space:]]*Description:/ {
+			sub(/^[[:space:]]*Description:[[:space:]]*/, "")
+			desc = $0
+			next
+		}
+		/^[[:space:]]*node\.name[[:space:]]*=/ {
+			sub(/^[[:space:]]*node\.name[[:space:]]*=[[:space:]]*/, "")
+			gsub(/^"|"$/, "", $0)
+			node_name = $0
+			next
+		}
+		/^[[:space:]]*node\.nick[[:space:]]*=/ {
+			sub(/^[[:space:]]*node\.nick[[:space:]]*=[[:space:]]*/, "")
+			gsub(/^"|"$/, "", $0)
+			node_nick = $0
+			next
+		}
+		/^[[:space:]]*Ports:/ {
+			in_ports = 1
+			had_ports = 1
+			next
+		}
+		in_ports && /^[[:space:]]*Active Port:/ {
+			in_ports = 0
+			next
+		}
+		in_ports && /^[[:space:]]*Formats:/ {
+			in_ports = 0
+			next
+		}
+		in_ports {
+			if (/availability: yes|availability: unknown|availability unknown/) {
+				port_ok = 1
+			}
+			if (/not available/) {
+				saw_not_available = 1
+			}
+			next
+		}
+		END { flush() }
+	'
+}
+
+# Match rofi line label to node.name
+resolve_node_name_from_label() {
+	local list_kind="$1"
+	local label="$2"
+	local node desc nick display
+	while IFS=$'\t' read -r node desc nick; do
+		[[ -z "$node" ]] && continue
+		display="$desc"
+		if [[ -n "$nick" ]]; then
+			display="${desc} (${nick})"
+		fi
+		if [[ "$label" == "$display" ]] || [[ "$label" == "$desc" ]]; then
+			printf '%s' "$node"
+			return 0
+		fi
+	done < <(pactl_parse_node_blocks "$list_kind")
+	return 1
+}
 
 # Make script independent on particular implementation of send client
 if command -v notify-send > /dev/null 2>&1; then
@@ -57,8 +155,13 @@ then
         input_or_output="input"
     fi
 
-    # Figure out what the device name is based on the description passed by checking list of sinks or sources
-    device=$(pactl list ${sink_or_source}s|grep -C2 -F "Description: $device_description"|grep Name|cut -d: -f2|xargs)
+    # Map chosen line (nick + Description or Description alone) back to node.name
+    list_kind="sinks"
+    [[ "$sink_or_source" == "source" ]] && list_kind="sources"
+    device="$(resolve_node_name_from_label "$list_kind" "$device_description")"
+    if [[ -z "$device" ]]; then
+        device=$(pactl list "${sink_or_source}s" | grep -C2 -F "Description: $device_description" | grep -ie '^[[:space:]]*Name:' | head -1 | cut -d: -f2- | xargs)
+    fi
     # Try to set the default to the device chosen
     if pactl set-default-${sink_or_source} "$device"
     then
@@ -69,67 +172,36 @@ then
 else
     echo -en "\x00prompt\x1fSelect input or output device to use\n"
 
-    # list outputs
+    # list outputs (prepend node.nick when present)
     default_device_id=$(pactl get-default-sink|xargs)
-    device_names_list=$(pactl list sinks | grep -ie "description:" | cut -d: -f2)
-    device_names=( )
-    i=0
-    for name in $device_names_list
-    do
-        device_names[$i]=$(echo $name|xargs)
-        i=$i+1
-    done
-    device_ids_list=$(pactl list sinks | grep -ie "node.name = " | cut -d= -f2)
-    device_ids=( )
-    i=0
-    for id in $device_ids_list
-    do
-        device_ids[$i]=$(echo $id|xargs)
-        i=$i+1
-    done
-
-    for i in "${!device_names[@]}"
-    do
-        if [ "${device_ids[$i]}" == "$default_device_id" ]
-        then
-            echo "output: * ""${device_names[$i]}"
-        else
-            echo "output:   ${device_names[$i]}"
+    while IFS=$'\t' read -r node_name desc nick; do
+        [[ -z "$node_name" ]] && continue
+        display="$desc"
+        if [[ -n "$nick" ]]; then
+            display="${desc} (${nick})"
         fi
-    done
+        if [[ "$node_name" == "$default_device_id" ]]; then
+            echo "output: * ${display}"
+        else
+            echo "output:   ${display}"
+        fi
+    done < <(pactl_parse_node_blocks sinks "$default_device_id")
 
     echo " "
 
-    # list inputs
+    # list inputs (same; hide monitor sources)
     default_device_id=$(pactl get-default-source|xargs)
-    device_names_list=$(pactl list sources | grep -ie "description:" | cut -d: -f2)
-    device_names=( )
-    i=0
-    for name in $device_names_list
-    do
-        device_names[$i]=$(echo $name|xargs)
-        i=$((i+1))
-    done
-    device_ids_list=$(pactl list sources | grep -ie "node.name = " | cut -d= -f2)
-    device_ids=( )
-    i=0
-    for id in $device_ids_list
-    do
-        device_ids[$i]=$(echo $id|xargs)
-        i=$((i+1))
-    done
-    i=0
-    for i in "${!device_names[@]}"
-    do
-        # show only things that are not "Monitor of"
-        if [[ ! "${device_names[$i]}" == Monitor* ]]
-        then
-            if [ "${device_ids[$i]}" == "$default_device_id" ]
-            then
-                echo "input: * ""${device_names[$i]}"
-            else
-                echo "input:   ${device_names[$i]}"
-            fi
+    while IFS=$'\t' read -r node_name desc nick; do
+        [[ -z "$node_name" ]] && continue
+        [[ "$desc" == Monitor* ]] && continue
+        display="$desc"
+        if [[ -n "$nick" ]]; then
+            display="${desc} (${nick})"
         fi
-    done
+        if [[ "$node_name" == "$default_device_id" ]]; then
+            echo "input: * ${display}"
+        else
+            echo "input:   ${display}"
+        fi
+    done < <(pactl_parse_node_blocks sources "$default_device_id")
 fi

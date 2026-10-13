@@ -53,6 +53,16 @@ client.connect_signal("manage", function(c)
     c.width = screen_width > 1500 and 1800 or screen_width * 0.8
     c.height = screen_height > 1000 and 900 or screen_height * 0.8
   end
+
+
+  if c.class == "Screenkey" then
+    -- move the client on the bottom right corner of current screen
+    -- with an offset of 20px/20px
+    local screen_width = c.screen.workarea.width
+    local screen_height = c.screen.workarea.height
+    c.x = screen_width - c.width - 20
+    c.y = screen_height - c.height - 20
+  end
   -- end of app-specific rules
 
   if awesome.startup

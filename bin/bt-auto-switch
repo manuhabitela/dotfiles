@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+#
+# I just can't manage to make wireplumber correctly change sinks when devices change.
+# This script does it manually.
+#
+# A udev rule is used to trigger the script:
+#   ACTION=="add", SUBSYSTEM=="bluetooth", ENV{DEVTYPE}=="link", KERNEL=="hci0:*", RUN+="/home/manu/bin/bt-auto-switch"
+set -euo pipefail
+LANG=C
+
+# list the sinks you want to switch to automatically when a bluetooth device is connected
+PREFERRED_SINK_NAMES=(
+	"bluez_output.20_18_5B_3F_D5_FF.1"
+)
+
+# When invoked by udev as root, run as this user so pactl uses the session PipeWire socket.
+BT_AUTO_SWITCH_USER="${BT_AUTO_SWITCH_USER:-manu}"
+if [[ "$(id -u)" -eq 0 ]]; then
+	uid="$(id -u "$BT_AUTO_SWITCH_USER" 2>/dev/null || true)"
+	if [[ -z "${uid:-}" ]]; then
+		printf '%s: unknown user %s\n' "$(basename "$0")" "$BT_AUTO_SWITCH_USER" >&2
+		exit 1
+	fi
+	rt="/run/user/$uid"
+	exec runuser -u "$BT_AUTO_SWITCH_USER" -- \
+		env XDG_RUNTIME_DIR="$rt" BT_AUTO_SWITCH_USER="$BT_AUTO_SWITCH_USER" \
+		"$0" "$@"
+fi
+
+# If we're already on a preferred sink, exit early.
+current_default="$(pactl get-default-sink 2>/dev/null | xargs)" || true
+if [[ -n "$current_default" ]]; then
+	for p in "${PREFERRED_SINK_NAMES[@]}"; do
+		if [[ "$current_default" == "$p" ]]; then
+			exit 0
+		fi
+	done
+fi
+
+sink_description_for_name() {
+	local name="$1"
+	pactl list sinks 2>/dev/null | awk -v n="$name" '
+		/^Sink / { in_sink = 0 }
+		{
+			if ($0 ~ /^[[:space:]]*Name:[[:space:]]*/) {
+				line = $0
+				sub(/^[[:space:]]*Name:[[:space:]]*/, "", line)
+				if (line == n) { in_sink = 1; next }
+			}
+			if (in_sink && $0 ~ /^[[:space:]]*Description:[[:space:]]*/) {
+				sub(/^[[:space:]]*Description:[[:space:]]*/, "")
+				print
+				exit
+			}
+		}
+	'
+}
+
+sleep 2
+
+echo "bt-auto-switch: checking for bluetooth devices…"
+for preferred in "${PREFERRED_SINK_NAMES[@]}"; do
+	if pactl list short sinks | awk '{print $2}' | grep -qxF "$preferred"; then
+		pactl set-default-sink "$preferred"
+		label="$(sink_description_for_name "$preferred" | xargs)"
+		[[ -z "$label" ]] && label="$preferred"
+		echo "bt-auto-switch: set default sink to $preferred ($label)"
+    notify-send -u low "$label" "Set as default sink"
+		exit 0
+	fi
+done
+
+exit 0

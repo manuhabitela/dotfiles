@@ -1,7 +1,9 @@
 #!/bin/bash
 
-temp=$(cat /sys/devices/platform/thinkpad_hwmon/hwmon/hwmon7/temp1_input)
-temp=${temp:0:2}
+# run `sensors`, get the line starting with "Package", and get the temperature. The line follows this format :
+# Package id 0:  +55.0°C  (high = +100.0°C, crit = +100.0°C)
 
-echo "$temp°C"
+#temp=$(sensors | grep "Package" | awk '{print $4}' | sed 's/+//')
+temp=$(sensors -A | awk '/acpitz-acpi-0/{getline; print}' | awk '{print $2}' | sed 's/+//')
 
+echo "$temp"

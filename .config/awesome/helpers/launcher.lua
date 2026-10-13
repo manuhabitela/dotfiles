@@ -18,6 +18,10 @@ function launcher.run_once(cmd)
   awful.spawn.with_shell("ps -ef | grep -v grep | grep '" .. cmd .. "' > /dev/null || (" .. cmd .. ")")
 end
 
+function launcher.run_or_kill(cmd)
+  awful.spawn.with_shell("ps -ef | grep -v grep | grep '" .. cmd .. "' > /dev/null && kill $(pgrep -f '" .. cmd .. "') || (" .. cmd .. ")")
+end
+
 function launcher.run_on_tag(cmd, s, t)
 	local destination = s and screen[s] or screen.primary
 	destination.tags[t]:view_only()

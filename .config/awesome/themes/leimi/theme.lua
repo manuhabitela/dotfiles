@@ -4,7 +4,7 @@
 
 theme = {}
 
--- theme.wallpaper = "/home/manu/.config/awesome/themes/leimi/angers-fhd.png"
+theme.wallpaper = "/home/manu/.config/awesome/themes/leimi/angers-fhd.png"
 
 -- theme.wallpaper = "/home/manu/.config/awesome/themes/leimi/manuhabitela2k.png"
 -- theme.wallpaper = "/home/manu/.config/awesome/themes/leimi/greenscreen.png"
@@ -13,7 +13,11 @@ theme.wallpaper_blur = "/home/manu/.config/awesome/themes/leimi/angers-fhd-blur.
 
 theme.wallpaper_27inch = "/home/manu/.config/awesome/themes/leimi/1080p-record-fondu.png"
 theme.wallpaper_27inch = "/home/manu/.config/awesome/themes/leimi/1440p-record-fondu.png"
+theme.wallpaper_27inch = "/home/manu/.config/awesome/themes/leimi/angers-fhd.png"
+theme.wallpaper_4k = "/home/manu/.config/awesome/themes/leimi/background-4k.jpg"
+theme.wallpaper_4k = "/home/manu/.config/awesome/themes/leimi/angers-fhd.png"
 theme.wallpaper_laptop = "/home/manu/.config/awesome/themes/leimi/1080p-record-wall-laptop.png"
+theme.wallpaper_laptop = "/home/manu/.config/awesome/themes/leimi/angers-fhd.png"
 
 theme.fonts = { default = "San Francisco Display Medium 12" }
 theme.fonts.statusbar = theme.fonts.default

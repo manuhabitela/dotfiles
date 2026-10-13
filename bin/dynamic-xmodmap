@@ -1,10 +1,22 @@
 #!/bin/bash
-# check si j'ai connecté mon GH60 et lance le bon
-# script xmodmap
+# check si j'ai connecté un clavier externe déjà remappé ou non niveau hardware via QMK,
+# et lance xmodmap si on trouve rien, pour remapper au niveau logiciel
 
-found_GH60_string=$(LANG=en lsusb -d 0xfeed:0x6060)
-found_DZ60_string=$(LANG=en lsusb -d 0x445a:0x2260)
+found_DZ60=$(LANG=en lsusb -d 0x445a:0x2260)
+found_DZ60v2=$(LANG=en lsusb -d 0x445a:0x2261)
+found_WAFFLING60=$(LANG=en lsusb -d 0x4444:0x0014)
+found_YMD60XS=$(LANG=en lsusb -d 0x1915:0x520b)
+found_YMD60XS_BT=$(bluetoothctl devices Connected | grep YMD60XS_BLE)
+found_YMDK61=$(LANG=en lsusb -d 0x45d4:0x0111)
+found_KBBOX60=$(LANG=en lsusb -d 0x0314:0xaa77)
+found_CYBER60=$(LANG=en lsusb -d 0x1d50:0x615e)
 
-[[ -n "$found_GH60_string" ]] && xmodmap $HOME/.xmodmaprc-gh60
-[[ -n "$found_DZ60_string" ]] && xmodmap $HOME/.xmodmaprc-dz60
-[[ -z "$found_GH60_string" && -z "$found_DZ60_string" ]] && xmodmap $HOME/.xmodmaprc
+# found no external keyboard
+[[ -z "$found_DZ60"
+&& -z "$found_DZ60v2"
+&& -z "$found_WAFFLING60"
+&& -z "$found_CYBER60"
+&& -z "$found_YMD60XS"
+&& -z "$found_YMDK61"
+&& -z "$found_KBBOX60"
+&& -z "$found_YMD60XS_BT" ]] && xmodmap $HOME/.xmodmaprc

@@ -3,7 +3,7 @@
 # run this with arg "on" or "off".
 # "on" will get the current network dns and apply it in resolv.conf.
 # "off" will remove the dns from resolv.conf.
-wifiinterface="wlp3s0"
+wifiinterface="wlp0s20f3"
 
 get_dns_ip() {
     local nmap_output
